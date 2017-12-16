@@ -12,3 +12,6 @@ C:\Users\Maxim\Desktop\QRCodeConnect\QRCodeConnect\obj\Debug\QRCodeConnect.Prope
 C:\Users\Maxim\Desktop\QRCodeConnect\QRCodeConnect\obj\Debug\QRCodeConnect.csproj.GenerateResource.Cache
 C:\Users\Maxim\Desktop\QRCodeConnect\QRCodeConnect\obj\Debug\QRCodeConnect.exe
 C:\Users\Maxim\Desktop\QRCodeConnect\QRCodeConnect\obj\Debug\QRCodeConnect.pdb
+C:\Users\Maxim\Touchpad\QRCodeConnect\QRCodeConnect\bin\Debug\QRCodeConnect.exe.config
+C:\Users\Maxim\Touchpad\QRCodeConnect\QRCodeConnect\obj\Debug\QRCodeConnect.exe
+C:\Users\Maxim\Touchpad\QRCodeConnect\QRCodeConnect\obj\Debug\QRCodeConnect.pdb
