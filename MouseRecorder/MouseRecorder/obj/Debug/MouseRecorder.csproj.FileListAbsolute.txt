@@ -1,0 +1,9 @@
+c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\bin\Debug\MouseRecorder.exe.config
+c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\bin\Debug\MouseRecorder.exe
+c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\bin\Debug\MouseRecorder.pdb
+c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.csprojResolveAssemblyReference.cache
+c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.Form1.resources
+c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.Properties.Resources.resources
+c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.csproj.GenerateResource.Cache
+c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.exe
+c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.pdb
