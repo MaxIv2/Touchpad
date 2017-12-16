@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 namespace QRCodeConnect {
     class MouseController {
         [DllImport("user32.dll")]
-        private static extern void mouse_event(int dwFlags, int dx, int dy, int dwDAtat, UIntPtr dwExtraInfo);
+        private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, UIntPtr dwExtraInfo);
         private enum Flag { ABSOLUTE, LEFTDOWN, LEFTUP, MIDDLEDOWN, MIDDLEUP, MOVE, RIGHTDOWN, RIGHTUP };
         private static int GetFlag(Flag mf) {
             switch (mf) {
@@ -41,6 +41,9 @@ namespace QRCodeConnect {
         }
         public static void MiddleCLick() {
             mouse_event(GetFlag(Flag.MIDDLEDOWN) ^ GetFlag(Flag.MIDDLEUP), 0, 0, 0, new UIntPtr(0));
+        }
+        public static void MoveCursor(int dx, int dy) {
+            mouse_event(GetFlag(Flag.MOVE), dx, dy, 0, new UIntPtr());
         }
     }
 }
