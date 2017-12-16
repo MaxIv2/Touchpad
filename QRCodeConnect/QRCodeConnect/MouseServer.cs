@@ -15,7 +15,7 @@ namespace QRCodeConnect {
         private Socket serverSocket;
 
         public MouseServer() {
-            this.serverSocket = new Socket(SocketType.Dgram, ProtocolType.IP);
+            this.serverSocket = new Socket(SocketType.Stream, ProtocolType.IP);
             this.ip = GetLocalIPAddress();
             string[] splitIP = ip.Split('.');
             byte[] address = new byte[4];
