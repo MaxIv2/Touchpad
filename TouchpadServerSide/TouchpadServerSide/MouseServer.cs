@@ -54,7 +54,7 @@ namespace TouchpadServerSide {
         private void ServerThread() {
             this.serverSocket.Listen(1);
             Socket clientSocket = this.serverSocket.Accept();
-            byte[] buffer = new byte[4];
+            byte[] buffer = new byte[5];
             bool alive = true;
             while (alive) {
                 try {
@@ -68,10 +68,10 @@ namespace TouchpadServerSide {
         }
 
         private void HandleMovement(byte[] buffer) {
-            byte flags = buffer[0];
-            sbyte dx = (sbyte)buffer[1];
-            sbyte dy = (sbyte)buffer[2];
-            sbyte dwData = (sbyte)buffer[3];
+            int flags = (int)buffer[0] + ((int)buffer[1] * 256);
+            int dx = (sbyte)buffer[2];
+            int dy = (sbyte)buffer[3];
+            int dwData = (sbyte)buffer[4];
             MouseController.MouseEvent(flags, dx, dy, dwData);
         }
     }
