@@ -45,5 +45,9 @@ namespace TouchpadServerSide {
         public static void MoveCursor(int dx, int dy) {
             mouse_event(GetFlag(Flag.MOVE), dx, dy, 0, new UIntPtr());
         }
+
+        public static void MouseEvent(int dwFlags, int dx, int dy, int dwData) {
+            mouse_event(dwFlags, dx, dy, dwData, new UIntPtr());
+        }
     }
 }

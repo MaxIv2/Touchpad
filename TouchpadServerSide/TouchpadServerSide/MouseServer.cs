@@ -51,13 +51,28 @@ namespace TouchpadServerSide {
             return this.serverSocket;
         }
 
-        public void ServerThread() {
+        private void ServerThread() {
             this.serverSocket.Listen(1);
-            Socket clientSide = this.serverSocket.Accept();
-            byte[] buffer = Encoding.ASCII.GetBytes("Hello World!");
-            clientSide.Send(buffer);
-            clientSide.Close();
-            this.serverSocket.Close();
+            Socket clientSocket = this.serverSocket.Accept();
+            byte[] buffer = new byte[4];
+            bool alive = true;
+            while (alive) {
+                try {
+                    clientSocket.Receive(buffer);
+                    HandleMovement(buffer);
+                } catch (SocketException) {
+                    clientSocket.Close();
+                    serverSocket.Close();
+                }
+            }
+        }
+
+        private void HandleMovement(byte[] buffer) {
+            byte flags = buffer[0];
+            sbyte dx = (sbyte)buffer[1];
+            sbyte dy = (sbyte)buffer[2];
+            sbyte dwData = (sbyte)buffer[3];
+            MouseController.MouseEvent(flags, dx, dy, dwData);
         }
     }
 }
