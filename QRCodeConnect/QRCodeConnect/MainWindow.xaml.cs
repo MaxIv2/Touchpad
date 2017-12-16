@@ -41,7 +41,6 @@ namespace QRCodeConnect {
             string serverEndpoint = String.Format("{0}:{1}", ms.GetIP(), ms.GetPort());
             Rick.Text = serverEndpoint;
             Morty.Source = BitmapSourceFromBitmap(GetQrCodeBitmap(serverEndpoint));
-
         }
     }
 }
