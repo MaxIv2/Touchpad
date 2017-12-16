@@ -1,0 +1,2 @@
+C:\Users\Maxim\Desktop\TouchpadServerSide\TouchpadServerSide\bin\Debug\TouchpadServerSide.exe.config
+C:\Users\Maxim\Touchpad\TouchpadServerSide\TouchpadServerSide\bin\Debug\TouchpadServerSide.exe.config
