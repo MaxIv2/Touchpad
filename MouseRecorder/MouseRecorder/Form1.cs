@@ -24,23 +24,29 @@ namespace MouseRecorder
         private enum MouseAction
         {
             Move,
-            Left_Click,
-            Right_Click,
-            Middle_Click
+            Left_Down,
+            Right_Down,
+            Middle_Down,
+            Left_UP,
+            Right_Up,
+            Middle_Up
         }
 
         #endregion
 
-        #region Form1 Events
+        #region Form1 initialize
 
         public Form1()
         {
             InitializeComponent();
 
             MouseHook.Start();
-            MouseHook.MouseActionL += new EventHandler(OnLeftClickEvent);
-            MouseHook.MouseActionR += new EventHandler(OnRightClickEvent);
-            MouseHook.MouseActionM += new EventHandler(OnMiddleClickEvent);
+            MouseHook.MouseActionLD += new EventHandler(OnLeftDown);
+            MouseHook.MouseActionRD += new EventHandler(OnRightDown);
+            MouseHook.MouseActionMD += new EventHandler(OnMiddleDown);
+            MouseHook.MouseActionLU += new EventHandler(OnLeftUp);
+            MouseHook.MouseActionRU += new EventHandler(OnRightUp);
+            MouseHook.MouseActionMU += new EventHandler(OnMiddleUp);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -102,10 +108,18 @@ namespace MouseRecorder
                     foreach (string line in lines)
                     {
                         spl = line.Split('\t');
-                        if (spl.Length == 2 && Regex.IsMatch(spl[0], @"^\d+$") && Regex.IsMatch(spl[1], @"^\d+$"))
+                        if (spl.Length == 3 && Regex.IsMatch(spl[0], @"^\d+$") && Regex.IsMatch(spl[1], @"^\d+$") && Enum.IsDefined(typeof(MouseAction), spl[2]))
                         {
                             lv = new ListViewItem(spl[0]);
                             lv.SubItems.Add(spl[1]);
+                            if (b == 0){
+                                lv.SubItems.Add("0");
+                                lv.SubItems.Add("0");
+                            }else{
+                                lv.SubItems.Add((int.Parse(spl[0]) - int.Parse(listView1.Items[b-1].SubItems[0].Text)).ToString());
+                                lv.SubItems.Add((int.Parse(spl[1]) - int.Parse(listView1.Items[b - 1].SubItems[1].Text)).ToString());
+                            }
+                            lv.SubItems.Add(spl[2]);
                             listView1.Items.Add(lv);
                             b++;
                         }
@@ -133,7 +147,7 @@ namespace MouseRecorder
                     {
                         foreach (ListViewItem item in listView1.Items)
                         {
-                            sw.WriteLine("{0}{1}{2}", item.SubItems[0].Text, '\t', item.SubItems[1].Text);
+                            sw.WriteLine("{0}{1}{2}{3}{4}", item.SubItems[0].Text, '\t', item.SubItems[1].Text, '\t', item.SubItems[4].Text);
                         }
                     }
                 }
@@ -174,7 +188,7 @@ namespace MouseRecorder
 
         #region OnClick Event Heandlers
 
-        private void OnLeftClickEvent(object sender, EventArgs e)
+        private void OnLeftDown(object sender, EventArgs e)
         {
             if (!timer1.Enabled)
                 return;
@@ -187,12 +201,12 @@ namespace MouseRecorder
                 lv.SubItems.Add((int.Parse(lv.SubItems[0].Text) - int.Parse(listView1.Items[b - 1].SubItems[0].Text)).ToString());
                 lv.SubItems.Add((int.Parse(lv.SubItems[1].Text) - int.Parse(listView1.Items[b - 1].SubItems[1].Text)).ToString());
             }
-            lv.SubItems.Add(MouseAction.Left_Click.ToString());
+            lv.SubItems.Add(MouseAction.Left_Down.ToString());
             listView1.Items.Add(lv);
             b++;
         }
 
-        private void OnRightClickEvent(object sender, EventArgs e)
+        private void OnRightDown(object sender, EventArgs e)
         {
             if (!timer1.Enabled)
                 return;
@@ -208,12 +222,12 @@ namespace MouseRecorder
                 lv.SubItems.Add((int.Parse(lv.SubItems[0].Text) - int.Parse(listView1.Items[b - 1].SubItems[0].Text)).ToString());
                 lv.SubItems.Add((int.Parse(lv.SubItems[1].Text) - int.Parse(listView1.Items[b - 1].SubItems[1].Text)).ToString());
             }
-            lv.SubItems.Add(MouseAction.Right_Click.ToString());
+            lv.SubItems.Add(MouseAction.Right_Down.ToString());
             listView1.Items.Add(lv);
             b++;
         }
 
-        private void OnMiddleClickEvent(object sender, EventArgs e)
+        private void OnMiddleDown(object sender, EventArgs e)
         {
             if (!timer1.Enabled)
                 return;
@@ -229,7 +243,70 @@ namespace MouseRecorder
                 lv.SubItems.Add((int.Parse(lv.SubItems[0].Text) - int.Parse(listView1.Items[b - 1].SubItems[0].Text)).ToString());
                 lv.SubItems.Add((int.Parse(lv.SubItems[1].Text) - int.Parse(listView1.Items[b - 1].SubItems[1].Text)).ToString());
             }
-            lv.SubItems.Add(MouseAction.Middle_Click.ToString());
+            lv.SubItems.Add(MouseAction.Middle_Down.ToString());
+            listView1.Items.Add(lv);
+            b++;
+        }
+
+        private void OnLeftUp(object sender, EventArgs e)
+        {
+            if (!timer1.Enabled)
+                return;
+            lv = new ListViewItem(Cursor.Position.X.ToString());
+            lv.SubItems.Add(Cursor.Position.Y.ToString());
+            if (b == 0)
+            {
+                lv.SubItems.Add("0");
+                lv.SubItems.Add("0");
+            }
+            else
+            {
+                lv.SubItems.Add((int.Parse(lv.SubItems[0].Text) - int.Parse(listView1.Items[b - 1].SubItems[0].Text)).ToString());
+                lv.SubItems.Add((int.Parse(lv.SubItems[1].Text) - int.Parse(listView1.Items[b - 1].SubItems[1].Text)).ToString());
+            }
+            lv.SubItems.Add(MouseAction.Left_UP.ToString());
+            listView1.Items.Add(lv);
+            b++;
+        }
+
+        private void OnRightUp(object sender, EventArgs e)
+        {
+            if (!timer1.Enabled)
+                return;
+            lv = new ListViewItem(Cursor.Position.X.ToString());
+            lv.SubItems.Add(Cursor.Position.Y.ToString());
+            if (b == 0)
+            {
+                lv.SubItems.Add("0");
+                lv.SubItems.Add("0");
+            }
+            else
+            {
+                lv.SubItems.Add((int.Parse(lv.SubItems[0].Text) - int.Parse(listView1.Items[b - 1].SubItems[0].Text)).ToString());
+                lv.SubItems.Add((int.Parse(lv.SubItems[1].Text) - int.Parse(listView1.Items[b - 1].SubItems[1].Text)).ToString());
+            }
+            lv.SubItems.Add(MouseAction.Right_Up.ToString());
+            listView1.Items.Add(lv);
+            b++;
+        }
+
+        private void OnMiddleUp(object sender, EventArgs e)
+        {
+            if (!timer1.Enabled)
+                return;
+            lv = new ListViewItem(Cursor.Position.X.ToString());
+            lv.SubItems.Add(Cursor.Position.Y.ToString());
+            if (b == 0)
+            {
+                lv.SubItems.Add("0");
+                lv.SubItems.Add("0");
+            }
+            else
+            {
+                lv.SubItems.Add((int.Parse(lv.SubItems[0].Text) - int.Parse(listView1.Items[b - 1].SubItems[0].Text)).ToString());
+                lv.SubItems.Add((int.Parse(lv.SubItems[1].Text) - int.Parse(listView1.Items[b - 1].SubItems[1].Text)).ToString());
+            }
+            lv.SubItems.Add(MouseAction.Middle_Up.ToString());
             listView1.Items.Add(lv);
             b++;
         }
@@ -239,12 +316,75 @@ namespace MouseRecorder
 
     public static class MouseHook
     {
+        public static event EventHandler MouseActionLD = delegate { };
+        public static event EventHandler MouseActionRD = delegate { };
+        public static event EventHandler MouseActionMD = delegate { };
+        public static event EventHandler MouseActionLU = delegate { };
+        public static event EventHandler MouseActionRU = delegate { };
+        public static event EventHandler MouseActionMU = delegate { };
+
+        private enum MouseMessages
+        {
+            WM_LBUTTONDOWN = 0x0201,     //The left mouse button was pressed.
+            WM_LBUTTONUP = 0x0202,       //The left mouse button was released.
+            WM_RBUTTONDOWN = 0x0204,     //The right mouse button was pressed.
+            WM_RBUTTONUP = 0x0205,       //The right mouse button was released.
+            WM_MBUTTONDOWN = 0x0207,     //The middle mouse button was pressed.
+            WM_MBUTTONUP = 0x0208,       //The middle mouse button was released.
+
+            WM_MOUSEWHEEL = 0x020A,
+
+            //most likely useless:
+            MK_CONTROL = 0x0008,
+            WM_MOUSEMOVE = 0x0200,
+            WM_LBUTTONDBLCLK = 0x0203,   //The left mouse button was double-clicked.
+            WM_RBUTTONDBLCLK = 0x0206,   //The right mouse button was double-clicked.
+            WM_MBUTTONDBLCLK = 0x0209    //The middle mouse button was double-clicked.
+        }
+
+        private static IntPtr HookCallback(
+          int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            if (nCode >= 0 && MouseMessages.WM_LBUTTONDOWN == (MouseMessages)wParam){
+                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
+                MouseActionLD(null, new EventArgs());
+            }
+
+            if (nCode >= 0 && MouseMessages.WM_RBUTTONDOWN == (MouseMessages)wParam){
+                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
+                MouseActionRD(null, new EventArgs());
+            }
+
+            if (nCode >= 0 && MouseMessages.WM_MBUTTONDOWN == (MouseMessages)wParam){
+                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
+                MouseActionMD(null, new EventArgs());
+            }
+
+            if (nCode >= 0 && MouseMessages.WM_LBUTTONUP == (MouseMessages)wParam)
+            {
+                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
+                MouseActionLU(null, new EventArgs());
+            }
+
+            if (nCode >= 0 && MouseMessages.WM_RBUTTONUP == (MouseMessages)wParam)
+            {
+                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
+                MouseActionRU(null, new EventArgs());
+            }
+
+            if (nCode >= 0 && MouseMessages.WM_MBUTTONUP == (MouseMessages)wParam)
+            {
+                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
+                MouseActionMU(null, new EventArgs());
+            }
+
+            return CallNextHookEx(_hookID, nCode, wParam, lParam);
+        }
+
+        #region
+
         private static LowLevelMouseProc _proc = HookCallback;
         private static IntPtr _hookID = IntPtr.Zero;
-
-        public static event EventHandler MouseActionL = delegate { };
-        public static event EventHandler MouseActionR = delegate { };
-        public static event EventHandler MouseActionM = delegate { };
 
         public static void Start()
         {
@@ -266,45 +406,9 @@ namespace MouseRecorder
             }
         }
 
-        private delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
-
-        private static IntPtr HookCallback(
-          int nCode, IntPtr wParam, IntPtr lParam)
-        {
-            if (nCode >= 0 && MouseMessages.WM_LBUTTONDOWN == (MouseMessages)wParam)
-            {
-                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                MouseActionL(null, new EventArgs());
-            }
-            if (nCode >= 0 && MouseMessages.WM_RBUTTONDOWN == (MouseMessages)wParam)
-            {
-                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                MouseActionR(null, new EventArgs());
-            }
-            if (nCode >= 0 && MouseMessages.WM_MBUTTONDOWN == (MouseMessages)wParam)
-            {
-                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                MouseActionM(null, new EventArgs());
-            }
-            return CallNextHookEx(_hookID, nCode, wParam, lParam);
-        }
+        private delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);     
 
         private const int WH_MOUSE_LL = 14;
-
-        private enum MouseMessages
-        {
-            WM_LBUTTONDOWN = 0x0201,     //The left mouse button was pressed.
-            WM_LBUTTONDBLCLK = 0x0203,   //The left mouse button was double-clicked.
-            WM_RBUTTONDOWN = 0x0204,     //The right mouse button was pressed.
-            WM_RBUTTONDBLCLK = 0x0206,   //The right mouse button was double-clicked.
-            WM_MBUTTONDOWN = 0x0207,     //The middle mouse button was pressed.
-            WM_MBUTTONDBLCLK = 0x0209,   //The middle mouse button was double-clicked.
-            MK_CONTROL = 0x0008,
-            WM_MOUSEWHEEL = 0x020A,
-            WM_LBUTTONUP = 0x0202,
-            WM_RBUTTONUP = 0x0205,
-            WM_MOUSEMOVE = 0x0200
-        }
 
         [StructLayout(LayoutKind.Sequential)]
         private struct POINT
@@ -338,6 +442,9 @@ namespace MouseRecorder
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
-
+        #endregion
     }
 }
+
+//roll up/down
+//play clicks
