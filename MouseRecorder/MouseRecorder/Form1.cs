@@ -27,7 +27,7 @@ namespace MouseRecorder
             Left_Down,
             Right_Down,
             Middle_Down,
-            Left_UP,
+            Left_Up,
             Right_Up,
             Middle_Up
         }
@@ -81,11 +81,11 @@ namespace MouseRecorder
 
         private void Clear_Button_Click(object sender, EventArgs e)
         {
-            listView1.Items.Clear();
-            a = 0;
-            b = 0;
             timer1.Stop();
             timer2.Stop();
+            a = 0;
+            b = 0;
+            listView1.Items.Clear();
         }
 
         private void Load_Button_Click(object sender, EventArgs e)
@@ -176,18 +176,51 @@ namespace MouseRecorder
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            if (a != b)
-            {
+            if (a == b)
+                return;
+            
+            if (a == 0){
                 Cursor.Position = new Point(int.Parse(listView1.Items[a].SubItems[0].Text), int.Parse(listView1.Items[a].SubItems[1].Text));
-                //Cursor.Position = new Point(Cursor.Position.X + int.Parse(listView1.Items[a].SubItems[2].Text), Cursor.Position.Y + int.Parse(listView1.Items[a].SubItems[3].Text));              // moution by relative coordinates works poorly for dual monitor with 2 diffrent resolutions.
                 a++;
+                return;
             }
+
+            MouseAction act = (MouseAction)Enum.Parse(typeof(MouseAction), listView1.Items[a].SubItems[4].Text);
+
+            switch (act)
+            {
+                case MouseAction.Move:
+                    //MouseController.MoveCursor(int.Parse(listView1.Items[a].SubItems[2].Text), int.Parse(listView1.Items[a].SubItems[3].Text));
+                    Cursor.Position = new Point(Cursor.Position.X + int.Parse(listView1.Items[a].SubItems[2].Text), Cursor.Position.Y + int.Parse(listView1.Items[a].SubItems[3].Text));
+                    break;
+                case MouseAction.Left_Down:
+                    MouseController.LeftDown();
+                    break;
+                case MouseAction.Left_Up:
+                    MouseController.LeftUp();
+                    break;
+                case MouseAction.Right_Down:
+                    MouseController.RightDown();
+                    break;
+                case MouseAction.Right_Up:
+                    MouseController.RightUp();
+                    break;
+                case MouseAction.Middle_Down:
+                    MouseController.MiddleDown();
+                    break;
+                case MouseAction.Middle_Up:
+                    MouseController.MiddleUp();
+                    break;
+            }
+            //Cursor.Position = new Point(int.Parse(listView1.Items[a].SubItems[0].Text), int.Parse(listView1.Items[a].SubItems[1].Text));
+            a++;
+            
         }
 
         #endregion
 
-        #region OnClick Event Heandlers
-
+        #region OnClick Event Handlers
+        
         private void OnLeftDown(object sender, EventArgs e)
         {
             if (!timer1.Enabled)
@@ -264,7 +297,7 @@ namespace MouseRecorder
                 lv.SubItems.Add((int.Parse(lv.SubItems[0].Text) - int.Parse(listView1.Items[b - 1].SubItems[0].Text)).ToString());
                 lv.SubItems.Add((int.Parse(lv.SubItems[1].Text) - int.Parse(listView1.Items[b - 1].SubItems[1].Text)).ToString());
             }
-            lv.SubItems.Add(MouseAction.Left_UP.ToString());
+            lv.SubItems.Add(MouseAction.Left_Up.ToString());
             listView1.Items.Add(lv);
             b++;
         }
@@ -312,6 +345,79 @@ namespace MouseRecorder
         }
 
         #endregion
+    }
+
+    public static class MouseController
+    {
+        [DllImport("user32.dll")]
+        private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, UIntPtr dwExtraInfo);
+        private enum Flag {
+            ABSOLUTE,
+            LEFTDOWN,
+            LEFTUP,
+            MIDDLEDOWN,
+            MIDDLEUP,
+            MOVE,
+            RIGHTDOWN,
+            RIGHTUP
+        };
+        private static int GetFlag(Flag mf)
+        {
+            switch (mf)
+            {
+                case Flag.ABSOLUTE:
+                    return 0x8000;
+                case Flag.LEFTDOWN:
+                    return 0x0002;
+                case Flag.LEFTUP:
+                    return 0x0004;
+                case Flag.MIDDLEDOWN:
+                    return 0x0020;
+                case Flag.MIDDLEUP:
+                    return 0x0040;
+                case Flag.MOVE:
+                    return 0x0001;
+                case Flag.RIGHTDOWN:
+                    return 0x0008;
+                case Flag.RIGHTUP:
+                    return 0x0010;
+                default:
+                    return 0;
+            }
+        }
+        public static void RightDown()
+        {
+            mouse_event(GetFlag(Flag.RIGHTDOWN), 0, 0, 0, new UIntPtr(0));
+        }
+        public static void RightUp()
+        {
+            mouse_event(GetFlag(Flag.RIGHTUP), 0, 0, 0, new UIntPtr(0));
+        }
+        public static void LeftDown()
+        {
+            mouse_event(GetFlag(Flag.LEFTDOWN), 0, 0, 0, new UIntPtr(0));
+        }
+        public static void LeftUp()
+        {
+            mouse_event(GetFlag(Flag.LEFTUP), 0, 0, 0, new UIntPtr(0));
+        }
+        public static void MiddleDown()
+        {
+            mouse_event(GetFlag(Flag.MIDDLEDOWN), 0, 0, 0, new UIntPtr(0));
+        }
+        public static void MiddleUp()
+        {
+            mouse_event(GetFlag(Flag.MIDDLEUP), 0, 0, 0, new UIntPtr(0));
+        }
+        public static void MoveCursor(int dx, int dy)
+        {
+            mouse_event(GetFlag(Flag.MOVE), dx, dy, 0, new UIntPtr());
+        }
+
+        public static void MouseEvent(int dwFlags, int dx, int dy, int dwData)
+        {
+            mouse_event(dwFlags, dx, dy, dwData, new UIntPtr());
+        }
     }
 
     public static class MouseHook
@@ -447,4 +553,3 @@ namespace MouseRecorder
 }
 
 //roll up/down
-//play clicks
