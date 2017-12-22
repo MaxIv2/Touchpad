@@ -1,0 +1,1 @@
+C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.exe.config
