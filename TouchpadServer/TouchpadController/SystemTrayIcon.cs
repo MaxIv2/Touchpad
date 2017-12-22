@@ -7,13 +7,17 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace TouchpadController {
-    class SystemTrayIcon {
+    class SystemTrayIcon : ApplicationContext {
         private NotifyIcon trayIcon;
+        private ContextMenu contextMenu;
 
         public SystemTrayIcon() {
+            MenuItem[] menuItems = { new MenuItem("Exit", ExitOnClick) };
+            this.contextMenu = new ContextMenu(menuItems);
             trayIcon = new NotifyIcon();
             trayIcon.Text = "Remote touchpad settings";
-            //trayIcon.Icon = TouchpadController.Proper
+            trayIcon.ContextMenu = contextMenu;
+            trayIcon.Icon = Properties.Resources.mouseIcon;
             trayIcon.Visible = true;
             trayIcon.Click += OnIconClick;
             trayIcon.DoubleClick += this.OnDoubleClick;
@@ -29,8 +33,14 @@ namespace TouchpadController {
             //this.ShowInTaskbar = visible;
         }
 
+        public void ExitOnClick(object sender, EventArgs e) {
+            trayIcon.Dispose();
+            this.ExitThread();
+        }
+
         public void OnIconClick(object sender, EventArgs e) {
-            //SetVisibilty(!this.Visible);
+            TouchpadController t = new TouchpadController();
+            t.Show();
         }
     }
 }

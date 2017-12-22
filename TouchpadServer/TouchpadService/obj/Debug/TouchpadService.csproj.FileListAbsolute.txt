@@ -1,1 +1,8 @@
 C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.exe.config
+C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.exe
+C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.pdb
+C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\obj\Debug\TouchpadService.csprojResolveAssemblyReference.cache
+C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\obj\Debug\TouchpadService.exe
+C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\obj\Debug\TouchpadService.pdb
+C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\obj\Debug\TouchpadService.ProjectInstaller.resources
+C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\obj\Debug\TouchpadService.csproj.GenerateResource.Cache

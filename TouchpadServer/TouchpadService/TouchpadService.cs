@@ -56,7 +56,7 @@ namespace TouchpadService {
         protected override void OnStop() {
             SetServiceStatus(ServiceState.SERVICE_STOP_PENDING);
             TouchpadServerThread thread = new TouchpadServerThread(this.server);
-            thread.Start();
+            thread.Stop();
             SetServiceStatus(ServiceState.SERVICE_STOPPED);
         }
 
@@ -82,7 +82,8 @@ namespace TouchpadService {
             server.Start();
             this.port = (server.LocalEndpoint as IPEndPoint).Port;
             server.Stop();
-            SetPortInRegitry();
+            SetRegistryValue("port", this.port);
+            SetRegistryValue("ip", this.ip);
         }
 
         public void SetServiceStatus(ServiceState serviceState, int dwWaitHint = 10000) {
@@ -92,9 +93,9 @@ namespace TouchpadService {
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         }
 
-        public void SetPortInRegitry() {
+        public void SetRegistryValue(string valueName, object value) {
             Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Touchpad");
-            key.SetValue("port", this.port);
+            key.SetValue(valueName, value);
             key.Close();
         }
     }
