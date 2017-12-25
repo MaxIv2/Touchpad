@@ -11,12 +11,15 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace TouchpadService {
     public partial class TouchpadService : ServiceBase {
+        private const string path = "";//path of tray icon app
         private int port;
         private string ip;
         private TcpListener server;
+        private TouchpadServerThread thread;
 
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
@@ -48,15 +51,15 @@ namespace TouchpadService {
         protected override void OnStart(string[] args) {
             SetServiceStatus(ServiceState.SERVICE_START_PENDING);
             SetListener();
-            TouchpadServerThread thread = new TouchpadServerThread(this.server);
+            this.thread = new TouchpadServerThread(this.server);
+            Process.Start(this.path, this.ip + " " + this.port);
             thread.Start();
             SetServiceStatus(ServiceState.SERVICE_RUNNING);
         }
 
         protected override void OnStop() {
             SetServiceStatus(ServiceState.SERVICE_STOP_PENDING);
-            TouchpadServerThread thread = new TouchpadServerThread(this.server);
-            thread.Stop();
+            this.thread.Stop();
             SetServiceStatus(ServiceState.SERVICE_STOPPED);
         }
 
@@ -80,10 +83,8 @@ namespace TouchpadService {
             IPEndPoint localEP = new IPEndPoint(new IPAddress(address), 0);
             this.server = new TcpListener(localEP);
             server.Start();
-            this.port = (server.LocalEndpoint as IPEndPoint).Port;
+            this.port = (server.LocalEndpoint as IPEndPoint).Port + 1;
             server.Stop();
-            SetRegistryValue("port", this.port);
-            SetRegistryValue("ip", this.ip);
         }
 
         public void SetServiceStatus(ServiceState serviceState, int dwWaitHint = 10000) {
@@ -91,12 +92,6 @@ namespace TouchpadService {
             serviceStatus.dwCurrentState = serviceState;
             serviceStatus.dwWaitHint = dwWaitHint;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
-        }
-
-        public void SetRegistryValue(string valueName, object value) {
-            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Touchpad");
-            key.SetValue(valueName, value);
-            key.Close();
         }
     }
 }

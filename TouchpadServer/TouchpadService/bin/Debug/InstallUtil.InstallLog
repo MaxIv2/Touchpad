@@ -61,3 +61,24 @@ See the contents of the log file for the c:\Users\Maxim\Touchpad\TouchpadServer\
 The file is located at c:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.InstallLog.
 
 The uninstall has completed.
+
+Running a transacted installation.
+
+Beginning the Install phase of the installation.
+See the contents of the log file for the c:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.exe assembly's progress.
+The file is located at c:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.InstallLog.
+
+The Install phase completed successfully, and the Commit phase is beginning.
+See the contents of the log file for the c:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.exe assembly's progress.
+The file is located at c:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.InstallLog.
+
+The Commit phase completed successfully.
+
+The transacted install has completed.
+
+
+The uninstall is beginning.
+See the contents of the log file for the c:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.exe assembly's progress.
+The file is located at c:\Users\Maxim\Touchpad\TouchpadServer\TouchpadService\bin\Debug\TouchpadService.InstallLog.
+
+The uninstall has completed.
