@@ -8,3 +8,12 @@ C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadCont
 C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.pdb
 C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadController\bin\Debug\QRCoder.dll
 C:\Users\Maxim\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.TouchpadController.resources
+C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\bin\Debug\TouchpadController.exe.config
+C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.exe
+C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.pdb
+C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\bin\Debug\TouchpadController.exe
+C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\bin\Debug\TouchpadController.pdb
+C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.csprojResolveAssemblyReference.cache
+C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.Properties.Resources.resources
+C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.TouchpadController.resources
+C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.csproj.GenerateResource.Cache

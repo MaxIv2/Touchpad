@@ -10,8 +10,12 @@ namespace TouchpadController {
     class SystemTrayIcon : ApplicationContext {
         private NotifyIcon trayIcon;
         private ContextMenu contextMenu;
+        private string ip;
+        private string port;
 
-        public SystemTrayIcon() {
+        public SystemTrayIcon(string ip, string port) {
+            this.port = port;
+            this.ip = ip;
             MenuItem[] menuItems = { new MenuItem("Exit", ExitOnClick) };
             this.contextMenu = new ContextMenu(menuItems);
             trayIcon = new NotifyIcon();
@@ -39,7 +43,7 @@ namespace TouchpadController {
         }
 
         public void OnIconClick(object sender, EventArgs e) {
-            TouchpadController t = new TouchpadController();
+            TouchpadController t = new TouchpadController(ip, port);
             t.Show();
         }
     }

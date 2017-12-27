@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Hello")]
+[assembly: AssemblyTitle("TouchpadServiceDebugging")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Hello")]
+[assembly: AssemblyProduct("TouchpadServiceDebugging")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f4c54dc8-af77-423c-8a70-3dae6de3a020")]
+[assembly: Guid("2d3ca9c1-893e-48da-b77e-4bef2989d2ac")]
 
 // Version information for an assembly consists of the following four values:
 //
