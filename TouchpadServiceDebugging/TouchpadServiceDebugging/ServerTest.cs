@@ -15,14 +15,14 @@ namespace TouchpadServiceDebugging{
         private bool terminateThread;
         public string ip { get; private set; }
         public int port { get; private set; }
-        MouseController mc;
+        InputHandler mc;
 
         [DllImport("user32.dll")]
         private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, UIntPtr dwExtraInfo);
 
         public ServerTest() {
             SetListener();
-            mc = new MouseController();
+            mc = new InputHandler();
             this.terminateThread = false;
         }
 

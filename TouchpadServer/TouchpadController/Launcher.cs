@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.ServiceProcess;
 
-namespace TouchpadServiceDebugging {
+namespace TouchpadController {
     class Launcher {
         public static Process StartProcess(string fileName, string args) {
             try {
@@ -14,7 +15,8 @@ namespace TouchpadServiceDebugging {
                 process.StartInfo.Arguments = args;
                 process.Start();
                 return process;
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return null;
             }
@@ -23,6 +25,14 @@ namespace TouchpadServiceDebugging {
         public static void KillPocess(Process p) {
             p.Kill();
             p.Close();
+        }
+
+        public static void StopService(string serviceName) {
+            ServiceController serviceController = new ServiceController(serviceName);
+            if (serviceController.Status.Equals(ServiceControllerStatus.Running))
+                serviceController.Stop();
+            else
+                throw new Exception("Can't stop service");
         }
     }
 }

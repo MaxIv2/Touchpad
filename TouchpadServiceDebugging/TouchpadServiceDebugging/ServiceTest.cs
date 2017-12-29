@@ -50,6 +50,7 @@ namespace TouchpadServiceDebugging {
         public void OnStop() {
             SetServiceStatus(ServiceState.SERVICE_STOP_PENDING);
             this.server.Stop();
+            Launcher.KillPocess(trayApp);
             SetServiceStatus(ServiceState.SERVICE_STOPPED);
         }
 
