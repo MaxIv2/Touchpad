@@ -9,6 +9,8 @@ namespace TouchpadServiceDebugging {
     class InputHandler {
         private Queue<byte> clientInput;
         public bool done { get; private set; }
+        public enum ActionType { Move = 0, Left = 1, Right = 2, Scroll = 3, Zoom = 4}
+
         public InputHandler() {
             this.clientInput = new Queue<byte>();
             this.done = true;
@@ -27,9 +29,21 @@ namespace TouchpadServiceDebugging {
 
         public void HandleInput() {
             while (!done) {
-                byte b = clientInput.Dequeue();
-                //do something
-                Console.WriteLine(b);
+                byte length = clientInput.Dequeue();
+                while (length > clientInput.Count)
+                    Thread.Sleep(5);
+                byte type = clientInput.Dequeue();
+                switch ((ActionType)type) {
+                    case ActionType.Move:
+                        MouseController.Move(clientInput.Dequeue(), clientInput.Dequeue());
+                        break;
+                    case ActionType.Left:
+                        MouseController.Left(Convert.ToBoolean(clientInput.Dequeue()));
+                        break;
+                    case ActionType.Right:
+                        MouseController.Right(Convert.ToBoolean(clientInput.Dequeue()));
+                        break;
+                }
                 if (clientInput.Count == 0)
                     done = true;
             }
