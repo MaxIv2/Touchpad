@@ -38,11 +38,14 @@ namespace TouchpadServiceDebugging{
             }
         }
 
-        private void HandleClient(Socket client) {
+        private void HandleClient(Socket client)
+        {
+            Console.WriteLine("HeyThere" + client.ToString());
             byte[] buffer;
             int dataLen;
+
             while (!this.terminateThread) {
-                if(client.Available > 0){
+                if (client.Available > 0) {
                     dataLen = client.Available;
                     buffer = new byte[dataLen];
                     client.Receive(buffer);
@@ -74,7 +77,7 @@ namespace TouchpadServiceDebugging{
 
         private void SetListener() {
             IPAddress ipObject = GetLocalIPAddress();
-            IPEndPoint localEP = new IPEndPoint(ipObject, 0);
+            IPEndPoint localEP = new IPEndPoint(ipObject, 1800);
             this.ip = ipObject.ToString();
             this.listener = new TcpListener(localEP);
             listener.Start();
