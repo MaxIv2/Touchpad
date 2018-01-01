@@ -17,3 +17,6 @@ C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\To
 C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.Properties.Resources.resources
 C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.TouchpadController.resources
 C:\Users\Maxim\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.csproj.GenerateResource.Cache
+C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadController\bin\Debug\TouchpadController.exe.config
+C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.exe
+C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadController\obj\Debug\TouchpadController.pdb
