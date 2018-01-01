@@ -44,13 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InputHandler.cs" />
+    <Compile Include="Launcher.cs" />
+    <Compile Include="MouseController.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
-    <Compile Include="TouchpadServerThread.cs" />
+    <Compile Include="TouchpadServer.cs" />
     <Compile Include="TouchpadService.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace TouchpadServiceDebugging {
     class ServiceTest {
-        private const string path = "C:\\Users\\Maxim\\Documents\\Touchpad\\TouchpadServer\\TouchpadController\\bin\\Debug\\TouchpadController.exe";//path of tray icon app
+        private const string path = "C:\\Users\\Maxim2\\Documents\\Touchpad\\TouchpadServer\\TouchpadController\\bin\\Debug\\TouchpadController.exe";//path of tray icon app
         private ServerTest server;
         private Process trayApp;
 

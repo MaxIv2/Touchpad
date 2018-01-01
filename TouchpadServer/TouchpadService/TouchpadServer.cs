@@ -3,26 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
+using System.Net;
 using System.Threading;
-using System.Timers;
+using System.Runtime.InteropServices;
 
-namespace TouchpadServiceDebugging{
-    class ServerTest {
+namespace TouchpadService {
+    class TouchpadServer {
         private TcpListener listener;
         private bool terminateThread;
         public string ip { get; private set; }
         public int port { get; private set; }
-        InputHandler mc;
+        InputHandler handler;
 
         [DllImport("user32.dll")]
         private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, UIntPtr dwExtraInfo);
 
-        public ServerTest() {
+        public TouchpadServer() {
             SetListener();
-            mc = new InputHandler();
+            handler = new InputHandler();
             this.terminateThread = false;
         }
 
@@ -34,13 +33,11 @@ namespace TouchpadServiceDebugging{
                     listener.Stop();
                     HandleClient(client);
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
             }
         }
 
-        private void HandleClient(Socket client)
-        {
-            Console.WriteLine("HeyThere" + client.ToString());
+        private void HandleClient(Socket client) {
             byte[] buffer;
             int dataLen;
 
@@ -49,9 +46,11 @@ namespace TouchpadServiceDebugging{
                     dataLen = client.Available;
                     buffer = new byte[dataLen];
                     client.Receive(buffer);
-                    mc.AddToQueue(buffer);
+                    handler.AddToQueue(buffer);
                 }
                 Thread.Sleep(50);
+                if (!client.Connected)
+                    break;
             }
             client.Close();
         }
@@ -77,7 +76,7 @@ namespace TouchpadServiceDebugging{
 
         private void SetListener() {
             IPAddress ipObject = GetLocalIPAddress();
-            IPEndPoint localEP = new IPEndPoint(ipObject, 1800);
+            IPEndPoint localEP = new IPEndPoint(ipObject, 400);
             this.ip = ipObject.ToString();
             this.listener = new TcpListener(localEP);
             listener.Start();

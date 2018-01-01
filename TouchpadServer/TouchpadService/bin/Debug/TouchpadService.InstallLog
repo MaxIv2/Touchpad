@@ -82,3 +82,79 @@ Affected parameters are:
 Removing EventLog source TouchpadService.
 Service TouchpadService is being removed from the system...
 Service TouchpadService was successfully removed from the system.
+Installing assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe
+Installing service TouchpadService...
+Service TouchpadService has been successfully installed.
+Creating EventLog source TouchpadService in log Application...
+Committing assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe
+Uninstalling assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe
+Removing EventLog source TouchpadService.
+Service TouchpadService is being removed from the system...
+Service TouchpadService was successfully removed from the system.
+Installing assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe
+Installing service TouchpadService...
+Service TouchpadService has been successfully installed.
+Creating EventLog source TouchpadService in log Application...
+Committing assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe
+Uninstalling assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe
+Removing EventLog source TouchpadService.
+Service TouchpadService is being removed from the system...
+Service TouchpadService was successfully removed from the system.
+Installing assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe
+Installing service TouchpadService...
+Service TouchpadService has been successfully installed.
+Creating EventLog source TouchpadService in log Application...
+Committing assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe
+Uninstalling assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe
+Removing EventLog source TouchpadService.
+Service TouchpadService is being removed from the system...
+Service TouchpadService was successfully removed from the system.
+Installing assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe
+Installing service TouchpadService...
+Service TouchpadService has been successfully installed.
+Creating EventLog source TouchpadService in log Application...
+Committing assembly 'c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.InstallLog
+   assemblypath = c:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadService\bin\Debug\touchpadservice.exe

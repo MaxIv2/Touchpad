@@ -15,11 +15,8 @@ using System.IO;
 
 namespace TouchpadService {
     public partial class TouchpadService : ServiceBase {
-        private const string path = "";//path of tray icon app
-        private int port;
-        private string ip;
-        private TcpListener server;
-        private TouchpadServerThread thread;
+        private const string path = "C:\\Users\\Maxim2\\Documents\\Touchpad\\TouchpadServer\\TouchpadController\\bin\\Debug\\TouchpadController.exe";//path of tray icon app
+        private TouchpadServer server;
 
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
@@ -42,7 +39,7 @@ namespace TouchpadService {
             public int dwServiceSpecificExitCode;
             public int dwCheckPoint;
             public int dwWaitHint;
-        }; 
+        };
 
         public TouchpadService() {
             InitializeComponent();
@@ -50,41 +47,15 @@ namespace TouchpadService {
 
         protected override void OnStart(string[] args) {
             SetServiceStatus(ServiceState.SERVICE_START_PENDING);
-            SetListener();
-            this.thread = new TouchpadServerThread(this.server);
-            Process.Start(this.path, this.ip + " " + this.port);
-            thread.Start();
+            this.server = new TouchpadServer();
+            this.server.Start();
             SetServiceStatus(ServiceState.SERVICE_RUNNING);
         }
 
         protected override void OnStop() {
             SetServiceStatus(ServiceState.SERVICE_STOP_PENDING);
-            this.thread.Stop();
+            this.server.Stop();
             SetServiceStatus(ServiceState.SERVICE_STOPPED);
-        }
-
-        public static string GetLocalIPAddress() {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList) {
-                if (ip.AddressFamily == AddressFamily.InterNetwork) {
-                    return ip.ToString();
-                }
-            }
-            throw new Exception("No network adapters with an IPv4 address in the system!");
-        }
-
-        public void SetListener() {
-            this.ip = GetLocalIPAddress();
-            string[] splitIP = ip.Split('.');
-            byte[] address = new byte[4];
-            for (int i = 0; i < 4; i++) {
-                address[i] = byte.Parse(splitIP[i]);
-            }
-            IPEndPoint localEP = new IPEndPoint(new IPAddress(address), 0);
-            this.server = new TcpListener(localEP);
-            server.Start();
-            this.port = (server.LocalEndpoint as IPEndPoint).Port + 1;
-            server.Stop();
         }
 
         public void SetServiceStatus(ServiceState serviceState, int dwWaitHint = 10000) {
