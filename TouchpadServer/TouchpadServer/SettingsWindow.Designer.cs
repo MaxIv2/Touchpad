@@ -31,7 +31,7 @@
             // 
             this.QRCodeContainer.Location = new System.Drawing.Point(12, 12);
             this.QRCodeContainer.Name = "QRCodeContainer";
-            this.QRCodeContainer.Size = new System.Drawing.Size(260, 237);
+            this.QRCodeContainer.Size = new System.Drawing.Size(260, 260);
             this.QRCodeContainer.TabIndex = 0;
             this.QRCodeContainer.TabStop = false;
             // 
@@ -39,7 +39,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(335, 357);
             this.Controls.Add(this.QRCodeContainer);
             this.Name = "SettingsWindow";
             this.Text = "SettingsWindow";

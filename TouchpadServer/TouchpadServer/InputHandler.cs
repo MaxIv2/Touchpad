@@ -10,8 +10,11 @@ namespace TouchpadServer {
         private Queue<byte> clientInput;
         public bool done { get; private set; }
         public enum ActionType { Move = 0, Left = 1, Right = 2, Scroll = 3, Zoom = 4 }
+        public static int[] ActionParamLength = { 2, 1, 1, 1, 1 };
+        private DiagnosticsReporter reporter;
 
         public InputHandler() {
+            this.reporter = new DiagnosticsReporter("");
             this.clientInput = new Queue<byte>();
             this.done = true;
         }
@@ -30,19 +33,29 @@ namespace TouchpadServer {
         public void HandleInput() {
             while (!done) {
                 byte length = clientInput.Dequeue();
-                while (length > clientInput.Count)
-                    Thread.Sleep(5);
                 byte type = clientInput.Dequeue();
-                switch ((ActionType)type) {
-                    case ActionType.Move:
-                        MouseController.Move((sbyte)clientInput.Dequeue(), (sbyte)clientInput.Dequeue());
-                        break;
-                    case ActionType.Left:
-                        MouseController.Left(clientInput.Dequeue());
-                        break;
-                    case ActionType.Right:
-                        MouseController.Right(clientInput.Dequeue());
-                        break;
+                if (length <= clientInput.Count) {
+                    switch ((ActionType)type) {
+                        case ActionType.Move:
+                            sbyte dx = (sbyte)clientInput.Dequeue();
+                            sbyte dy = (sbyte)clientInput.Dequeue();
+                            MouseController.Move(dx, dy);
+                            reporter.AddItem(new Item(type, new Description.MoveDescription(dx, dy)));
+                            break;
+                        case ActionType.Left:
+                            byte state = clientInput.Dequeue();
+                            MouseController.Left(state);
+                            reporter.AddItem(new Item(type, new Description.ButtonEventDescription(state)));
+                            break;
+                        case ActionType.Right:
+                            state = clientInput.Dequeue();
+                            MouseController.Right(state);
+                            reporter.AddItem(new Item(type, new Description.ButtonEventDescription(state)));
+                            break;
+                    }
+                }
+                else {
+                    done = true;
                 }
                 if (clientInput.Count == 0)
                     done = true;
