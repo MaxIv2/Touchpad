@@ -1,0 +1,6 @@
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\Json\Json\bin\Debug\Json.exe.config
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\Json\Json\obj\Debug\Json.csprojResolveAssemblyReference.cache
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\Json\Json\bin\Debug\Json.exe
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\Json\Json\bin\Debug\Json.pdb
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\Json\Json\obj\Debug\Json.exe
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\Json\Json\obj\Debug\Json.pdb
