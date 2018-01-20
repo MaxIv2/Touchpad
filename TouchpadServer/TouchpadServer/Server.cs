@@ -37,7 +37,6 @@ namespace TouchpadServer {
         {
             byte[] buffer;
             int dataLen;
-
             while (!this.terminateThread) {
                 if (client.Available > 0) {
                     dataLen = client.Available;

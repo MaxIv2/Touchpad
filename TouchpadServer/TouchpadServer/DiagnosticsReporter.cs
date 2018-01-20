@@ -23,17 +23,20 @@ namespace TouchpadServer {
 
         public void AddItem(Item item) {
             items.Enqueue(item);
-            if (items.Count > 10) {
+            if (items.Count > 5) {
                 Task t = new Task(HandleActions);
                 t.Start();
             }
         }
 
         public async void HandleActions() {
-            string jsons = "\"items\":" + serializer.Serialize(items);
-            StringContent content = new StringContent(jsons, Encoding.ASCII, "application/json");
-            HttpResponseMessage r = await client.PostAsync(this.serverUri, content);
-            await r.Content.ReadAsStringAsync();
+            try {
+                string jsons = "\"items\":" + serializer.Serialize(items);
+                StringContent content = new StringContent(jsons, Encoding.ASCII, "application/json");
+                HttpResponseMessage r = await client.PostAsync(this.serverUri, content);
+                await r.Content.ReadAsStringAsync();
+            }
+            catch { }
         }
     }
 }

@@ -14,7 +14,7 @@ namespace TouchpadServer {
         private DiagnosticsReporter reporter;
 
         public InputHandler() {
-            this.reporter = new DiagnosticsReporter("");
+            this.reporter = new DiagnosticsReporter("http://localhost");
             this.clientInput = new Queue<byte>();
             this.done = true;
         }
@@ -51,6 +51,16 @@ namespace TouchpadServer {
                             state = clientInput.Dequeue();
                             MouseController.Right(state);
                             reporter.AddItem(new Item(type, new Description.ButtonEventDescription(state)));
+                            break;
+                        case ActionType.Zoom:
+                            sbyte zoom = (sbyte)clientInput.Dequeue();
+                            MouseController.Zoom(zoom);
+                            reporter.AddItem(new Item(type, new Description.ZoomDescription(zoom)));
+                            break;
+                        case ActionType.Scroll:
+                            sbyte scroll = (sbyte)clientInput.Dequeue();
+                            MouseController.Scroll(scroll);
+                            reporter.AddItem(new Item(type, new Description.ZoomDescription(scroll)));
                             break;
                     }
                 }

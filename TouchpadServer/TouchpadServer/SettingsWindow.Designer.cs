@@ -24,6 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.QRCodeContainer = new System.Windows.Forms.PictureBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -35,21 +36,32 @@
             this.QRCodeContainer.TabIndex = 0;
             this.QRCodeContainer.TabStop = false;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(13, 279);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(237, 20);
+            this.textBox1.TabIndex = 1;
+            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(335, 357);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.QRCodeContainer);
             this.Name = "SettingsWindow";
             this.Text = "SettingsWindow";
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.PictureBox QRCodeContainer;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

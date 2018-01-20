@@ -19,6 +19,7 @@ namespace TouchpadServer {
             this.QRCodeContainer.BackgroundImage = RenderQrCode(valueInQrCode);
             this.QRCodeContainer.Size = RenderQrCode(valueInQrCode).Size;
             this.QRCodeContainer.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.textBox1.Text = valueInQrCode;
         }
 
         private static Bitmap RenderQrCode(string data) {
