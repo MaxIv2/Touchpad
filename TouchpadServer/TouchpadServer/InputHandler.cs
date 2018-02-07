@@ -7,22 +7,27 @@ using System.Threading;
 
 namespace TouchpadServer {
     class InputHandler {
-        private Queue<byte> clientInput;
+        private Queue<TouchpadRequest> clientInput;
         public bool done { get; private set; }
-        public enum ActionType { Move = 0, Left = 1, Right = 2, Scroll = 3, Zoom = 4 }
-        public static int[] ActionParamLength = { 2, 1, 1, 1, 1 };
         private DiagnosticsReporter reporter;
 
         public InputHandler() {
             this.reporter = new DiagnosticsReporter("http://localhost");
-            this.clientInput = new Queue<byte>();
+            this.clientInput = new Queue<TouchpadRequest>();
             this.done = true;
         }
 
-        public void AddToQueue(byte[] buffer) {
-            foreach (byte b in buffer) {
-                clientInput.Enqueue(b);
+        public static void EnqueueRawRequests(Queue<TouchpadRequest> queue, byte[] data) {
+            int nextDataSetIndex = 0;
+            while (nextDataSetIndex < data.Length) {
+                TouchpadRequest request = new TouchpadRequest(data, nextDataSetIndex);
+                queue.Enqueue(request);
+                nextDataSetIndex += request.length + 1;//+1 because length excludes itself
             }
+        }
+
+        public void AddToQueue(byte[] buffer) {
+            EnqueueRawRequests(clientInput, buffer);
             if (done) {
                 Thread th = new Thread(HandleInput);
                 done = false;
@@ -32,40 +37,34 @@ namespace TouchpadServer {
 
         public void HandleInput() {
             while (!done) {
-                byte length = clientInput.Dequeue();
-                byte type = clientInput.Dequeue();
-                if (length <= clientInput.Count) {
-                    switch ((ActionType)type) {
-                        case ActionType.Move:
-                            sbyte dx = (sbyte)clientInput.Dequeue();
-                            sbyte dy = (sbyte)clientInput.Dequeue();
-                            MouseController.Move(dx, dy);
-                            reporter.AddItem(new Item(type, new Description.MoveDescription(dx, dy)));
-                            break;
-                        case ActionType.Left:
-                            byte state = clientInput.Dequeue();
-                            MouseController.Left(state);
-                            reporter.AddItem(new Item(type, new Description.ButtonEventDescription(state)));
-                            break;
-                        case ActionType.Right:
-                            state = clientInput.Dequeue();
-                            MouseController.Right(state);
-                            reporter.AddItem(new Item(type, new Description.ButtonEventDescription(state)));
-                            break;
-                        case ActionType.Zoom:
-                            sbyte zoom = (sbyte)clientInput.Dequeue();
-                            MouseController.Zoom(zoom);
-                            reporter.AddItem(new Item(type, new Description.ZoomDescription(zoom)));
-                            break;
-                        case ActionType.Scroll:
-                            sbyte scroll = (sbyte)clientInput.Dequeue();
-                            MouseController.Scroll(scroll);
-                            reporter.AddItem(new Item(type, new Description.ZoomDescription(scroll)));
-                            break;
-                    }
-                }
-                else {
-                    done = true;
+                TouchpadRequest request = clientInput.Dequeue();
+                switch ((TouchpadRequest.ActionType)request.type) {
+                    case TouchpadRequest.ActionType.Move:
+                        sbyte dx = (sbyte)request.GetArgumentAt(0);
+                        sbyte dy = (sbyte)request.GetArgumentAt(1);
+                        MouseController.Move(dx, dy);
+                        reporter.AddItem(new Item((byte)request.type, new Description.MoveDescription(dx, dy)));
+                        break;
+                    case TouchpadRequest.ActionType.Left:
+                        byte state = request.GetArgumentAt(0);
+                        MouseController.Left(state);
+                        reporter.AddItem(new Item((byte)request.type, new Description.ButtonEventDescription(state)));
+                        break;
+                    case TouchpadRequest.ActionType.Right:
+                        state = request.GetArgumentAt(0);
+                        MouseController.Right(state);
+                        reporter.AddItem(new Item((byte)request.type, new Description.ButtonEventDescription(state)));
+                        break;
+                    case TouchpadRequest.ActionType.Zoom:
+                        sbyte zoom = (sbyte)request.GetArgumentAt(0);;
+                        MouseController.Zoom(zoom);
+                        reporter.AddItem(new Item((byte)request.type, new Description.ZoomDescription(zoom)));
+                        break;
+                    case TouchpadRequest.ActionType.Scroll:
+                        sbyte scroll = (sbyte)request.GetArgumentAt(0); ;
+                        MouseController.Scroll(scroll);
+                        reporter.AddItem(new Item((byte)request.type, new Description.ScrollDescription(scroll)));
+                        break;
                 }
                 if (clientInput.Count == 0)
                     done = true;
