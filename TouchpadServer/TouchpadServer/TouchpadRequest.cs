@@ -15,8 +15,8 @@ namespace TouchpadServer {
         public TouchpadRequest (byte[] data, int index) {
             this.type = (ActionType)data[1];
             this.length = data[0];
-            this.args = new byte[length];
-            Array.Copy(data, index, args, 0, length);
+            this.args = new byte[length-1];
+            Array.Copy(data, index+2, args, 0, length-1);
         }
 
         public byte GetArgumentAt(int index) {

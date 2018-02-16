@@ -43,6 +43,7 @@ namespace TouchpadServer {
                         sbyte dx = (sbyte)request.GetArgumentAt(0);
                         sbyte dy = (sbyte)request.GetArgumentAt(1);
                         MouseController.Move(dx, dy);
+
                         reporter.AddItem(new Item((byte)request.type, new Description.MoveDescription(dx, dy)));
                         break;
                     case TouchpadRequest.ActionType.Left:
