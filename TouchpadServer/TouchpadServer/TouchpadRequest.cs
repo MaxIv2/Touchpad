@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace TouchpadServer {
     class TouchpadRequest {
@@ -13,8 +14,8 @@ namespace TouchpadServer {
         private byte[] args;
 
         public TouchpadRequest (byte[] data, int index) {
-            this.type = (ActionType)data[1];
-            this.length = data[0];
+            this.length = data[index];
+            this.type = (ActionType)data[index + 1];
             this.args = new byte[length-1];
             Array.Copy(data, index+2, args, 0, length-1);
         }
