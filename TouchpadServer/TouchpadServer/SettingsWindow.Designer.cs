@@ -24,44 +24,34 @@
         /// </summary>
         private void InitializeComponent() {
             this.QRCodeContainer = new System.Windows.Forms.PictureBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).BeginInit();
             this.SuspendLayout();
             // 
             // QRCodeContainer
             // 
-            this.QRCodeContainer.Location = new System.Drawing.Point(12, 12);
+            this.QRCodeContainer.Location = new System.Drawing.Point(13, 12);
+            this.QRCodeContainer.MaximumSize = new System.Drawing.Size(250, 50);
+            this.QRCodeContainer.MinimumSize = new System.Drawing.Size(250, 250);
             this.QRCodeContainer.Name = "QRCodeContainer";
-            this.QRCodeContainer.Size = new System.Drawing.Size(260, 260);
+            this.QRCodeContainer.Size = new System.Drawing.Size(250, 250);
             this.QRCodeContainer.TabIndex = 0;
             this.QRCodeContainer.TabStop = false;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(13, 279);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(237, 20);
-            this.textBox1.TabIndex = 1;
             // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(335, 357);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(275, 389);
             this.Controls.Add(this.QRCodeContainer);
             this.Name = "SettingsWindow";
-            this.Text = "SettingsWindow";
+            this.Text = "SettingsWindows";
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.PictureBox QRCodeContainer;
-        private System.Windows.Forms.TextBox textBox1;
     }
 }

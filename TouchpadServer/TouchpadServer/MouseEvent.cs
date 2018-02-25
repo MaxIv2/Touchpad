@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TouchpadServer {
-    public class Item {
+    public class MouseEvent {
+        public enum ActionCodes { MOVE = 0, LEFTBUTTON = 1, RIGHTBUTTON = 2, SCROLL = 3, ZOOM = 4 }
+
         public byte actionCode;
         public Description description;
 
-        public Item(byte actionCode, Description description) {
+        public MouseEvent(byte actionCode, Description description) {
             this.actionCode = actionCode;
             this.description = description;
         }

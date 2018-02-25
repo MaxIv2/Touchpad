@@ -1,9 +1,12 @@
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.exe.config
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.exe
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.pdb
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csprojResolveAssemblyReference.cache
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.Properties.Resources.resources
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csproj.GenerateResource.Cache
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.exe
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.pdb
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.SettingsWindow.resources
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.exe.config
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csprojResolveAssemblyReference.cache
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.Properties.Resources.resources
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.Resources.resources
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.SettingsWindow.resources
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csproj.GenerateResource.Cache
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.exe
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.pdb
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\bin\Debug\InTheHand.Net.Personal.dll
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\bin\Debug\InTheHand.Net.Personal.xml
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.exe
+C:\Users\Maxim2\Desktop\Files\VS Projects\Ultimate\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.pdb

@@ -13,7 +13,7 @@ namespace TouchpadServer {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MyApplicationContext());
+            Application.Run(new MainContext());
         }
     }
 }

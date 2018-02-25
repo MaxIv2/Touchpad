@@ -11,21 +11,23 @@ namespace TouchpadServer {
         private ContextMenu contextMenu;
         private bool disposed;
         private EventHandler exitApplication;
+        private string MACAddress;
 
-        public TrayIconController(EventHandler exitApplicaion) {
+        public TrayIconController(EventHandler exitApplicaion, string MACAddress) {
             MenuItem[] menuItems = { new MenuItem("Exit", exitApplicaion) };
             this.contextMenu = new ContextMenu(menuItems);
-            trayIcon = new NotifyIcon();
-            trayIcon.Text = "Remote touchpad settings";
-            trayIcon.ContextMenu = contextMenu;
-            trayIcon.Icon = Properties.Resources.mouseIcon;
-            trayIcon.Visible = true;
-            trayIcon.Click += OnIconClick;
+            this.trayIcon = new NotifyIcon();
+            this.trayIcon.Text = "Remote touchpad settings";
+            this.trayIcon.ContextMenu = contextMenu;
+            this.trayIcon.Icon = Resources.mouseBlack;
+            this.trayIcon.Visible = true;
+            this.trayIcon.Click += OnIconClick;
             this.exitApplication += exitApplication;
+            this.MACAddress = MACAddress;
         }
 
         public void OnIconClick(object sender, EventArgs e) {
-            SettingsWindow t = new SettingsWindow();
+            SettingsWindow t = new SettingsWindow(this.MACAddress);
             t.Show();
         }
 

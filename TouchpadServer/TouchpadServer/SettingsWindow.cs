@@ -11,15 +11,11 @@ using QRCoder;
 
 namespace TouchpadServer {
     public partial class SettingsWindow : Form {
-        public SettingsWindow() {
+        public SettingsWindow(string MACAddress) {
             InitializeComponent();
-            object ip = Properties.Settings.Default.ip;
-            object port = Properties.Settings.Default.port;
-            string valueInQrCode = ip + ":" + port;
-            this.QRCodeContainer.BackgroundImage = RenderQrCode(valueInQrCode);
-            this.QRCodeContainer.Size = RenderQrCode(valueInQrCode).Size;
+            this.QRCodeContainer.BackgroundImage = RenderQrCode(MACAddress);
+            this.QRCodeContainer.Size = RenderQrCode(MACAddress).Size;
             this.QRCodeContainer.SizeMode = PictureBoxSizeMode.StretchImage;
-            this.textBox1.Text = valueInQrCode;
         }
 
         private static Bitmap RenderQrCode(string data) {
