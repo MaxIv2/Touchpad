@@ -12,9 +12,10 @@ namespace TouchpadServer {
         TrayIconController icon;
 
         public delegate void NewDataEventHandler(object sender, NewDataEventArgs e);
+        public delegate void DisconnectedEventHandler(object sender, EventArgs e);
 
         public MainContext() : base() {
-            this.server = new BluetoothServer(new Guid(Resources.MyGuid), this.HandleNewData);
+            this.server = new BluetoothServer(new Guid(Resources.MyGuid), this.HandleNewData, this.DisconnectedEvent);
             this.icon = new TrayIconController(ExitApplication, BluetoothServer.GetAdaptersMACAddress());
         }
 
@@ -72,6 +73,10 @@ namespace TouchpadServer {
                         break;
                 }
             }
+        }
+
+        public void DisconnectedEvent(object sender, EventArgs e) {
+
         }
 
         public void ExitApplication(object sender, EventArgs e) {
