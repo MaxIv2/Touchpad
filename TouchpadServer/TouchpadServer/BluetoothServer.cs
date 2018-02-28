@@ -16,69 +16,66 @@ namespace TouchpadServer {
         private NetworkStream stream;
         private Timer connectivityChecker;
         private Timer reader;
+        private Timer clientGetter;
         private bool connected;
         private Queue<byte> inputData;
         private int missingDataCount;
         private bool awaitingAcknoldegement;
-        public event MainContext.NewDataEventHandler newDataEventHandler;
-        private bool isListening;
-        private event MainContext.DisconnectedEventHandler disconnectedEventHandler;
+
+        public static bool online { get; private set; }
         public bool disposed { get; private set; }
 
-        public BluetoothServer(Guid guid, MainContext.NewDataEventHandler newDataEventHandler, MainContext.DisconnectedEventHandler disconnectedEventHandler) {
+        public BluetoothServer(Guid guid) {
+            online = false;
             this.identifier = guid;
             this.listener = new BluetoothListener(guid);
-            this.disconnectedEventHandler += disconnectedEventHandler;
-            this.newDataEventHandler += newDataEventHandler;
             this.connected = false;
             this.inputData = new Queue<byte>();
             this.awaitingAcknoldegement = false;
             this.SetConnectivityChecker();
             this.SetReader();
+            ApplicationEvents.turnOnOffEventHandler += this.HandleTurnOnOff;
+            ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
         }
 
-        public void Disconnect(bool notifyClient=true) {
+        #region Connectivity
+        public void GoOnline() {
+            if (online)
+                return;
+            online = true;
+            this.listener.Start();
+            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED));
+            this.SetClientGetter();
+            this.clientGetter.Enabled = true;
+        }
+        
+        public void GoOffline() {
+            if (!online)
+                return;
+            if (this.connected)
+                Disconnect();
+            else {
+                this.clientGetter.Enabled = false;
+                this.clientGetter.Dispose();
+                this.listener.Stop();
+            }
+            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE));
+            online = false;
+        }
+        
+        public void Disconnect(bool notifyClient = true) {
             if (this.connected) {
                 this.connectivityChecker.Enabled = false;
                 this.reader.Enabled = false;
-                if(notifyClient)
-                    this.sendTerminateConnection();
+                if (notifyClient)
+                    this.SendTerminateConnection();
                 this.client.Close();
                 this.client.Dispose();
                 this.stream.Close();
                 this.stream.Dispose();
                 this.connected = false;
-                OnDisconnectedEvent();
+                OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED));
             }
-        }
-
-        public void OnDisconnectedEvent() {
-            disconnectedEventHandler(this, new EventArgs());
-        }
-
-        public void CloseServer() {
-            this.Disconnect();
-            if (this.isListening)
-                listener.Stop();
-        }
-
-        private void sendTerminateConnection() {
-            byte[] buffer = { (byte)MessageType.TERMINATE_CONNECTION, 0 };
-            SendData(buffer);
-        }
-
-        public void StartListening() {
-            if (this.isListening)
-                return;
-            this.listener.Start();
-            this.isListening = true;
-        }
-
-        public void StopListening() {
-            if (!this.isListening)
-                return;
-            this.listener.Stop();
-            this.isListening = false;
         }
 
         public void AcceptClient() {
@@ -87,8 +84,11 @@ namespace TouchpadServer {
             this.stream = client.GetStream();
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
+            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED));
         }
+        #endregion
 
+        #region Timers and timed methods
         private void SetConnectivityChecker() {
             this.connectivityChecker = new Timer(5000);
             this.connectivityChecker.AutoReset = true;
@@ -104,10 +104,6 @@ namespace TouchpadServer {
             this.awaitingAcknoldegement = true;
         }
 
-        private void OnConnectionLost() {
-            this.Disconnect();
-        }
-
         private void SetReader() {
             this.reader = new Timer(50);
             this.reader.AutoReset = true;
@@ -115,7 +111,7 @@ namespace TouchpadServer {
         }
 
         private void ReadData(Object source, ElapsedEventArgs e) {
-            byte[] buffer = this.RecieveData();
+            byte[] buffer = this.ReceiveData();
             if (buffer == null)
                 return;
             int index = 0;
@@ -152,7 +148,47 @@ namespace TouchpadServer {
             }
         }
 
-        private byte[] RecieveData() {
+        private void SetClientGetter() {
+            this.clientGetter = new Timer(500);
+            this.clientGetter.AutoReset = true;
+            this.clientGetter.Elapsed += this.TryToGetClient;
+        }
+
+        public void TryToGetClient(Object source, ElapsedEventArgs e) {
+            if (listener.Pending()) {
+                this.listener.Stop();
+                this.AcceptClient();
+                this.clientGetter.Enabled = false;
+                this.clientGetter.Dispose();
+            }
+        }
+        #endregion
+        
+        #region Handle events
+        private void HandleDisconnectRequest(object sender, EventArgs e) {
+            Disconnect();
+        }
+
+        private void HandleTurnOnOff(object sender, EventArgs e) {
+            if (online)
+                GoOffline();
+            else
+                GoOnline();
+        }
+        #endregion
+
+        #region Raise events
+        private void OnConnectionStatusChanged(ConnectionStatusChangedEventArgs args) {
+            ApplicationEvents.CallConnectionStatusChangedEventHandler(this, args);
+        }
+
+        private void OnNewData(Queue<byte> info) {
+            ApplicationEvents.CallNewEventDataEventHandler(this, new NewDataEventArgs(info));
+        }
+        #endregion
+
+        #region Send/Receive data
+        private byte[] ReceiveData() {
             if (this.client.Available < 2)
                 return null;
             byte[] buffer = new byte[this.client.Available];
@@ -166,7 +202,9 @@ namespace TouchpadServer {
             this.stream.Write(buffer, start, length);
             this.stream.Flush();
         }
+        #endregion
 
+        #region Special Messages
         private void SendCheckAcknoledgement() {
             byte[] buffer = { (byte) MessageType.CHECK_ACKNOLEDGEMENT, 0};
             this.SendData(buffer);
@@ -177,17 +215,13 @@ namespace TouchpadServer {
             SendData(buffer);
         }
 
-        private void OnNewData(Queue<byte> info) {
-            this.newDataEventHandler(this, new NewDataEventArgs(info));
+        private void SendTerminateConnection() {
+            byte[] buffer = { (byte)MessageType.TERMINATE_CONNECTION, 0 };
+            SendData(buffer);
         }
+        #endregion
 
-        public static string GetAdaptersMACAddress() {
-            BluetoothRadio radio = BluetoothRadio.PrimaryRadio;
-            if (radio == null || radio.LocalAddress == null)
-                throw new Exception("Primary radio is missing, or bluetooth is off");
-            return String.Format("{0:C}", radio.LocalAddress);
-        }
-
+        #region IDisposable implementation
         public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -196,6 +230,8 @@ namespace TouchpadServer {
         protected virtual void Dispose(bool disposing) {
             if (this.disposed)
                 return;
+            ApplicationEvents.userDisconnectRequestEventHandler -= this.HandleDisconnectRequest;
+            ApplicationEvents.turnOnOffEventHandler -= this.HandleTurnOnOff;
             if (disposing) {
                 if (this.connected) {
                     this.stream.Dispose();
@@ -206,5 +242,15 @@ namespace TouchpadServer {
             }
             this.disposed = true;
         }
+        #endregion
+
+        #region Static methods
+        public static string GetAdaptersMACAddress() {
+            BluetoothRadio radio = BluetoothRadio.PrimaryRadio;
+            if (radio == null || radio.LocalAddress == null)
+                throw new Exception("Primary radio is missing, or bluetooth is off");
+            return String.Format("{0:C}", radio.LocalAddress);
+        }
+        #endregion
     }
 }

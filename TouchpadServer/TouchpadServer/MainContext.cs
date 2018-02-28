@@ -10,22 +10,33 @@ namespace TouchpadServer {
 
         BluetoothServer server;
         TrayIconController icon;
+        public static ConnectionStatusChangedEventArgs.ConnectionStatus status;
 
         public delegate void NewDataEventHandler(object sender, NewDataEventArgs e);
         public delegate void DisconnectedEventHandler(object sender, EventArgs e);
 
         public MainContext() : base() {
-            this.server = new BluetoothServer(new Guid(Resources.MyGuid), this.HandleNewData, this.DisconnectedEvent);
-            this.icon = new TrayIconController(ExitApplication, BluetoothServer.GetAdaptersMACAddress());
+            status = ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE;
+            ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
+            ApplicationEvents.newDataEventDataEventHandler += this.HandleNewData;
+            ApplicationEvents.userExitRequestEventHandler += this.HandleUserExitRequest;
+            this.server = new BluetoothServer(new Guid(Resources.MyGuid));
+            this.icon = new TrayIconController(HandleUserExitRequest, BluetoothServer.GetAdaptersMACAddress());
+            this.server.GoOnline();
         }
 
+        private void HandleConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e) {
+            status = e.status;
+        }
+
+        //implement this
         public void HandleNewData(object sender, NewDataEventArgs e) {
             Queue<byte> actionData = e.info;
             bool notEnoughBytes = false;
             while(!notEnoughBytes || actionData.Count == 0) {
                 byte actionCode = actionData.Peek();
-                switch ((MouseEvent.ActionCodes)actionCode) {
-                    case MouseEvent.ActionCodes.MOVE:
+                switch ((MouseEvent.ActionCode)actionCode) {
+                    case MouseEvent.ActionCode.MOVE:
                         if (actionData.Count < 3) { // 2 bytes: dx,dy + 1 type byte, 3 IN TOTAL
                             actionData.Dequeue();
                             sbyte dx = (sbyte)actionData.Dequeue();
@@ -35,7 +46,7 @@ namespace TouchpadServer {
                         else
                             notEnoughBytes = true;
                         break;
-                    case MouseEvent.ActionCodes.LEFTBUTTON:
+                    case MouseEvent.ActionCode.LEFTBUTTON:
                         if (actionData.Count < 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
                             actionData.Dequeue();
                             byte status = actionData.Dequeue();
@@ -44,7 +55,7 @@ namespace TouchpadServer {
                         else
                             notEnoughBytes = true;
                         break;
-                    case MouseEvent.ActionCodes.RIGHTBUTTON:
+                    case MouseEvent.ActionCode.RIGHTBUTTON:
                         if (actionData.Count < 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
                             actionData.Dequeue();
                             byte status = actionData.Dequeue();
@@ -53,7 +64,7 @@ namespace TouchpadServer {
                         else
                             notEnoughBytes = true;
                         break;
-                    case MouseEvent.ActionCodes.SCROLL:
+                    case MouseEvent.ActionCode.SCROLL:
                         if (actionData.Count < 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
                             actionData.Dequeue();
                             sbyte scroll = (sbyte)actionData.Dequeue();
@@ -62,7 +73,7 @@ namespace TouchpadServer {
                         else
                             notEnoughBytes = true;
                         break;
-                    case MouseEvent.ActionCodes.ZOOM:
+                    case MouseEvent.ActionCode.ZOOM:
                         if (actionData.Count < 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
                             actionData.Dequeue();
                             sbyte zoom = (sbyte)actionData.Dequeue();
@@ -75,12 +86,11 @@ namespace TouchpadServer {
             }
         }
 
-        public void DisconnectedEvent(object sender, EventArgs e) {
-
-        }
-
-        public void ExitApplication(object sender, EventArgs e) {
-            this.server.CloseServer();
+        public void HandleUserExitRequest(object sender, EventArgs e) {
+            ApplicationEvents.newDataEventDataEventHandler -= this.HandleNewData;
+            ApplicationEvents.newDataEventDataEventHandler -= this.HandleUserExitRequest;
+            ApplicationEvents.connectionStatusChangedEventHandler -= this.HandleConnectionStatusChanged;
+            this.server.GoOffline();
             this.server.Dispose();
             this.icon.Dispose();
             this.ExitThread();

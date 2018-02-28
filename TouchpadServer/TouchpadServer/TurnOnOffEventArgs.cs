@@ -5,7 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TouchpadServer {
-    class MouseEvent {
-        public enum ActionCode { MOVE = 0, LEFTBUTTON = 1, RIGHTBUTTON = 2, SCROLL = 3, ZOOM = 4 };
+    class TurnOnOffEventArgs {
+        public bool turnOn;
+
+        public TurnOnOffEventArgs(bool turnOn) {
+            this.turnOn = turnOn;
+        }
+
     }
 }

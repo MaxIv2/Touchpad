@@ -9,19 +9,17 @@ namespace TouchpadServer {
     class TrayIconController : IDisposable {
         private bool windowIsOpen;
         private NotifyIcon trayIcon;
-        private EventHandler exitApplication;
         private string MACAddress;
         private bool disposed;
 
         public TrayIconController(EventHandler exitApplicaion, string MACAddress) {
             this.trayIcon = new NotifyIcon();
-            MenuItem[] menuItems = { new MenuItem("Exit", exitApplicaion) };
+            MenuItem[] menuItems = { new MenuItem("Exit", ApplicationEvents.CallUserExitRequestEventHandler) };
             this.trayIcon.ContextMenu = new ContextMenu(menuItems);
             this.trayIcon.Text = "Remote Touchpad";
             this.trayIcon.Icon = Resources.mouseBlack;
             this.trayIcon.Visible = true;
             this.trayIcon.Click += this.IconClick;
-            this.exitApplication += this.exitApplication;
             this.MACAddress = MACAddress;
         }
 

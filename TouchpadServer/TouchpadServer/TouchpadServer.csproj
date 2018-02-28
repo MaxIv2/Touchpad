@@ -51,8 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MouseEvent.cs" />
+    <Compile Include="ApplicationEvents.cs" />
     <Compile Include="BluetoothServer.cs" />
+    <Compile Include="ConnectionStatusChangedEventArgs.cs" />
+    <Compile Include="MouseEvent.cs" />
     <Compile Include="TrayIconController.cs" />
     <Compile Include="MainContext.cs" />
     <Compile Include="MouseController.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="SettingsWindow.Designer.cs">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="TurnOnOffEventArgs.cs" />
     <Compile Include="VirtualKeys.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

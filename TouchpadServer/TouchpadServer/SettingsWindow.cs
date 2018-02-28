@@ -13,9 +13,37 @@ namespace TouchpadServer {
     public partial class SettingsWindow : Form {
         public SettingsWindow(string MACAddress) {
             InitializeComponent();
+            this.UpdateStatus(MainContext.status);
             this.QRCodeContainer.BackgroundImage = RenderQrCode(MACAddress);
             this.QRCodeContainer.Size = RenderQrCode(MACAddress).Size;
             this.QRCodeContainer.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.exitButton.Click += ApplicationEvents.CallUserExitRequestEventHandler;
+            this.diconnectButton.Click += ApplicationEvents.CallUserDisconnectRequestEventHandler;
+            this.onAndOffButtonSwitch.Click += ApplicationEvents.CallTurnOnOffEventHandlerHandler;
+            ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
+            this.FormClosing += this.UnsbscribeFromHandlers;
+        }
+
+        private void HandleConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e) {
+            UpdateStatus(e.status);
+        }
+
+        private void UpdateStatus(ConnectionStatusChangedEventArgs.ConnectionStatus status) {
+            switch (status) {
+                case ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED:
+                    this.serverStatus.Text = "Status: Connected to";
+                    break;
+                case ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED:
+                    this.serverStatus.Text = "Status: Not connected";
+                    break;
+                case ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE:
+                    this.serverStatus.Text = "Status: Offline";
+                    break;
+            }
+        }
+
+        private void UnsbscribeFromHandlers(object sender, EventArgs e) {
+            ApplicationEvents.connectionStatusChangedEventHandler -= this.HandleConnectionStatusChanged;
         }
 
         private static Bitmap RenderQrCode(string data) {
