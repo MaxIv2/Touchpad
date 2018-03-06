@@ -1,0 +1,6 @@
+c:\users\talma\documents\visual studio 2015\Projects\QRCode\QRCode\bin\Debug\QRCode.exe.config
+c:\users\talma\documents\visual studio 2015\Projects\QRCode\QRCode\obj\Debug\QRCode.csprojResolveAssemblyReference.cache
+c:\users\talma\documents\visual studio 2015\Projects\QRCode\QRCode\bin\Debug\QRCode.exe
+c:\users\talma\documents\visual studio 2015\Projects\QRCode\QRCode\bin\Debug\QRCode.pdb
+c:\users\talma\documents\visual studio 2015\Projects\QRCode\QRCode\obj\Debug\QRCode.exe
+c:\users\talma\documents\visual studio 2015\Projects\QRCode\QRCode\obj\Debug\QRCode.pdb
