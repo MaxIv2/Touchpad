@@ -10,13 +10,13 @@ namespace TouchpadServer {
 
         BluetoothServer server;
         TrayIconController icon;
-        public static ConnectionStatusChangedEventArgs.ConnectionStatus status;
+        public static ConnectionStatusChangedEventArgs status;
 
         public delegate void NewDataEventHandler(object sender, NewDataEventArgs e);
         public delegate void DisconnectedEventHandler(object sender, EventArgs e);
 
         public MainContext() : base() {
-            status = ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE;
+            status = new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE, "");
             ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
             ApplicationEvents.newDataEventDataEventHandler += this.HandleNewData;
             ApplicationEvents.userExitRequestEventHandler += this.HandleUserExitRequest;
@@ -26,7 +26,7 @@ namespace TouchpadServer {
         }
 
         private void HandleConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e) {
-            status = e.status;
+            status = e;
         }
 
         //implement this
