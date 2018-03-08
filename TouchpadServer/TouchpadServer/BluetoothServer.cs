@@ -44,7 +44,7 @@ namespace TouchpadServer {
                 return;
             online = true;
             this.listener.Start();
-            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED));
+            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED, ""));
             this.SetClientGetter();
             this.clientGetter.Enabled = true;
         }
@@ -59,7 +59,7 @@ namespace TouchpadServer {
                 this.clientGetter.Dispose();
                 this.listener.Stop();
             }
-            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE));
+            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE,""));
             online = false;
         }
         
@@ -69,12 +69,13 @@ namespace TouchpadServer {
                 this.reader.Enabled = false;
                 if (notifyClient)
                     this.SendTerminateConnection();
+                string address = this.client.RemoteEndPoint.Address.ToString();
                 this.client.Close();
                 this.client.Dispose();
                 this.stream.Close();
                 this.stream.Dispose();
                 this.connected = false;
-                OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED));
+                OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED, address));
             }
         }
 
@@ -84,7 +85,8 @@ namespace TouchpadServer {
             this.stream = client.GetStream();
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
-            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED));
+            string address = this.client.RemoteEndPoint.Address.ToString();
+            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, address));
         }
         #endregion
 

@@ -22,3 +22,16 @@ C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\Touch
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.Resources.resources
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.SettingsWindow.resources
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csproj.GenerateResource.Cache
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.exe.config
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.exe
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.pdb
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\InTheHand.Net.Personal.dll
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\InTheHand.Net.Personal.xml
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csprojResolveAssemblyReference.cache
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.Properties.Resources.resources
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.Resources.resources
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.SettingsWindow.resources
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csproj.GenerateResource.Cache
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csproj.CoreCompileInputs.cache
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.exe
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.pdb
