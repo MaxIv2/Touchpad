@@ -158,8 +158,8 @@ namespace TouchpadServer {
 
         public void TryToGetClient(Object source, ElapsedEventArgs e) {
             if (listener.Pending()) {
-                this.listener.Stop();
                 this.AcceptClient();
+                this.listener.Stop();
                 this.clientGetter.Enabled = false;
                 this.clientGetter.Dispose();
             }
