@@ -34,6 +34,7 @@ namespace TouchpadServer {
             this.awaitingAcknoldegement = false;
             this.SetConnectivityChecker();
             this.SetReader();
+            this.SetClientGetter();
             ApplicationEvents.turnOnOffEventHandler += this.HandleTurnOnOff;
             ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
         }
@@ -45,7 +46,6 @@ namespace TouchpadServer {
             online = true;
             this.listener.Start();
             this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED, ""));
-            this.SetClientGetter();
             this.clientGetter.Enabled = true;
         }
         
@@ -56,7 +56,6 @@ namespace TouchpadServer {
                 Disconnect();
             else {
                 this.clientGetter.Enabled = false;
-                this.clientGetter.Dispose();
                 this.listener.Stop();
             }
             this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE,""));
@@ -137,10 +136,11 @@ namespace TouchpadServer {
                         break;
                     case MessageType.MOUSE:
                         byte length = buffer[1];
-                        for (int j = 0; j < length; length--) {
+                        int j;
+                        for (j = 0; j < length; j++) {
                             this.inputData.Enqueue(buffer[j + 2]);
                         }
-                        missingDataCount = length;
+                        missingDataCount = buffer[1] - j;
                         OnNewData(inputData);
                         break;
                     default:
@@ -158,10 +158,9 @@ namespace TouchpadServer {
 
         public void TryToGetClient(Object source, ElapsedEventArgs e) {
             if (listener.Pending()) {
+                this.clientGetter.Enabled = false;
                 this.AcceptClient();
                 this.listener.Stop();
-                this.clientGetter.Enabled = false;
-                this.clientGetter.Dispose();
             }
         }
         #endregion
@@ -169,6 +168,8 @@ namespace TouchpadServer {
         #region Handle events
         private void HandleDisconnectRequest(object sender, EventArgs e) {
             Disconnect();
+            this.listener.Start();
+            this.clientGetter.Enabled = true;
         }
 
         private void HandleTurnOnOff(object sender, EventArgs e) {
@@ -201,8 +202,12 @@ namespace TouchpadServer {
         public void SendData(byte[] buffer, int start = 0, int length = -1) {
             if (length == -1)
                 length = buffer.Length;
-            this.stream.Write(buffer, start, length);
-            this.stream.Flush();
+            try {
+                this.stream.Write(buffer, start, length);
+                this.stream.Flush();
+            } catch {
+                //no client
+            }
         }
         #endregion
 

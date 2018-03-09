@@ -11,6 +11,8 @@ using QRCoder;
 
 namespace TouchpadServer {
     public partial class SettingsWindow : Form {
+
+        delegate void SafeUpdateStatusDelegate(ConnectionStatusChangedEventArgs text);
         public SettingsWindow(string MACAddress) {
             InitializeComponent();
             this.UpdateStatus(MainContext.status);
@@ -25,7 +27,7 @@ namespace TouchpadServer {
         }
 
         private void HandleConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e) {
-            UpdateStatus(e);
+            this.SafeUpdateStatus(e);
         }
 
         private void UpdateStatus(ConnectionStatusChangedEventArgs status) {
@@ -40,6 +42,15 @@ namespace TouchpadServer {
                     this.serverStatus.Text = "Status: Offline";
                     break;
             }
+        }
+
+        private void SafeUpdateStatus(ConnectionStatusChangedEventArgs status) {
+            if (this.serverStatus.InvokeRequired) {
+                SafeUpdateStatusDelegate d = new SafeUpdateStatusDelegate(UpdateStatus);
+                this.Invoke(d, new object[] { status });
+            }
+            else
+                this.UpdateStatus(status);
         }
 
         private void UnsbscribeFromHandlers(object sender, EventArgs e) {

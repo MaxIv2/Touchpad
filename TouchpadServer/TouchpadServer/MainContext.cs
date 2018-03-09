@@ -29,25 +29,25 @@ namespace TouchpadServer {
             status = e;
         }
 
-        //implement this
         public void HandleNewData(object sender, NewDataEventArgs e) {
             Queue<byte> actionData = e.info;
             bool notEnoughBytes = false;
-            while(!notEnoughBytes || actionData.Count == 0) {
+            while(!notEnoughBytes && actionData.Count > 0) {
                 byte actionCode = actionData.Peek();
                 switch ((MouseEvent.ActionCode)actionCode) {
                     case MouseEvent.ActionCode.MOVE:
-                        if (actionData.Count < 3) { // 2 bytes: dx,dy + 1 type byte, 3 IN TOTAL
+                        if (actionData.Count >= 3) { // 2 bytes: dx,dy + 1 type byte, 3 IN TOTAL
                             actionData.Dequeue();
                             sbyte dx = (sbyte)actionData.Dequeue();
                             sbyte dy = (sbyte)actionData.Dequeue();
                             MouseController.Move(dx, dy);
+                            System.Threading.Thread.Sleep(5);
                         }
                         else
                             notEnoughBytes = true;
                         break;
                     case MouseEvent.ActionCode.LEFTBUTTON:
-                        if (actionData.Count < 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
+                        if (actionData.Count >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
                             actionData.Dequeue();
                             byte status = actionData.Dequeue();
                             MouseController.Left(status);
@@ -56,7 +56,7 @@ namespace TouchpadServer {
                             notEnoughBytes = true;
                         break;
                     case MouseEvent.ActionCode.RIGHTBUTTON:
-                        if (actionData.Count < 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
+                        if (actionData.Count >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
                             actionData.Dequeue();
                             byte status = actionData.Dequeue();
                             MouseController.Right(status);
@@ -65,7 +65,7 @@ namespace TouchpadServer {
                             notEnoughBytes = true;
                         break;
                     case MouseEvent.ActionCode.SCROLL:
-                        if (actionData.Count < 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
+                        if (actionData.Count >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
                             actionData.Dequeue();
                             sbyte scroll = (sbyte)actionData.Dequeue();
                             MouseController.Scroll(scroll);
@@ -74,7 +74,7 @@ namespace TouchpadServer {
                             notEnoughBytes = true;
                         break;
                     case MouseEvent.ActionCode.ZOOM:
-                        if (actionData.Count < 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
+                        if (actionData.Count >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
                             actionData.Dequeue();
                             sbyte zoom = (sbyte)actionData.Dequeue();
                             MouseController.Zoom(zoom);
