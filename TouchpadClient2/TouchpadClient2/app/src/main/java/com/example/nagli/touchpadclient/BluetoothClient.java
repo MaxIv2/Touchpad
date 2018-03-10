@@ -15,6 +15,8 @@ import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BluetoothClient {
     private String serverMACAddress;
@@ -36,13 +38,16 @@ public class BluetoothClient {
         this.client.connect();
         this.input = this.client.getInputStream();
         this.output = client.getOutputStream();
+        this.bmessage = new ConcurrentLinkedQueue<>();
     }
 
     public void SetMessage(byte [] buffer) {
-        for (byte b:buffer
-             ) {
+        String s = "";
+        for (byte b:buffer ) {
             bmessage.add(b);
+            s += "" + b;
         }
+        Log.println(Log.INFO,"SetMessage()", s);
     }
 
     public void SetMessageTimer() throws  InterruptedException
@@ -50,6 +55,8 @@ public class BluetoothClient {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
+                if(bmessage.size() == 0)
+                    return;
                 byte[] buffer = new byte[bmessage.size()+2];
                 buffer[0] = 0;
                 buffer[1] = (byte) bmessage.size();
@@ -61,7 +68,7 @@ public class BluetoothClient {
             }
         };
         messagetimer = new Timer();
-        messagetimer.schedule(task,0,50);
+        messagetimer.scheduleAtFixedRate(task,0,2000);
     }
     public void SetTimer() throws InterruptedException {
         final byte[] buffer = {1, 0};
@@ -73,7 +80,6 @@ public class BluetoothClient {
         };
         connectivityChecker = new Timer();
         connectivityChecker.schedule(task, 0, 5000);
-
     }
 
     public void sendData(byte[] buffer) {

@@ -82,7 +82,7 @@ namespace TouchpadServer {
             this.client = this.listener.AcceptBluetoothClient();
             this.connected = true;
             this.stream = client.GetStream();
-            this.connectivityChecker.Enabled = true;
+            //this.connectivityChecker.Enabled;
             this.reader.Enabled = true;
             string address = this.client.RemoteEndPoint.Address.ToString();
             this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, address));
@@ -109,7 +109,7 @@ namespace TouchpadServer {
 
         private void SetReader() {
             this.reader = new Timer(50);
-            this.reader.AutoReset = true;
+            this.reader.AutoReset = false;
             this.reader.Elapsed += this.ReadData;
         }
 
