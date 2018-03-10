@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace QRCode
 {
     class QRCode
     {
-        public enum ErrorCorrLev { L, M, Q, H };
-
-        public static List<bool> Generate(string data, int size, ErrorCorrLev ErrCorr)
+        public static Bitmap Generate(string data, int size, QRCodeImpl.ErrorCorrectionLevels ErrCorrVer)
         {
-            QRCodeImpl qrcode = new QRCodeImpl(data, size, ErrCorr);
-            return qrcode.Encode();
+            QRCodeImpl qrcode = new QRCodeImpl(data, size, ErrCorrVer);
+            return qrcode.Generate();
         }
     }
 }
