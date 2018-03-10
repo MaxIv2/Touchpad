@@ -99,6 +99,8 @@ namespace TouchpadServer {
         private void CheckConnection(Object source, ElapsedEventArgs e) {
             if (awaitingAcknoldegement) {
                 Disconnect();
+                this.listener.Start();
+                this.clientGetter.Enabled = true;
                 return;
             }
             SendConnectionCheck();

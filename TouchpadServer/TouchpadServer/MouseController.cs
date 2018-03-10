@@ -23,17 +23,17 @@ namespace TouchpadServer {
         }
         public static void Left(int up) {
             if (up == 0)
-                mouse_event((int)Flags.LeftUp, 0, 0, 0, 0);
-            else if (up == 1)
                 mouse_event((int)Flags.LeftDown, 0, 0, 0, 0);
+            else if (up == 1)
+                mouse_event((int)Flags.LeftUp, 0, 0, 0, 0);
             else
                 mouse_event((int)Flags.LeftDown | (int)Flags.LeftUp, 0, 0, 0, 0);
         }
         public static void Right(int up) {
             if (up == 0)
-                mouse_event((int)Flags.RightUp, 0, 0, 0, 0);
-            else if (up == 1)
                 mouse_event((int)Flags.RightDown, 0, 0, 0, 0);
+            else if (up == 1)
+                mouse_event((int)Flags.RightUp, 0, 0, 0, 0);
             else
                 mouse_event((int)Flags.RightDown | (int)Flags.RightUp, 0, 0, 0, 0);
         }
