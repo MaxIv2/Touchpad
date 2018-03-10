@@ -35,11 +35,15 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.X = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Y = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.relX = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.relY = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Action = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Save_Button = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.Clear_Button = new System.Windows.Forms.Button();
             this.Load_Button = new System.Windows.Forms.Button();
+            this.Scale_Label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // Record_Button
@@ -76,23 +80,41 @@
             // 
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.X,
-            this.Y});
-            this.listView1.Location = new System.Drawing.Point(12, 144);
+            this.Y,
+            this.relX,
+            this.relY,
+            this.Action});
+            this.listView1.Location = new System.Drawing.Point(12, 186);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(453, 293);
+            this.listView1.Size = new System.Drawing.Size(888, 401);
             this.listView1.TabIndex = 3;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             // 
             // X
             // 
-            this.X.Text = "X coordinate";
-            this.X.Width = 223;
+            this.X.Text = "Absolute X";
+            this.X.Width = 120;
             // 
             // Y
             // 
-            this.Y.Text = "Y coordinate";
-            this.Y.Width = 284;
+            this.Y.Text = "Absolute Y";
+            this.Y.Width = 119;
+            // 
+            // relX
+            // 
+            this.relX.Text = "Relutive X";
+            this.relX.Width = 112;
+            // 
+            // relY
+            // 
+            this.relY.Text = "Relutive Y";
+            this.relY.Width = 116;
+            // 
+            // Action
+            // 
+            this.Action.Text = "Action";
+            this.Action.Width = 110;
             // 
             // Save_Button
             // 
@@ -134,11 +156,21 @@
             this.Load_Button.UseVisualStyleBackColor = true;
             this.Load_Button.Click += new System.EventHandler(this.Load_Button_Click);
             // 
+            // Scale_Label
+            // 
+            this.Scale_Label.AutoSize = true;
+            this.Scale_Label.Location = new System.Drawing.Point(12, 163);
+            this.Scale_Label.Name = "Scale_Label";
+            this.Scale_Label.Size = new System.Drawing.Size(49, 20);
+            this.Scale_Label.TabIndex = 7;
+            this.Scale_Label.Text = "Scale";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(478, 466);
+            this.ClientSize = new System.Drawing.Size(912, 599);
+            this.Controls.Add(this.Scale_Label);
             this.Controls.Add(this.Load_Button);
             this.Controls.Add(this.Clear_Button);
             this.Controls.Add(this.Save_Button);
@@ -150,6 +182,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -166,6 +199,10 @@
         private System.Windows.Forms.ColumnHeader Y;
         private System.Windows.Forms.Button Clear_Button;
         private System.Windows.Forms.Button Load_Button;
+        private System.Windows.Forms.ColumnHeader relX;
+        private System.Windows.Forms.ColumnHeader relY;
+        private System.Windows.Forms.Label Scale_Label;
+        private System.Windows.Forms.ColumnHeader Action;
     }
 }
 
