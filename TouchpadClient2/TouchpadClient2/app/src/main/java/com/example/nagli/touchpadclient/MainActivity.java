@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     String adress;
     BluetoothClient bluetoothClient;
     Context context;
+    Float previousX, previousY;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         btnRight.setOnTouchListener(btnRightTouchListener);
         btnLeft = (Button)findViewById(R.id.btnleft);
         btnLeft.setOnTouchListener(viewTouchListener);
-        adress = "C4:8E:8F:C3:61:12";
+        adress = "38:59:F9:EC:1A:57";
         try {
             bluetoothClient = new BluetoothClient(adress);
             try {
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         context =this;
-       /* try {
+       /*try {
 
             Intent intent = new Intent("com.google.zxing.client.android.SCAN");
             intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
@@ -67,9 +68,15 @@ public class MainActivity extends AppCompatActivity {
     {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == motionEvent.ACTION_DOWN) {
+                previousX = motionEvent.getX();
+                previousY = motionEvent.getY();
+            }
             if (motionEvent.getAction() == motionEvent.ACTION_MOVE){
-                byte[] buffer = {0,3,0,(byte) motionEvent.getX(), (byte) motionEvent.getY()};
+                byte[] buffer = {0,(byte) (motionEvent.getX()-previousX), (byte) (motionEvent.getY()-previousY)};
                 bluetoothClient.SetMessage(buffer);
+                previousX= motionEvent.getX();
+                previousY= motionEvent.getY();
                 try {
                     Toast.makeText(context ,new String(buffer, "UTF-8"), Toast.LENGTH_LONG).show();
                 } catch (UnsupportedEncodingException e) {
@@ -84,11 +91,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == motionEvent.ACTION_UP){
-                byte[] buffer = {0,2,1,1};
+                byte[] buffer = {1,1};
                 bluetoothClient.SetMessage(buffer);
             }
             if (motionEvent.getAction() == motionEvent.ACTION_DOWN){
-                byte[] buffer = {0,2,1,0};
+                byte[] buffer = {1,0};
                 bluetoothClient.SetMessage(buffer);
             }
             return true;
@@ -99,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == motionEvent.ACTION_UP){
-                byte[] buffer = {0,2,2,1};
+                byte[] buffer = {2,1};
                 bluetoothClient.SetMessage(buffer);
             }
             if (motionEvent.getAction() == motionEvent.ACTION_DOWN){
-                byte[] buffer = {0,2,2,0};
+                byte[] buffer = {2,0};
                 bluetoothClient.SetMessage(buffer);
             }
             return true;
@@ -130,6 +137,6 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_CANCELED){
             }
         }
-    }
-    */
+    }*/
+
 }

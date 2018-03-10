@@ -25,7 +25,7 @@ public class BluetoothClient {
     private OutputStream output;
     private InputStream input;
     private Timer connectivityChecker;
-    private Queue<byte[]> bmessage;
+    private Queue<Byte> bmessage;
     private Timer messagetimer;
 
     public BluetoothClient(String serverMACAddress) throws IOException {
@@ -39,7 +39,10 @@ public class BluetoothClient {
     }
 
     public void SetMessage(byte [] buffer) {
-        bmessage.add(buffer);
+        for (byte b:buffer
+             ) {
+            bmessage.add(b);
+        }
     }
 
     public void SetMessageTimer() throws  InterruptedException
@@ -47,9 +50,14 @@ public class BluetoothClient {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                while (!bmessage.isEmpty()) {
-                    sendData(bmessage.remove());
+                byte[] buffer = new byte[bmessage.size()+2];
+                buffer[0] = 0;
+                buffer[1] = (byte) bmessage.size();
+                for (int i = 2;i<buffer.length;i++)
+                {
+                    buffer[i]=bmessage.remove();
                 }
+                sendData(buffer);
             }
         };
         messagetimer = new Timer();
