@@ -54,6 +54,7 @@
     <Compile Include="ApplicationEvents.cs" />
     <Compile Include="BluetoothServer.cs" />
     <Compile Include="ConnectionStatusChangedEventArgs.cs" />
+    <Compile Include="InputHandler.cs" />
     <Compile Include="MouseEvent.cs" />
     <Compile Include="TrayIconController.cs" />
     <Compile Include="MainContext.cs" />

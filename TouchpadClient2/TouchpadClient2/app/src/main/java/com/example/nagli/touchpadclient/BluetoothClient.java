@@ -42,12 +42,28 @@ public class BluetoothClient {
     }
 
     public void SetMessage(byte [] buffer) {
-        String s = "";
+        if (bmessage.size() + buffer.length >= 255)
+            SendBmessageNow();
+        String s = "{ ";
         for (byte b:buffer ) {
             bmessage.add(b);
-            s += "" + b;
+            s += b + " ";
         }
-        Log.println(Log.INFO,"SetMessage()", s);
+        Log.println(Log.INFO,"message", s);
+    }
+
+    public void SendBmessageNow() {
+        if(bmessage.size() == 0)
+            return;
+        byte[] buffer = new byte[bmessage.size()+2];
+        buffer[0] = 0;
+        buffer[1] = (byte) bmessage.size();
+        for (int i = 2;i<buffer.length;i++)
+        {
+            buffer[i]=bmessage.remove();
+        }
+        Log.println(Log.INFO,"send", "Length: " + buffer.length);
+        sendData(buffer);
     }
 
     public void SetMessageTimer() throws  InterruptedException
@@ -55,22 +71,13 @@ public class BluetoothClient {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if(bmessage.size() == 0)
-                    return;
-                byte[] buffer = new byte[bmessage.size()+2];
-                buffer[0] = 0;
-                buffer[1] = (byte) bmessage.size();
-                for (int i = 2;i<buffer.length;i++)
-                {
-                    buffer[i]=bmessage.remove();
-                }
-                sendData(buffer);
+                SendBmessageNow();
             }
         };
         messagetimer = new Timer();
-        messagetimer.scheduleAtFixedRate(task,0,2000);
+        messagetimer.scheduleAtFixedRate(task,0,25);
     }
-    public void SetTimer() throws InterruptedException {
+    public void SetConnectivityCheckerTimer() throws InterruptedException {
         final byte[] buffer = {1, 0};
         TimerTask task = new TimerTask() {
             @Override

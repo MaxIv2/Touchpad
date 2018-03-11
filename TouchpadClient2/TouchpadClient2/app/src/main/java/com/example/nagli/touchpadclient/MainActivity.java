@@ -55,16 +55,18 @@ public class MainActivity extends AppCompatActivity {
     {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            Log.println(Log.INFO,"viewTouchListener()", "Called");
+            Log.println(Log.INFO,"move", "Called");
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 previousX = motionEvent.getX();
                 previousY = motionEvent.getY();
+                Log.println(Log.INFO,"move", "down: " + previousX + ", " + previousY);
             }
             if (motionEvent.getAction() == MotionEvent.ACTION_MOVE){
                 byte[] buffer = {0,(byte) (motionEvent.getX()-previousX), (byte) (motionEvent.getY()-previousY)};
                 bluetoothClient.SetMessage(buffer);
                 previousX= motionEvent.getX();
                 previousY= motionEvent.getY();
+                Log.println(Log.INFO,"move", "move: " + buffer[1] + ", " + buffer[2]);
             }
             if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 view.performClick();
@@ -79,12 +81,12 @@ public class MainActivity extends AppCompatActivity {
             Log.println(Log.INFO,"btnLeftTouchListener()", "Called");
             if (motionEvent.getAction() == MotionEvent.ACTION_UP){
                 view.performClick();
-                Log.println(Log.INFO,"btnLeftTouchListener()", "Up");
+                Log.println(Log.INFO,"left", "Up");
                 byte[] buffer = {1,1};
                 bluetoothClient.SetMessage(buffer);
             }
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-                Log.println(Log.INFO,"btnLeftTouchListener()", "Down");
+                Log.println(Log.INFO,"left", "Down");
                 byte[] buffer = {1,0};
                 bluetoothClient.SetMessage(buffer);
             }
@@ -96,11 +98,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_UP){
+                Log.println(Log.INFO,"right", "Up");
                 view.performClick();
                 byte[] buffer = {2,1};
                 bluetoothClient.SetMessage(buffer);
             }
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                Log.println(Log.INFO,"right", "Up");
                 byte[] buffer = {2,0};
                 bluetoothClient.SetMessage(buffer);
             }

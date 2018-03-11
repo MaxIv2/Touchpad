@@ -6,6 +6,7 @@ using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
 using System.Timers;
 using System.Net.Sockets;
+using System.Diagnostics;
 
 namespace TouchpadServer {
     class BluetoothServer : IDisposable {//TO DO: implement a handler for termination of connection request
@@ -108,8 +109,8 @@ namespace TouchpadServer {
         }
 
         private void SetReader() {
-            this.reader = new Timer(50);
-            this.reader.AutoReset = false;
+            this.reader = new Timer(5);
+            this.reader.AutoReset = true;
             this.reader.Elapsed += this.ReadData;
         }
 
@@ -117,14 +118,8 @@ namespace TouchpadServer {
             byte[] buffer = this.ReceiveData();
             if (buffer == null)
                 return;
+            //Debug.WriteLine("Received: " + BitConverter.ToString(buffer));
             int index = 0;
-            if (missingDataCount > 0) {
-                while (missingDataCount > 0) {
-                    this.inputData.Enqueue(buffer[index]);
-                    index++;
-                }
-                OnNewData(inputData);
-            }
             if(buffer.Length > index + 1) {
                 switch ((MessageType)buffer[0]) {
                     case MessageType.TERMINATE_CONNECTION:
@@ -142,11 +137,10 @@ namespace TouchpadServer {
                         for (j = 0; j < length; j++) {
                             this.inputData.Enqueue(buffer[j + 2]);
                         }
-                        missingDataCount = buffer[1] - j;
                         OnNewData(inputData);
                         break;
                     default:
-                        throw new Exception("Something went wrong :(");
+                        inputData.Clear();
                         break;
                 }
             }

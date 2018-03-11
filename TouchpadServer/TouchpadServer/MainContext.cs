@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace TouchpadServer {
     class MainContext : ApplicationContext {
@@ -17,8 +18,8 @@ namespace TouchpadServer {
 
         public MainContext() : base() {
             status = new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE, "");
+            ApplicationEvents.newDataEventDataEventHandler += InputHandler.HandleOnNewDataEvent;
             ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
-            ApplicationEvents.newDataEventDataEventHandler += this.HandleNewData;
             ApplicationEvents.userExitRequestEventHandler += this.HandleUserExitRequest;
             this.server = new BluetoothServer(new Guid(Resources.MyGuid));
             this.icon = new TrayIconController(HandleUserExitRequest, BluetoothServer.GetAdaptersMACAddress());
@@ -29,66 +30,9 @@ namespace TouchpadServer {
             status = e;
         }
 
-        public void HandleNewData(object sender, NewDataEventArgs e) {
-            Queue<byte> actionData = e.info;
-            bool notEnoughBytes = false;
-            while(!notEnoughBytes && actionData.Count > 0) {
-                byte actionCode = actionData.Peek();
-                switch ((MouseEvent.ActionCode)actionCode) {
-                    case MouseEvent.ActionCode.MOVE:
-                        if (actionData.Count >= 3) { // 2 bytes: dx,dy + 1 type byte, 3 IN TOTAL
-                            actionData.Dequeue();
-                            sbyte dx = (sbyte)actionData.Dequeue();
-                            sbyte dy = (sbyte)actionData.Dequeue();
-                            MouseController.Move(dx, dy);
-                            System.Threading.Thread.Sleep(5);
-                        }
-                        else
-                            notEnoughBytes = true;
-                        break;
-                    case MouseEvent.ActionCode.LEFTBUTTON:
-                        if (actionData.Count >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
-                            actionData.Dequeue();
-                            byte status = actionData.Dequeue();
-                            MouseController.Left(status);
-                        }
-                        else
-                            notEnoughBytes = true;
-                        break;
-                    case MouseEvent.ActionCode.RIGHTBUTTON:
-                        if (actionData.Count >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
-                            actionData.Dequeue();
-                            byte status = actionData.Dequeue();
-                            MouseController.Right(status);
-                        }
-                        else
-                            notEnoughBytes = true;
-                        break;
-                    case MouseEvent.ActionCode.SCROLL:
-                        if (actionData.Count >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
-                            actionData.Dequeue();
-                            sbyte scroll = (sbyte)actionData.Dequeue();
-                            MouseController.Scroll(scroll);
-                        }
-                        else
-                            notEnoughBytes = true;
-                        break;
-                    case MouseEvent.ActionCode.ZOOM:
-                        if (actionData.Count >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
-                            actionData.Dequeue();
-                            sbyte zoom = (sbyte)actionData.Dequeue();
-                            MouseController.Zoom(zoom);
-                        }
-                        else
-                            notEnoughBytes = true;
-                        break;
-                }
-            }
-        }
-
         public void HandleUserExitRequest(object sender, EventArgs e) {
-            ApplicationEvents.newDataEventDataEventHandler -= this.HandleNewData;
-            ApplicationEvents.newDataEventDataEventHandler -= this.HandleUserExitRequest;
+            ApplicationEvents.newDataEventDataEventHandler -= InputHandler.HandleOnNewDataEvent;
+            ApplicationEvents.userExitRequestEventHandler -= this.HandleUserExitRequest;
             ApplicationEvents.connectionStatusChangedEventHandler -= this.HandleConnectionStatusChanged;
             this.server.GoOffline();
             this.server.Dispose();
