@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,14 +21,17 @@ namespace TouchpadServer {
                 connectionStatusChangedEventHandler(sender, e);
         }
         public static void CallUserDisconnectRequestEventHandler(object sender, EventArgs e) {
-            userDisconnectRequestEventHandler(sender, e);
+			if(userDisconnectRequestEventHandler != null)
+				userDisconnectRequestEventHandler(sender, e);
         }
 
         public static void CallUserExitRequestEventHandler(object sender, EventArgs e) {
-            userExitRequestEventHandler(sender, e);
+			if(userExitRequestEventHandler != null)
+				userExitRequestEventHandler(sender, e);
         }
         public static void CallTurnOnOffEventHandlerHandler(object sender, EventArgs e) {
-            turnOnOffEventHandler(sender, e);
+            if(turnOnOffEventHandler != null)
+				turnOnOffEventHandler(sender, e);
         }
     }
 }
