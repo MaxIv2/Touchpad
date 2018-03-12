@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +17,7 @@ namespace TouchpadServer {
         public delegate void DisconnectedEventHandler(object sender, EventArgs e);
 
         public MainContext() : base() {
+			InputHandler.SetThreadPool();
             status = new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE, "");
             ApplicationEvents.newDataEventDataEventHandler += InputHandler.HandleOnNewDataEvent;
             ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
