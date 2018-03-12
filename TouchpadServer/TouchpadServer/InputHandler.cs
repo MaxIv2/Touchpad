@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +8,14 @@ using System.Diagnostics;
 
 namespace TouchpadServer {
     class InputHandler {
+		public static void SetThreadPool() {
+            if(!ThreadPool.SetMaxThreads(1, 3))
+				Debug.WriteLine("Failed to set ThreadPool's max threads");
+			if(!ThreadPool.SetMinThreads(0,1))
+				Debug.WriteLine("Failed to set ThreadPool's min threads");
+		}
+		
         public static void HandleOnNewDataEvent(object sender, NewDataEventArgs e) {
-            ThreadPool.SetMaxThreads(1, 1);
             ThreadPool.QueueUserWorkItem(ProcessInput, e);
         }
 
