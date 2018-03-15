@@ -6,16 +6,13 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
-import java.io.InterruptedIOException;
 import java.util.Queue;
 import java.util.Timer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BluetoothClient {
@@ -28,7 +25,8 @@ public class BluetoothClient {
     private InputStream input;
     private Timer connectivityChecker;
     private Queue<Byte> bmessage;
-    private Timer messagetimer;
+    private Timer messagetimer,ACKtimer;
+    private boolean waitForACK;
 
     public BluetoothClient(String serverMACAddress) throws IOException {
         this.serverMACAddress = serverMACAddress;
@@ -78,15 +76,46 @@ public class BluetoothClient {
         messagetimer.scheduleAtFixedRate(task,0,25);
     }
     public void SetConnectivityCheckerTimer() throws InterruptedException {
-        final byte[] buffer = {1, 0};
+        final byte[] sendbuffer = {1, 0};
+        waitForACK = false;
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                sendData(buffer);
+                if (waitForACK == false) {
+                    //sendData(sendbuffer);
+                    waitForACK = true;
+                }
             }
         };
         connectivityChecker = new Timer();
         connectivityChecker.schedule(task, 0, 5000);
+    }
+
+    public void SetACKtimer() throws InterruptedException {//+check data
+        final byte[] ACKbuffer = {2, 0};
+        final byte[] getbuffer = new byte[2];
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                receiveData(getbuffer);
+                if (getbuffer[0] != 0)
+                    Log.d("getbuffer[0]:", getbuffer[0] + "");
+                if (getbuffer[0] == 1)
+                {
+                    sendData(ACKbuffer);
+                }
+                else if (getbuffer[0] == 3)
+                {
+                    close();
+                }
+                else if (getbuffer[0] == 2)
+                {
+                    waitForACK =false;
+                }
+            }
+        };
+        ACKtimer = new Timer();
+        ACKtimer.scheduleAtFixedRate(task, 0, 500);
     }
 
     public void sendData(byte[] buffer) {
@@ -101,6 +130,21 @@ public class BluetoothClient {
     public void receiveData(byte[] buffer) {
         try {
             this.input.read(buffer, 0, buffer.length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void close(){
+        messagetimer.cancel();
+        messagetimer.purge();
+        ACKtimer.cancel();
+        ACKtimer.purge();
+        connectivityChecker.cancel();
+        connectivityChecker.purge();
+        try {
+            this.output.close();
+            this.input.close();
+            this.client.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

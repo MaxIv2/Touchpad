@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnLeft,btnRight;
+    Button btnLeft,btnRight,btnExit;
     View view;
     LinearLayout linearLayout;
     String adress;
@@ -34,13 +34,17 @@ public class MainActivity extends AppCompatActivity {
         btnLeft.setOnTouchListener(btnLeftTouchListener);
         btnRight = (Button)findViewById(R.id.btnright);
         btnRight.setOnTouchListener(btnRightTouchListener);
+        btnExit = (Button)findViewById(R.id.btnexit);
+        btnExit.setOnClickListener(btnExitOnClickListener);
         view = (View) findViewById(R.id.view);
         view.setOnTouchListener(viewTouchListener);
-        adress = "08:3E:8E:83:05:2A";
+        adress = "34:23:87:3B:D7:34";
         try {
             bluetoothClient = new BluetoothClient(adress);
             try {
                 bluetoothClient.SetMessageTimer();
+                bluetoothClient.SetConnectivityCheckerTimer();
+                bluetoothClient.SetACKtimer();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -111,5 +115,22 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
+    View.OnClickListener btnExitOnClickListener = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view) {
+            if(btnExit == view) {
+                byte [] buffer = {3,0};
+                bluetoothClient.sendData(buffer);
+                bluetoothClient.close();
+                switchActivity(StartActivity.class);
+            }
+        }
+    };
+    public void switchActivity(Class C)
+    {
+        Intent intent = new Intent(this, C);
+        startActivity(intent);
+    }
 
 }
