@@ -18,11 +18,9 @@ namespace TouchpadServer {
         private Timer connectivityChecker;
         private Timer reader;
         private Timer clientGetter;
-        private bool connected;
         private Queue<byte> inputData;
-        private int missingDataCount;
         private bool awaitingAcknoldegement;
-
+        private bool connected;
         public static bool online { get; private set; }
         public bool disposed { get; private set; }
 
@@ -30,12 +28,13 @@ namespace TouchpadServer {
             online = false;
             this.identifier = guid;
             this.listener = new BluetoothListener(guid);
-            this.connected = false;
             this.inputData = new Queue<byte>();
-            this.awaitingAcknoldegement = false;
             this.SetConnectivityChecker();
             this.SetReader();
             this.SetClientGetter();
+            this.awaitingAcknoldegement = false;
+            this.connected = false;
+            this.disposed = false;
             ApplicationEvents.turnOnOffEventHandler += this.HandleTurnOnOff;
             ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
         }
@@ -82,8 +81,9 @@ namespace TouchpadServer {
         public void AcceptClient() {
             this.client = this.listener.AcceptBluetoothClient();
             this.connected = true;
+            this.awaitingAcknoldegement = false;
             this.stream = client.GetStream();
-            //this.connectivityChecker.Enabled;
+            this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
             string address = this.client.RemoteEndPoint.Address.ToString();
             this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, address));
@@ -124,6 +124,7 @@ namespace TouchpadServer {
                 switch ((MessageType)buffer[0]) {
                     case MessageType.TERMINATE_CONNECTION:
                         this.Disconnect(notifyClient: false);
+                        this.ResetGetter();
                         break;
                     case MessageType.CONNECTION_CHECK:
                         this.SendCheckAcknoledgement();
@@ -158,6 +159,11 @@ namespace TouchpadServer {
                 this.AcceptClient();
                 this.listener.Stop();
             }
+        }
+
+        private void ResetGetter() {
+            this.listener.Start();
+            this.clientGetter.Enabled = true;
         }
         #endregion
         
