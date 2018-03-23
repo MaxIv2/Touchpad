@@ -21,7 +21,7 @@ namespace TouchpadServer {
         private Queue<byte[]> inputBatches;
         private bool awaitingAcknoldegement = false;
         private bool connected = false;
-        private static bool online = false;
+        public bool online { get; private set; }
         private bool disposed = false;
 
         public BluetoothServer(Guid guid) {
@@ -32,6 +32,7 @@ namespace TouchpadServer {
             this.SetConnectivityChecker();
             this.SetReader();
             this.SetClientGetter();
+            this.online = false;
             ApplicationEvents.turnOnOffEventHandler += this.HandleTurnOnOff;
             ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
         }
@@ -77,6 +78,13 @@ namespace TouchpadServer {
 
         public void AcceptClient() {
             this.client = this.listener.AcceptBluetoothClient();
+            string address = this.client.RemoteEndPoint.Address.ToString();
+            if (BlacklistManager.IsBlacklisted(address)) {
+                this.client.Close();
+                this.ResetGetter();
+                return;
+            }
+            this.listener.Stop();
             this.connected = true;
             this.awaitingAcknoldegement = false;
             this.stream = client.GetStream();
@@ -84,7 +92,6 @@ namespace TouchpadServer {
             this.inputBatches.Clear();
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
-            string address = this.client.RemoteEndPoint.Address.ToString();
             this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, this.client.RemoteMachineName));
         }
         #endregion
@@ -183,7 +190,6 @@ namespace TouchpadServer {
             if (listener.Pending()) {
                 this.clientGetter.Enabled = false;
                 this.AcceptClient();
-                this.listener.Stop();
             }
         }
 
@@ -194,10 +200,14 @@ namespace TouchpadServer {
         #endregion
         
         #region Handle events
-        private void HandleDisconnectRequest(object sender, EventArgs e) {
-            Disconnect();
-            this.listener.Start();
-            this.clientGetter.Enabled = true;
+        private void HandleDisconnectRequest(object sender, bool blacklist) {
+            if (connected) {
+                if (blacklist)
+                    BlacklistManager.AddToBlacklist(client.RemoteEndPoint.Address.ToString());
+                Disconnect();
+                this.listener.Start();
+                this.clientGetter.Enabled = true;
+            }
         }
 
         private void HandleTurnOnOff(object sender, EventArgs e) {
@@ -265,8 +275,6 @@ namespace TouchpadServer {
         protected virtual void Dispose(bool disposing) {
             if (this.disposed)
                 return;
-            ApplicationEvents.userDisconnectRequestEventHandler -= this.HandleDisconnectRequest;
-            ApplicationEvents.turnOnOffEventHandler -= this.HandleTurnOnOff;
             if (disposing) {
                 if (this.connected) {
                     this.stream.Dispose();
@@ -274,6 +282,8 @@ namespace TouchpadServer {
                 }
                 this.connectivityChecker.Dispose();
                 this.reader.Dispose();
+                ApplicationEvents.userDisconnectRequestEventHandler -= this.HandleDisconnectRequest;
+                ApplicationEvents.turnOnOffEventHandler -= this.HandleTurnOnOff;
             }
             this.disposed = true;
         }

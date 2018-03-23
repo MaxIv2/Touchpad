@@ -48,7 +48,6 @@ namespace TouchpadServer {
                         if (merged.Length - i >= 3) { // 2 bytes: dx,dy + 1 type byte, 3 IN TOTAL
                             sbyte dx = (sbyte)merged[i + 1];
                             sbyte dy = (sbyte)merged[i + 2];
-                            Thread.Sleep(1);
                             MouseController.Move(dx, dy);
                             i += 3;
                         }

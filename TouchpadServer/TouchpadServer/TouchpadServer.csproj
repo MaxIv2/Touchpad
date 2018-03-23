@@ -52,10 +52,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.cs" />
+    <Compile Include="BlacklistManager.cs" />
+    <Compile Include="BlacklistWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BlacklistWindow.Designer.cs">
+      <DependentUpon>BlacklistWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="BluetoothServer.cs" />
     <Compile Include="ConnectionStatusChangedEventArgs.cs" />
     <Compile Include="InputHandler.cs" />
     <Compile Include="MouseEvent.cs" />
+    <Compile Include="SwitchButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TrayIconController.cs" />
     <Compile Include="MainContext.cs" />
     <Compile Include="MouseController.cs" />
@@ -70,6 +80,9 @@
     </Compile>
     <Compile Include="TurnOnOffEventArgs.cs" />
     <Compile Include="VirtualKeys.cs" />
+    <EmbeddedResource Include="BlacklistWindow.resx">
+      <DependentUpon>BlacklistWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

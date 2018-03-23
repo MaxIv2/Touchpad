@@ -8,7 +8,7 @@ namespace TouchpadServer {
     static class ApplicationEvents {
         public static event EventHandler<NewDataEventArgs> newDataEventDataEventHandler;
         public static event EventHandler<ConnectionStatusChangedEventArgs> connectionStatusChangedEventHandler;
-        public static event EventHandler<EventArgs> userDisconnectRequestEventHandler;
+        public static event EventHandler<bool> userDisconnectRequestEventHandler;
         public static event EventHandler<EventArgs> userExitRequestEventHandler;
         public static event EventHandler<EventArgs> turnOnOffEventHandler;
 
@@ -20,9 +20,9 @@ namespace TouchpadServer {
             if(connectionStatusChangedEventHandler != null)
                 connectionStatusChangedEventHandler(sender, e);
         }
-        public static void CallUserDisconnectRequestEventHandler(object sender, EventArgs e) {
+        public static void CallUserDisconnectRequestEventHandler(object sender, bool blacklist) {
 			if(userDisconnectRequestEventHandler != null)
-				userDisconnectRequestEventHandler(sender, e);
+				userDisconnectRequestEventHandler(sender, blacklist);
         }
 
         public static void CallUserExitRequestEventHandler(object sender, EventArgs e) {

@@ -26,8 +26,9 @@
             this.QRCodeContainer = new System.Windows.Forms.PictureBox();
             this.diconnectButton = new System.Windows.Forms.Button();
             this.serverStatus = new System.Windows.Forms.Label();
-            this.onAndOffButtonSwitch = new System.Windows.Forms.Button();
             this.exitButton = new System.Windows.Forms.Button();
+            this.onAndOffButtonSwitch = new TouchpadServer.SwitchButton();
+            this.blacklist = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,7 +47,7 @@
             this.diconnectButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.diconnectButton.Location = new System.Drawing.Point(305, 84);
             this.diconnectButton.Name = "diconnectButton";
-            this.diconnectButton.Size = new System.Drawing.Size(425, 36);
+            this.diconnectButton.Size = new System.Drawing.Size(424, 36);
             this.diconnectButton.TabIndex = 1;
             this.diconnectButton.Text = "Disconnect";
             this.diconnectButton.UseVisualStyleBackColor = true;
@@ -61,35 +62,48 @@
             this.serverStatus.TabIndex = 2;
             this.serverStatus.Text = "Status: Connected";
             // 
-            // onAndOffButtonSwitch
-            // 
-            this.onAndOffButtonSwitch.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.onAndOffButtonSwitch.Location = new System.Drawing.Point(643, 12);
-            this.onAndOffButtonSwitch.Name = "onAndOffButtonSwitch";
-            this.onAndOffButtonSwitch.Size = new System.Drawing.Size(87, 41);
-            this.onAndOffButtonSwitch.TabIndex = 3;
-            this.onAndOffButtonSwitch.Text = "On/Off";
-            this.onAndOffButtonSwitch.UseVisualStyleBackColor = true;
-            // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(306, 239);
+            this.exitButton.Location = new System.Drawing.Point(306, 242);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(124, 23);
             this.exitButton.TabIndex = 4;
             this.exitButton.Text = "Exit Remote Touchpad";
             this.exitButton.UseVisualStyleBackColor = true;
             // 
+            // onAndOffButtonSwitch
+            // 
+            this.onAndOffButtonSwitch.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.onAndOffButtonSwitch.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.onAndOffButtonSwitch.Location = new System.Drawing.Point(642, 12);
+            this.onAndOffButtonSwitch.Name = "onAndOffButtonSwitch";
+            this.onAndOffButtonSwitch.Size = new System.Drawing.Size(87, 23);
+            this.onAndOffButtonSwitch.TabIndex = 3;
+            this.onAndOffButtonSwitch.Text = "On/Off";
+            this.onAndOffButtonSwitch.UseVisualStyleBackColor = true;
+            // 
+            // blacklist
+            // 
+            this.blacklist.Location = new System.Drawing.Point(306, 127);
+            this.blacklist.Name = "blacklist";
+            this.blacklist.Size = new System.Drawing.Size(124, 23);
+            this.blacklist.TabIndex = 7;
+            this.blacklist.Text = "Blacklist";
+            this.blacklist.UseVisualStyleBackColor = true;
+            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(742, 277);
+            this.ClientSize = new System.Drawing.Size(741, 277);
+            this.Controls.Add(this.blacklist);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.onAndOffButtonSwitch);
             this.Controls.Add(this.serverStatus);
             this.Controls.Add(this.diconnectButton);
             this.Controls.Add(this.QRCodeContainer);
+            this.MaximizeBox = false;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "SettingsWindow";
             this.Text = "SettingsWindows";
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).EndInit();
@@ -103,7 +117,8 @@
         private System.Windows.Forms.PictureBox QRCodeContainer;
         private System.Windows.Forms.Button diconnectButton;
         private System.Windows.Forms.Label serverStatus;
-        private System.Windows.Forms.Button onAndOffButtonSwitch;
+        private SwitchButton onAndOffButtonSwitch;
         private System.Windows.Forms.Button exitButton;
+        private System.Windows.Forms.Button blacklist;
     }
 }

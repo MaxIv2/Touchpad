@@ -20,11 +20,20 @@ namespace TouchpadServer {
             this.QRCodeContainer.Size = RenderQrCode(MACAddress).Size;
             this.QRCodeContainer.SizeMode = PictureBoxSizeMode.StretchImage;
             this.exitButton.Click += ApplicationEvents.CallUserExitRequestEventHandler;
-            this.diconnectButton.Click += ApplicationEvents.CallUserDisconnectRequestEventHandler;
+            this.diconnectButton.Click += this.disconnectButtonClick;
+            this.blacklist.Click += this.blacklistButtonClick;
             this.onAndOffButtonSwitch.Click += ApplicationEvents.CallTurnOnOffEventHandlerHandler;
             ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
             this.FormClosing += this.UnsbscribeFromHandlers;
         }
+
+        private void disconnectButtonClick(object sender, EventArgs e) {
+            ApplicationEvents.CallUserDisconnectRequestEventHandler(sender, false);
+        }
+        private void blacklistButtonClick(object sender, EventArgs e) {
+            ApplicationEvents.CallUserDisconnectRequestEventHandler(sender, true);
+        }
+        
 
         private void HandleConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e) {
             this.SafeUpdateStatus(e);

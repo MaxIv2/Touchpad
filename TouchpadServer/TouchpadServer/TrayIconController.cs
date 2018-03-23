@@ -7,14 +7,18 @@ using System.Windows.Forms;
 
 namespace TouchpadServer {
     class TrayIconController : IDisposable {
-        private bool windowIsOpen;
+        private bool settingsWindowIsOpen;
+        private bool blackistWindowIsOpen;
         private NotifyIcon trayIcon;
         private string MACAddress;
+        private bool menuOpen = false;
         private bool disposed;
+        private SettingsWindow settingsWindow;
+        private BlacklistWindow blacklistWindow;
 
         public TrayIconController(EventHandler exitApplicaion, string MACAddress) {
             this.trayIcon = new NotifyIcon();
-            MenuItem[] menuItems = { new MenuItem("Exit", ApplicationEvents.CallUserExitRequestEventHandler) };
+            MenuItem[] menuItems = { new MenuItem("Exit", ApplicationEvents.CallUserExitRequestEventHandler), new MenuItem("Blacklist",LaunchBlacklistWindow) };
             this.trayIcon.ContextMenu = new ContextMenu(menuItems);
             this.trayIcon.Text = "Remote Touchpad";
             this.trayIcon.Icon = Properties.Resources.mouseBlack;
@@ -22,6 +26,15 @@ namespace TouchpadServer {
             this.trayIcon.Click += this.IconClick;
             this.MACAddress = MACAddress;
             ApplicationEvents.connectionStatusChangedEventHandler += ChangeAppearance;
+            this.trayIcon.ContextMenu.Popup += setMenuOpen;
+            this.trayIcon.ContextMenu.Collapse += setMenuClosed;
+        }
+
+        private void setMenuOpen(object sender, EventArgs e) {
+            this.menuOpen = true;
+        }
+        private void setMenuClosed(object sender, EventArgs e) {
+            this.menuOpen = false;
         }
 
         private void ChangeAppearance(object sender, ConnectionStatusChangedEventArgs e) {
@@ -38,17 +51,37 @@ namespace TouchpadServer {
             } 
         }
 
-        public void IconClick(object sender, EventArgs e) {
-            if (!windowIsOpen) {
-                SettingsWindow t = new SettingsWindow(this.MACAddress);
-                t.Show();
-                this.windowIsOpen = true;
-                t.FormClosed += this.FormClosed;
+        private void LaunchBlacklistWindow(object sender, EventArgs e) {
+            this.menuOpen = false;
+            if (!blackistWindowIsOpen) {
+                blacklistWindow = new BlacklistWindow();
+                blacklistWindow.Show();
+                this.blackistWindowIsOpen = true;
+                blacklistWindow.FormClosed += this.FormClosed;
+            }
+            else {
+                settingsWindow.WindowState = FormWindowState.Normal;
             }
         }
 
-        public void FormClosed(object sender, EventArgs e) {
-            this.windowIsOpen = false;
+        private void IconClick(object sender, EventArgs e) {
+            if (!menuOpen) {
+                if (!settingsWindowIsOpen) {
+                    settingsWindow = new SettingsWindow(this.MACAddress);
+                    settingsWindow.Show();
+                    this.settingsWindowIsOpen = true;
+                    settingsWindow.FormClosed += this.FormClosed;
+                } else {
+                    settingsWindow.WindowState = FormWindowState.Normal;
+                }
+            }
+        }
+
+        private void FormClosed(object sender, EventArgs e) {
+            if (sender is BlacklistWindow)
+                this.blackistWindowIsOpen = false;
+            else
+                this.settingsWindowIsOpen = false;
         }
 
         public void Dispose() {

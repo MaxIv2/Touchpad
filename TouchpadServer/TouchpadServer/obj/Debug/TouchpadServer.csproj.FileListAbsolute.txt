@@ -34,3 +34,4 @@ C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\Touchpa
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csproj.CoreCompileInputs.cache
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.exe
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.pdb
+C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.BlacklistWindow.resources
