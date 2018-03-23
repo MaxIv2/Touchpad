@@ -17,10 +17,25 @@ namespace TouchpadServer {
             MenuItem[] menuItems = { new MenuItem("Exit", ApplicationEvents.CallUserExitRequestEventHandler) };
             this.trayIcon.ContextMenu = new ContextMenu(menuItems);
             this.trayIcon.Text = "Remote Touchpad";
-            this.trayIcon.Icon = Resources.mouseBlack;
+            this.trayIcon.Icon = Properties.Resources.mouseBlack;
             this.trayIcon.Visible = true;
             this.trayIcon.Click += this.IconClick;
             this.MACAddress = MACAddress;
+            ApplicationEvents.connectionStatusChangedEventHandler += ChangeAppearance;
+        }
+
+        private void ChangeAppearance(object sender, ConnectionStatusChangedEventArgs e) {
+            switch (e.status) {
+                case ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE:
+                    this.trayIcon.Icon = Properties.Resources.mouseRed;
+                    break;
+                case ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED:
+                    this.trayIcon.Icon = Properties.Resources.mouseBlack;
+                    break;
+                case ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED:
+                    this.trayIcon.Icon = Properties.Resources.mouseGreen;
+                    break;
+            } 
         }
 
         public void IconClick(object sender, EventArgs e) {

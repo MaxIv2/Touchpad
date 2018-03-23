@@ -90,7 +90,7 @@ public class BluetoothClient {
         connectivityChecker = new Timer();
         connectivityChecker.schedule(task, 0, 5000);
     }
-
+    int ackcounter = 0;
     public void SetACKtimer() throws InterruptedException {//+check data
         final byte[] ACKbuffer = {2, 0};
         final byte[] getbuffer = new byte[2];
@@ -103,6 +103,8 @@ public class BluetoothClient {
                 if (getbuffer[0] == 1)
                 {
                     sendData(ACKbuffer);
+                    ackcounter += 1;
+                    Log.d("ack", "" + ackcounter);
                 }
                 else if (getbuffer[0] == 3)
                 {
@@ -110,7 +112,7 @@ public class BluetoothClient {
                 }
                 else if (getbuffer[0] == 2)
                 {
-                    waitForACK =false;
+                    waitForACK = false;
                 }
             }
         };

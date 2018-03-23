@@ -17,12 +17,11 @@ namespace TouchpadServer {
         public delegate void DisconnectedEventHandler(object sender, EventArgs e);
 
         public MainContext() : base() {
-			InputHandler.SetThreadPool();
             status = new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE, "");
             ApplicationEvents.newDataEventDataEventHandler += InputHandler.HandleOnNewDataEvent;
             ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
             ApplicationEvents.userExitRequestEventHandler += this.HandleUserExitRequest;
-            this.server = new BluetoothServer(new Guid(Resources.MyGuid));
+            this.server = new BluetoothServer(new Guid(Properties.Resources.Guid));
             this.icon = new TrayIconController(HandleUserExitRequest, BluetoothServer.GetAdaptersMACAddress());
             this.server.GoOnline();
         }

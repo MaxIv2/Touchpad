@@ -46,7 +46,7 @@
             this.diconnectButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.diconnectButton.Location = new System.Drawing.Point(305, 84);
             this.diconnectButton.Name = "diconnectButton";
-            this.diconnectButton.Size = new System.Drawing.Size(236, 36);
+            this.diconnectButton.Size = new System.Drawing.Size(425, 36);
             this.diconnectButton.TabIndex = 1;
             this.diconnectButton.Text = "Disconnect";
             this.diconnectButton.UseVisualStyleBackColor = true;
@@ -64,7 +64,7 @@
             // onAndOffButtonSwitch
             // 
             this.onAndOffButtonSwitch.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.onAndOffButtonSwitch.Location = new System.Drawing.Point(454, 12);
+            this.onAndOffButtonSwitch.Location = new System.Drawing.Point(643, 12);
             this.onAndOffButtonSwitch.Name = "onAndOffButtonSwitch";
             this.onAndOffButtonSwitch.Size = new System.Drawing.Size(87, 41);
             this.onAndOffButtonSwitch.TabIndex = 3;
@@ -73,7 +73,7 @@
             // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(417, 239);
+            this.exitButton.Location = new System.Drawing.Point(306, 239);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(124, 23);
             this.exitButton.TabIndex = 4;
@@ -84,7 +84,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(553, 277);
+            this.ClientSize = new System.Drawing.Size(742, 277);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.onAndOffButtonSwitch);
             this.Controls.Add(this.serverStatus);

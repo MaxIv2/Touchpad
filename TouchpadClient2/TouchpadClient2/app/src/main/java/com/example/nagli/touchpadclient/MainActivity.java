@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         btnExit.setOnClickListener(btnExitOnClickListener);
         view = (View) findViewById(R.id.view);
         view.setOnTouchListener(viewTouchListener);
-        adress = "34:23:87:3B:D7:34";
+        adress = "08:3E:8E:83:05:2A";
         try {
             bluetoothClient = new BluetoothClient(adress);
             try {

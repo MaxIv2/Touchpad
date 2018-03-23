@@ -18,23 +18,20 @@ namespace TouchpadServer {
         private Timer connectivityChecker;
         private Timer reader;
         private Timer clientGetter;
-        private Queue<byte> inputData;
-        private bool awaitingAcknoldegement;
-        private bool connected;
-        public static bool online { get; private set; }
-        public bool disposed { get; private set; }
+        private Queue<byte[]> inputBatches;
+        private bool awaitingAcknoldegement = false;
+        private bool connected = false;
+        private static bool online = false;
+        private bool disposed = false;
 
         public BluetoothServer(Guid guid) {
             online = false;
             this.identifier = guid;
             this.listener = new BluetoothListener(guid);
-            this.inputData = new Queue<byte>();
+            this.inputBatches = new Queue<byte[]>();
             this.SetConnectivityChecker();
             this.SetReader();
             this.SetClientGetter();
-            this.awaitingAcknoldegement = false;
-            this.connected = false;
-            this.disposed = false;
             ApplicationEvents.turnOnOffEventHandler += this.HandleTurnOnOff;
             ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
         }
@@ -83,10 +80,12 @@ namespace TouchpadServer {
             this.connected = true;
             this.awaitingAcknoldegement = false;
             this.stream = client.GetStream();
+            this.missing = 0;
+            this.inputBatches.Clear();
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
             string address = this.client.RemoteEndPoint.Address.ToString();
-            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, address));
+            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, this.client.RemoteMachineName));
         }
         #endregion
 
@@ -114,34 +113,61 @@ namespace TouchpadServer {
             this.reader.Elapsed += this.ReadData;
         }
 
+        private object readerLock = new object();
+        private int missing = 0;
         private void ReadData(Object source, ElapsedEventArgs e) {
-            byte[] buffer = this.ReceiveData();
-            if (buffer == null)
-                return;
-            //Debug.WriteLine("Received: " + BitConverter.ToString(buffer));
-            int index = 0;
-            if(buffer.Length > index + 1) {
-                switch ((MessageType)buffer[0]) {
+            lock (readerLock) {
+                if (missing > 0) {
+                    Debug.WriteLine("compliting missing data...");
+                    if (this.client.Available < missing) {
+                        Debug.WriteLine("using found data...");
+                        return;
+                    }
+                    byte[] buffer = new byte[missing];
+                    this.stream.Read(buffer, 0, missing);
+                    int j;
+                    for (j = 0; j < missing; j++) {
+                        this.inputBatches.Enqueue(buffer);
+                    }
+                    OnNewData(inputBatches);
+                }
+                if (this.client.Available < 2)
+                    return;
+                byte[] outerHeader = new byte[2];
+                this.stream.Read(outerHeader, 0, 2);
+                byte type = outerHeader[0];
+                byte length = outerHeader[1];
+                switch ((MessageType)type) {
                     case MessageType.TERMINATE_CONNECTION:
+                        Debug.WriteLine("terminate");
                         this.Disconnect(notifyClient: false);
                         this.ResetGetter();
                         break;
                     case MessageType.CONNECTION_CHECK:
+                        Debug.WriteLine("CONNECTION_CHECK");
                         this.SendCheckAcknoledgement();
                         break;
                     case MessageType.CHECK_ACKNOLEDGEMENT:
+                        Debug.WriteLine("CHECK_ACKNOLEDGEMENT");
                         this.awaitingAcknoldegement = false;
                         break;
                     case MessageType.MOUSE:
-                        byte length = buffer[1];
+                        //Debug.WriteLine("Mouse");
+                        if (this.client.Available < length) {
+                            missing = length;
+                            return;
+                        }
+                        byte[] buffer = new byte[length];
+                        this.stream.Read(buffer, 0, length);
                         int j;
                         for (j = 0; j < length; j++) {
-                            this.inputData.Enqueue(buffer[j + 2]);
+                            this.inputBatches.Enqueue(buffer);
                         }
-                        OnNewData(inputData);
+                        OnNewData(inputBatches);
                         break;
                     default:
-                        inputData.Clear();
+                        Debug.WriteLine("wut");
+                        inputBatches.Clear();
                         break;
                 }
             }
@@ -187,7 +213,7 @@ namespace TouchpadServer {
             ApplicationEvents.CallConnectionStatusChangedEventHandler(this, args);
         }
 
-        private void OnNewData(Queue<byte> info) {
+        private void OnNewData(Queue<byte[]> info) {
             ApplicationEvents.CallNewEventDataEventHandler(this, new NewDataEventArgs(info));
         }
         #endregion
