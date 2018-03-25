@@ -24,7 +24,9 @@
         /// </summary>
         private void InitializeComponent() {
             this.removeButton = new System.Windows.Forms.Button();
-            this.blacklistDisplay = new System.Windows.Forms.ListBox();
+            this.blacklistView = new System.Windows.Forms.ListView();
+            this.deviceNameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.addressHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // removeButton
@@ -36,21 +38,36 @@
             this.removeButton.Text = "Remove";
             this.removeButton.UseVisualStyleBackColor = true;
             // 
-            // blacklistDisplay
+            // blacklistView
             // 
-            this.blacklistDisplay.Location = new System.Drawing.Point(12, 12);
-            this.blacklistDisplay.Name = "blacklistDisplay";
-            this.blacklistDisplay.Size = new System.Drawing.Size(260, 199);
-            this.blacklistDisplay.TabIndex = 2;
+            this.blacklistView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.deviceNameHeader,
+            this.addressHeader});
+            this.blacklistView.View = System.Windows.Forms.View.Details;
+            this.blacklistView.FullRowSelect = true;
+            this.blacklistView.Location = new System.Drawing.Point(13, 12);
+            this.blacklistView.Name = "blacklistView";
+            this.blacklistView.Size = new System.Drawing.Size(259, 208);
+            this.blacklistView.TabIndex = 2;
+            this.blacklistView.UseCompatibleStateImageBehavior = false;
+            // 
+            // deviceNameHeader
+            // 
+            this.deviceNameHeader.Text = "Device Name";
+            this.deviceNameHeader.Width = -2;//Auto sizing
+            // 
+            // addressHeader
+            // 
+            this.addressHeader.Text = "Address";
+            this.addressHeader.Width = -2;//Auto sizing
             // 
             // BlacklistWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Controls.Add(this.blacklistDisplay);
+            this.Controls.Add(this.blacklistView);
             this.Controls.Add(this.removeButton);
-            this.MaximizeBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "BlacklistWindow";
             this.Text = "BlacklistWindow";
@@ -61,7 +78,9 @@
         #endregion
 
         private System.Windows.Forms.Button removeButton;
-        private System.Windows.Forms.ListBox blacklistDisplay;
+        private System.Windows.Forms.ListView blacklistView;
+        private System.Windows.Forms.ColumnHeader deviceNameHeader;
+        private System.Windows.Forms.ColumnHeader addressHeader;
 
     }
 }

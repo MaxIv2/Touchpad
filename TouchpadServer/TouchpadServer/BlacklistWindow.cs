@@ -12,13 +12,19 @@ namespace TouchpadServer {
     public partial class BlacklistWindow : Form {
         public BlacklistWindow() {
             InitializeComponent();
-            this.blacklistDisplay.Items.AddRange(BlacklistManager.GetList());
+
+            BlacklistManager.Insert("afsd", "88899");
+            BlacklistManager.GetAllItems();
+            BlacklistManager.Delete("88899");
+            BlacklistManager.GetAllItems();
             this.removeButton.Click += removeButtonClick;
             BlacklistManager.changeEventHandler += OnBlacklistChange;
         }
 
+        public void FillList() {
+        } 
+
         public void OnBlacklistChange(object sender, object newAddress) {
-            this.blacklistDisplay.Items.Add(newAddress);
         }
 
         protected override void OnClosed(EventArgs e) {
@@ -27,11 +33,11 @@ namespace TouchpadServer {
         }
 
         private void removeButtonClick(object sender, EventArgs e) {
-            object blackListedDevice = (object)blacklistDisplay.SelectedItem;
+            /*object blackListedDevice = (object)blacklistView.SelectedItem;
             if (blackListedDevice != null) {
                 BlacklistManager.Remove((string)blackListedDevice);
-                blacklistDisplay.Items.Remove(blackListedDevice);
-            }
+                blacklistView.Items.Remove(blackListedDevice);
+            }*/
         }
 
         
