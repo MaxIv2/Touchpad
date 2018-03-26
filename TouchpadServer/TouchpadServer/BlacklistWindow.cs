@@ -12,11 +12,8 @@ namespace TouchpadServer {
     public partial class BlacklistWindow : Form {
         public BlacklistWindow() {
             InitializeComponent();
-            BlacklistManager.Insert("max", "1");
-            //BlacklistManager.Insert("tal", "2");
-            //BlacklistManager.Insert("gil", "3");
+            this.FillList();
             BlacklistManager.changeEventHandler += OnBlacklistChange;
-            FillList();
             this.removeButton.Click += removeButtonClick;
         }
 
@@ -28,7 +25,7 @@ namespace TouchpadServer {
         } 
 
         public void OnBlacklistChange(object sender, EventArgs e) {
-            blacklistView.Clear();
+            blacklistView.Items.Clear();
             FillList();
         }
 
@@ -43,7 +40,6 @@ namespace TouchpadServer {
                 string address = item.SubItems[1].Text;
                 BlacklistManager.Delete(address);
             }
-            FillList();
         }
 
         

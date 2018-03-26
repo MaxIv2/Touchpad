@@ -29,12 +29,22 @@ namespace TouchpadServer {
         public static long GetCount() {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             SQLiteCommand command = new SQLiteCommand(getCount, connection);
+            long result = 0;
             connection.Open();
-            SQLiteDataReader reader = command.ExecuteReader();
-            reader.Read();
-            long result = (long)reader[0];
-            reader.Close();
-            connection.Close();
+            try {
+                SQLiteDataReader reader = command.ExecuteReader();
+                reader.Read();
+                result = (long)reader[0];
+                reader.Close();
+            }
+            catch (SQLiteException) {
+                connection.Close();
+                BlacklistManager.SetUp();
+                return 0;
+            }
+            finally {
+                connection.Close();
+            }
             return result;
         }
 
@@ -42,8 +52,18 @@ namespace TouchpadServer {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(String.Format(insertItem, name, address), connection);
-            command.ExecuteNonQuery();
-            connection.Close();
+            try {
+                command.ExecuteNonQuery();
+            }
+            catch (SQLiteException) {
+                connection.Close();
+                BlacklistManager.SetUp();
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+            finally {
+                connection.Close();
+            }
             BlacklistManager.OnChange();
         }
 
@@ -52,12 +72,22 @@ namespace TouchpadServer {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             SQLiteCommand command = new SQLiteCommand(getAllItems, connection);
             connection.Open();
-            SQLiteDataReader reader = command.ExecuteReader();
-            for (int i = 0; reader.Read(); i++) {
-                result[i] = new string[2] {(string)reader["name"], (string) reader["address"]};
+            SQLiteDataReader reader = null;
+            try {
+                reader = command.ExecuteReader();
+                for (int i = 0; reader.Read(); i++) {
+                    result[i] = new string[2] { (string)reader["name"], (string)reader["address"] };
+                }
+                reader.Close();
             }
-            reader.Close();
-            connection.Close();
+            catch (SQLiteException) {
+                connection.Close();
+                BlacklistManager.SetUp();
+                //should be empty now, so no loop
+            }
+            finally {
+                connection.Close();
+            }
             return result;
         }
 
@@ -65,23 +95,40 @@ namespace TouchpadServer {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(String.Format(removeItem, address), connection);
-            command.ExecuteNonQuery();
-            connection.Close();
-            BlacklistManager.OnChange();
+            try {
+                command.ExecuteNonQuery();
+                BlacklistManager.OnChange();
+            }
+            catch (SQLiteException) {
+                connection.Close();
+                BlacklistManager.SetUp();
+            }
+            finally {
+                connection.Close();
+            }
         }
 
         public static bool Contains(string address) {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             SQLiteCommand command = new SQLiteCommand(String.Format(getItemByAddress, address), connection);
             connection.Open();
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
+            SQLiteDataReader reader = null;
+            try {
+                reader = command.ExecuteReader();
+                while (reader.Read()) {
+                    reader.Close();
+                    return true;
+                }
                 reader.Close();
-                connection.Close();
-                return true;
             }
-            reader.Close();
-            connection.Close();
+            catch (SQLiteException) {
+                connection.Close();
+                BlacklistManager.SetUp();
+                //should always be empty here, so no loop
+            }
+            finally {
+                connection.Close();
+            }
             return false;
         }
 

@@ -60,7 +60,9 @@ namespace TouchpadServer {
                 blacklistWindow.FormClosed += this.FormClosed;
             }
             else {
-                settingsWindow.WindowState = FormWindowState.Normal;
+                blacklistWindow.WindowState = FormWindowState.Normal;
+                blacklistWindow.Focus();
+                blacklistWindow.BringToFront();
             }
         }
 
@@ -73,6 +75,8 @@ namespace TouchpadServer {
                     settingsWindow.FormClosed += this.FormClosed;
                 } else {
                     settingsWindow.WindowState = FormWindowState.Normal;
+                    settingsWindow.Focus();
+                    settingsWindow.BringToFront();
                 }
             }
         }
