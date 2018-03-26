@@ -7,13 +7,14 @@ using System.Data.SQLite;
 
 namespace TouchpadServer {
     static class BlacklistManager {
-        public static event EventHandler<object> changeEventHandler;
+        public static event EventHandler changeEventHandler;
         private const string getCount = "SELECT COUNT(address) FROM blacklist";
         private const string getAllItems = "SELECT * FROM blacklist";
         private const string removeItem = "DELETE FROM blacklist WHERE address='{0}'";
         private const string insertItem = "INSERT INTO blacklist (name, address) VALUES ('{0}', '{1}')";
         private const string setConnection = "Data Source=blacklist.sqlite;Version=3;";
-        private const string createTable = "CREATE TABLE blacklist (name VARCHAR(248), address VARCHAR(12))";
+        private const string createTable = "CREATE TABLE blacklist (name string, address string)";
+        private const string getItemByAddress = "SELECT * FROM blacklist WHERE address='{0}'";
 
         public static void SetUp() {
             SQLiteConnection.CreateFile("blacklist.sqlite");
@@ -22,6 +23,7 @@ namespace TouchpadServer {
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
+            BlacklistManager.OnChange();
         }
 
         public static long GetCount() {
@@ -31,6 +33,7 @@ namespace TouchpadServer {
             SQLiteDataReader reader = command.ExecuteReader();
             reader.Read();
             long result = (long)reader[0];
+            reader.Close();
             connection.Close();
             return result;
         }
@@ -41,6 +44,7 @@ namespace TouchpadServer {
             SQLiteCommand command = new SQLiteCommand(String.Format(insertItem, name, address), connection);
             command.ExecuteNonQuery();
             connection.Close();
+            BlacklistManager.OnChange();
         }
 
         public static string[][] GetAllItems() {
@@ -52,6 +56,7 @@ namespace TouchpadServer {
             for (int i = 0; reader.Read(); i++) {
                 result[i] = new string[2] {(string)reader["name"], (string) reader["address"]};
             }
+            reader.Close();
             connection.Close();
             return result;
         }
@@ -62,6 +67,27 @@ namespace TouchpadServer {
             SQLiteCommand command = new SQLiteCommand(String.Format(removeItem, address), connection);
             command.ExecuteNonQuery();
             connection.Close();
+            BlacklistManager.OnChange();
+        }
+
+        public static bool Contains(string address) {
+            SQLiteConnection connection = new SQLiteConnection(setConnection);
+            SQLiteCommand command = new SQLiteCommand(String.Format(getItemByAddress, address), connection);
+            connection.Open();
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read()) {
+                reader.Close();
+                connection.Close();
+                return true;
+            }
+            reader.Close();
+            connection.Close();
+            return false;
+        }
+
+        private static void OnChange() {
+            if (changeEventHandler != null)
+                changeEventHandler(null, new EventArgs());
         }
 
     }

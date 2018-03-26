@@ -79,7 +79,7 @@ namespace TouchpadServer {
         public void AcceptClient() {
             this.client = this.listener.AcceptBluetoothClient();
             string address = this.client.RemoteEndPoint.Address.ToString();
-            if (false) {
+            if (BlacklistManager.Contains(address)) {
                 this.client.Close();
                 this.ResetGetter();
                 return;
@@ -203,7 +203,7 @@ namespace TouchpadServer {
         private void HandleDisconnectRequest(object sender, bool blacklist) {
             if (connected) {
                 if (blacklist)
-                    //BlacklistManager.AddToBlacklist(client.RemoteEndPoint.Address.ToString());
+                    BlacklistManager.Insert(client.GetRemoteMachineName(client.RemoteEndPoint.Address), client.RemoteEndPoint.Address.ToString());
                 Disconnect();
                 this.listener.Start();
                 this.clientGetter.Enabled = true;

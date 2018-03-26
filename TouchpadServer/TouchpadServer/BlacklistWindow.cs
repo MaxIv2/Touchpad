@@ -12,19 +12,24 @@ namespace TouchpadServer {
     public partial class BlacklistWindow : Form {
         public BlacklistWindow() {
             InitializeComponent();
-
-            BlacklistManager.Insert("afsd", "88899");
-            BlacklistManager.GetAllItems();
-            BlacklistManager.Delete("88899");
-            BlacklistManager.GetAllItems();
-            this.removeButton.Click += removeButtonClick;
+            BlacklistManager.Insert("max", "1");
+            //BlacklistManager.Insert("tal", "2");
+            //BlacklistManager.Insert("gil", "3");
             BlacklistManager.changeEventHandler += OnBlacklistChange;
+            FillList();
+            this.removeButton.Click += removeButtonClick;
         }
 
         public void FillList() {
+            string[][] items = BlacklistManager.GetAllItems();
+            foreach (string[] item in items) {
+                this.blacklistView.Items.Add(new ListViewItem(item));
+            }
         } 
 
-        public void OnBlacklistChange(object sender, object newAddress) {
+        public void OnBlacklistChange(object sender, EventArgs e) {
+            blacklistView.Clear();
+            FillList();
         }
 
         protected override void OnClosed(EventArgs e) {
@@ -33,11 +38,12 @@ namespace TouchpadServer {
         }
 
         private void removeButtonClick(object sender, EventArgs e) {
-            /*object blackListedDevice = (object)blacklistView.SelectedItem;
-            if (blackListedDevice != null) {
-                BlacklistManager.Remove((string)blackListedDevice);
-                blacklistView.Items.Remove(blackListedDevice);
-            }*/
+             ListView.SelectedListViewItemCollection blackListedDevices = blacklistView.SelectedItems;
+            foreach (ListViewItem item in blackListedDevices) {
+                string address = item.SubItems[1].Text;
+                BlacklistManager.Delete(address);
+            }
+            FillList();
         }
 
         
