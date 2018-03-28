@@ -28,8 +28,8 @@
             this.serverStatus = new System.Windows.Forms.Label();
             this.exitButton = new System.Windows.Forms.Button();
             this.blacklist = new System.Windows.Forms.Button();
-            this.onAndOffButtonSwitch = new TouchpadServer.SwitchButton();
             this.switchConnectionType = new System.Windows.Forms.Button();
+            this.onAndOffButtonSwitch = new TouchpadServer.SwitchButton();
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,7 +46,7 @@
             // diconnectButton
             // 
             this.diconnectButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.diconnectButton.Location = new System.Drawing.Point(305, 84);
+            this.diconnectButton.Location = new System.Drawing.Point(306, 109);
             this.diconnectButton.Name = "diconnectButton";
             this.diconnectButton.Size = new System.Drawing.Size(424, 36);
             this.diconnectButton.TabIndex = 1;
@@ -59,9 +59,9 @@
             this.serverStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.serverStatus.Location = new System.Drawing.Point(301, 56);
             this.serverStatus.Name = "serverStatus";
-            this.serverStatus.Size = new System.Drawing.Size(175, 25);
+            this.serverStatus.Size = new System.Drawing.Size(185, 50);
             this.serverStatus.TabIndex = 2;
-            this.serverStatus.Text = "Status: Connected";
+            this.serverStatus.Text = "Status (___ based):\nOffline";
             // 
             // exitButton
             // 
@@ -74,12 +74,21 @@
             // 
             // blacklist
             // 
-            this.blacklist.Location = new System.Drawing.Point(306, 127);
+            this.blacklist.Location = new System.Drawing.Point(306, 151);
             this.blacklist.Name = "blacklist";
             this.blacklist.Size = new System.Drawing.Size(124, 23);
             this.blacklist.TabIndex = 7;
             this.blacklist.Text = "Blacklist";
             this.blacklist.UseVisualStyleBackColor = true;
+            // 
+            // switchConnectionType
+            // 
+            this.switchConnectionType.Location = new System.Drawing.Point(516, 242);
+            this.switchConnectionType.Name = "switchConnectionType";
+            this.switchConnectionType.Size = new System.Drawing.Size(213, 23);
+            this.switchConnectionType.TabIndex = 8;
+            this.switchConnectionType.Text = "Switch Connection Type";
+            this.switchConnectionType.UseVisualStyleBackColor = true;
             // 
             // onAndOffButtonSwitch
             // 
@@ -91,15 +100,6 @@
             this.onAndOffButtonSwitch.TabIndex = 3;
             this.onAndOffButtonSwitch.Text = "On/Off";
             this.onAndOffButtonSwitch.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.switchConnectionType.Location = new System.Drawing.Point(516, 242);
-            this.switchConnectionType.Name = "button1";
-            this.switchConnectionType.Size = new System.Drawing.Size(213, 23);
-            this.switchConnectionType.TabIndex = 8;
-            this.switchConnectionType.Text = "Switch Connection Type";
-            this.switchConnectionType.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 

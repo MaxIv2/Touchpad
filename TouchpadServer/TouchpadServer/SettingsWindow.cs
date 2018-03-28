@@ -43,15 +43,16 @@ namespace TouchpadServer {
         }
 
         private void UpdateStatus(ConnectionStatusChangedEventArgs status) {
+            string firstRow = "Status" + (Properties.Settings.Default.Bluetooth ? "(Bluetooth based):" : "(WiFi based):") + "\n";
             switch (status.status) {
                 case ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED:
-                    this.serverStatus.Text = "Status: Connected to: " + status.endpointRepresentation;
+                    this.serverStatus.Text = firstRow + status.endpointRepresentation;
                     break;
                 case ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED:
-                    this.serverStatus.Text = "Status: Not connected";
+                    this.serverStatus.Text = firstRow + "Not connected";
                     break;
                 case ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE:
-                    this.serverStatus.Text = "Status: Offline";
+                    this.serverStatus.Text = firstRow + "Status: Offline";
                     break;
             }
         }
