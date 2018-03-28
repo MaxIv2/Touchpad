@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace TouchpadServer {
     static class ApplicationEvents {
-        public static event EventHandler<NewDataEventArgs> newDataEventDataEventHandler;
+        public static event EventHandler<Queue<byte[]>> newDataEventDataEventHandler;
         public static event EventHandler<ConnectionStatusChangedEventArgs> connectionStatusChangedEventHandler;
         public static event EventHandler<bool> userDisconnectRequestEventHandler;
         public static event EventHandler<EventArgs> userExitRequestEventHandler;
         public static event EventHandler<EventArgs> turnOnOffEventHandler;
         public static event EventHandler<EventArgs> connectionTypeChangeRequestHandler;
 
-        public static void CallNewEventDataEventHandler(object sender, NewDataEventArgs e) {
-            newDataEventDataEventHandler(sender, e);
+        public static void CallNewEventDataEventHandler(object sender, Queue<byte[]> inputBatches) {
+            newDataEventDataEventHandler(sender, inputBatches);
         }
 
         public static void CallConnectionStatusChangedEventHandler(object sender, ConnectionStatusChangedEventArgs e) {

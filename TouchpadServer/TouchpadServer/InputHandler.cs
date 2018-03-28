@@ -8,22 +8,22 @@ using System.Diagnostics;
 
 namespace TouchpadServer {
     class InputHandler {
+        public enum ActionCode { MOVE = 0, LEFTBUTTON = 1, RIGHTBUTTON = 2, SCROLL = 3, ZOOM = 4 };
         static object locker = new object();
 
-        public static void HandleOnNewDataEvent(object sender, NewDataEventArgs e) {
-            Thread th = new Thread(() => ProcessInput(e));
+        public static void HandleOnNewDataEvent(object sender, Queue<byte[]> inputBatches) {
+            Thread th = new Thread(() => ProcessInput(inputBatches));
             th.Start();
         }
 
-        private static void ProcessInput(object e) {
+        private static void ProcessInput(object inputBatches) {
             lock (locker) {
-                Queue<byte[]> actionData = ((NewDataEventArgs)e).info;
                 Debug.WriteLine("Trying to control mouse");
                 int lastIndx = -1;
                 byte[] previousBatch = null;
-                int lengthNow = actionData.Count;
+                int lengthNow = ((Queue<byte[]>)inputBatches).Count;
                 for (int i = 0; i < lengthNow; i++) {
-                    byte[] batch = actionData.Dequeue();
+                    byte[] batch = ((Queue<byte[]>)inputBatches).Dequeue();
                     lastIndx = ProccessBatch(batch, previousBatch, lastIndx);
                     previousBatch = batch;
                 }
@@ -43,8 +43,8 @@ namespace TouchpadServer {
             int i = 0;
             while (i < merged.Length && !notEnoughBytes) {
                 byte action = merged[i];
-                switch ((MouseEvent.ActionCode)action) {
-                    case MouseEvent.ActionCode.MOVE:
+                switch ((ActionCode)action) {
+                    case ActionCode.MOVE:
                         if (merged.Length - i >= 3) { // 2 bytes: dx,dy + 1 type byte, 3 IN TOTAL
                             sbyte dx = (sbyte)merged[i + 1];
                             sbyte dy = (sbyte)merged[i + 2];
@@ -55,7 +55,7 @@ namespace TouchpadServer {
                             notEnoughBytes = true;
                         }
                         break;
-                    case MouseEvent.ActionCode.LEFTBUTTON:
+                    case ActionCode.LEFTBUTTON:
                         if (merged.Length - i >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
                             byte status = merged[i + 1];
                             MouseController.Left(status);
@@ -65,7 +65,7 @@ namespace TouchpadServer {
                             notEnoughBytes = true;
                         }
                         break;
-                    case MouseEvent.ActionCode.RIGHTBUTTON:
+                    case ActionCode.RIGHTBUTTON:
                         if (merged.Length - i >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
                             byte status = merged[i + 1];
                             MouseController.Right(status);
@@ -75,7 +75,7 @@ namespace TouchpadServer {
                             notEnoughBytes = true;
                         }
                         break;
-                    case MouseEvent.ActionCode.SCROLL:
+                    case ActionCode.SCROLL:
                         if (merged.Length - i >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
                             sbyte scroll = (sbyte)merged[i + 1];
                             MouseController.Scroll(scroll);
@@ -85,7 +85,7 @@ namespace TouchpadServer {
                             notEnoughBytes = true;
                         }
                         break;
-                    case MouseEvent.ActionCode.ZOOM:
+                    case ActionCode.ZOOM:
                         if (merged.Length - i >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
                             sbyte zoom = (sbyte)merged[i + 1];
                             MouseController.Zoom(zoom);

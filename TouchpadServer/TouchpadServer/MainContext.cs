@@ -13,7 +13,7 @@ namespace TouchpadServer {
         TrayIconController icon;
         public static ConnectionStatusChangedEventArgs status;
 
-        public delegate void NewDataEventHandler(object sender, NewDataEventArgs e);
+        public delegate void NewDataEventHandler(object sender, Queue<byte[]> inputBatches);
         public delegate void DisconnectedEventHandler(object sender, EventArgs e);
 
         public MainContext() : base() {

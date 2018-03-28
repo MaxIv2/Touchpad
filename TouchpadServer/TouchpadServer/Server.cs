@@ -151,7 +151,7 @@ namespace TouchpadServer {
         }
 
         protected void OnNewData(Queue<byte[]> info) {
-            ApplicationEvents.CallNewEventDataEventHandler(this, new NewDataEventArgs(info));
+            ApplicationEvents.CallNewEventDataEventHandler(this, info);
         }
         #endregion
 

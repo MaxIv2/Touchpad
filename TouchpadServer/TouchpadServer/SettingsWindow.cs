@@ -45,7 +45,7 @@ namespace TouchpadServer {
         private void UpdateStatus(ConnectionStatusChangedEventArgs status) {
             switch (status.status) {
                 case ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED:
-                    this.serverStatus.Text = "Status: Connected to: " + status.macaddress;
+                    this.serverStatus.Text = "Status: Connected to: " + status.endpointRepresentation;
                     break;
                 case ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED:
                     this.serverStatus.Text = "Status: Not connected";
