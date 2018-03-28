@@ -25,13 +25,25 @@ namespace TouchpadServer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Blacklist {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Bluetooth {
             get {
-                return ((string)(this["Blacklist"]));
+                return ((bool)(this["Bluetooth"]));
             }
             set {
-                this["Blacklist"] = value;
+                this["Bluetooth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.0.0.0:0")]
+        public string EndpointRepresentation {
+            get {
+                return ((string)(this["EndpointRepresentation"]));
+            }
+            set {
+                this["EndpointRepresentation"] = value;
             }
         }
     }

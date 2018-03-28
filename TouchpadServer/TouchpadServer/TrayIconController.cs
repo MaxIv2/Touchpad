@@ -10,13 +10,12 @@ namespace TouchpadServer {
         private bool settingsWindowIsOpen;
         private bool blackistWindowIsOpen;
         private NotifyIcon trayIcon;
-        private string MACAddress;
         private bool menuOpen = false;
         private bool disposed;
         private SettingsWindow settingsWindow;
         private BlacklistWindow blacklistWindow;
 
-        public TrayIconController(EventHandler exitApplicaion, string MACAddress) {
+        public TrayIconController() {
             this.trayIcon = new NotifyIcon();
             MenuItem[] menuItems = { new MenuItem("Exit", ApplicationEvents.CallUserExitRequestEventHandler), new MenuItem("Blacklist",LaunchBlacklistWindow) };
             this.trayIcon.ContextMenu = new ContextMenu(menuItems);
@@ -24,7 +23,6 @@ namespace TouchpadServer {
             this.trayIcon.Icon = Properties.Resources.mouseBlack;
             this.trayIcon.Visible = true;
             this.trayIcon.Click += this.IconClick;
-            this.MACAddress = MACAddress;
             ApplicationEvents.connectionStatusChangedEventHandler += ChangeAppearance;
             this.trayIcon.ContextMenu.Popup += setMenuOpen;
             this.trayIcon.ContextMenu.Collapse += setMenuClosed;
@@ -33,6 +31,7 @@ namespace TouchpadServer {
         private void setMenuOpen(object sender, EventArgs e) {
             this.menuOpen = true;
         }
+
         private void setMenuClosed(object sender, EventArgs e) {
             this.menuOpen = false;
         }
@@ -69,7 +68,7 @@ namespace TouchpadServer {
         private void IconClick(object sender, EventArgs e) {
             if (!menuOpen) {
                 if (!settingsWindowIsOpen) {
-                    settingsWindow = new SettingsWindow(this.MACAddress);
+                    settingsWindow = new SettingsWindow();
                     settingsWindow.Show();
                     this.settingsWindowIsOpen = true;
                     settingsWindow.FormClosed += this.FormClosed;

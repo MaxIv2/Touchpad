@@ -13,11 +13,13 @@ namespace TouchpadServer {
     public partial class SettingsWindow : Form {
 
         delegate void SafeUpdateStatusDelegate(ConnectionStatusChangedEventArgs text);
-        public SettingsWindow(string MACAddress) {
+        public SettingsWindow() {
             InitializeComponent();
             this.UpdateStatus(MainContext.status);
-            this.QRCodeContainer.BackgroundImage = RenderQrCode(MACAddress);
-            this.QRCodeContainer.Size = RenderQrCode(MACAddress).Size;
+            this.switchConnectionType.Text = Properties.Settings.Default.Bluetooth ? "Switch to WiFi" : "Switch to Bluetooth";
+            this.switchConnectionType.Click += this.SwitchConnectionTypeRequest;
+            this.QRCodeContainer.BackgroundImage = RenderQrCode(Properties.Settings.Default.EndpointRepresentation);
+            this.QRCodeContainer.Size = this.QRCodeContainer.BackgroundImage.Size;
             this.QRCodeContainer.SizeMode = PictureBoxSizeMode.StretchImage;
             this.exitButton.Click += ApplicationEvents.CallUserExitRequestEventHandler;
             this.diconnectButton.Click += this.disconnectButtonClick;
@@ -30,6 +32,7 @@ namespace TouchpadServer {
         private void disconnectButtonClick(object sender, EventArgs e) {
             ApplicationEvents.CallUserDisconnectRequestEventHandler(sender, false);
         }
+
         private void blacklistButtonClick(object sender, EventArgs e) {
             ApplicationEvents.CallUserDisconnectRequestEventHandler(sender, true);
         }
@@ -71,6 +74,11 @@ namespace TouchpadServer {
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.L);
             QRCode qrCode = new QRCode(qrCodeData);
             return qrCode.GetGraphic(9);
+        }
+
+        private void SwitchConnectionTypeRequest(object sender, EventArgs e) {
+            ApplicationEvents.CallConnectionTypeChangeRequestHandler(this, null);
+            this.Close();
         }
     }
 }

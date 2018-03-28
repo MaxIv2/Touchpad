@@ -27,8 +27,9 @@
             this.diconnectButton = new System.Windows.Forms.Button();
             this.serverStatus = new System.Windows.Forms.Label();
             this.exitButton = new System.Windows.Forms.Button();
-            this.onAndOffButtonSwitch = new TouchpadServer.SwitchButton();
             this.blacklist = new System.Windows.Forms.Button();
+            this.onAndOffButtonSwitch = new TouchpadServer.SwitchButton();
+            this.switchConnectionType = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,6 +72,15 @@
             this.exitButton.Text = "Exit Remote Touchpad";
             this.exitButton.UseVisualStyleBackColor = true;
             // 
+            // blacklist
+            // 
+            this.blacklist.Location = new System.Drawing.Point(306, 127);
+            this.blacklist.Name = "blacklist";
+            this.blacklist.Size = new System.Drawing.Size(124, 23);
+            this.blacklist.TabIndex = 7;
+            this.blacklist.Text = "Blacklist";
+            this.blacklist.UseVisualStyleBackColor = true;
+            // 
             // onAndOffButtonSwitch
             // 
             this.onAndOffButtonSwitch.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -82,28 +92,29 @@
             this.onAndOffButtonSwitch.Text = "On/Off";
             this.onAndOffButtonSwitch.UseVisualStyleBackColor = true;
             // 
-            // blacklist
+            // button1
             // 
-            this.blacklist.Location = new System.Drawing.Point(306, 127);
-            this.blacklist.Name = "blacklist";
-            this.blacklist.Size = new System.Drawing.Size(124, 23);
-            this.blacklist.TabIndex = 7;
-            this.blacklist.Text = "Blacklist";
-            this.blacklist.UseVisualStyleBackColor = true;
+            this.switchConnectionType.Location = new System.Drawing.Point(516, 242);
+            this.switchConnectionType.Name = "button1";
+            this.switchConnectionType.Size = new System.Drawing.Size(213, 23);
+            this.switchConnectionType.TabIndex = 8;
+            this.switchConnectionType.Text = "Switch Connection Type";
+            this.switchConnectionType.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(741, 277);
+            this.Controls.Add(this.switchConnectionType);
             this.Controls.Add(this.blacklist);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.onAndOffButtonSwitch);
             this.Controls.Add(this.serverStatus);
             this.Controls.Add(this.diconnectButton);
             this.Controls.Add(this.QRCodeContainer);
-            this.MaximizeBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "SettingsWindow";
             this.Text = "SettingsWindows";
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).EndInit();
@@ -120,5 +131,6 @@
         private SwitchButton onAndOffButtonSwitch;
         private System.Windows.Forms.Button exitButton;
         private System.Windows.Forms.Button blacklist;
+        private System.Windows.Forms.Button switchConnectionType;
     }
 }

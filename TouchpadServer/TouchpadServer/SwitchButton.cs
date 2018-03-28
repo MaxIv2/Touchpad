@@ -52,7 +52,8 @@ namespace TouchpadServer {
             }
             Invalidate();//repaint
         }
-        public void Dispose() {
+
+        public void Dispose2() {
             Dispose(true);
             GC.SuppressFinalize(this);
         }

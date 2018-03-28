@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace TouchpadServer {
     class MainContext : ApplicationContext {
 
-        BluetoothServer server;
+        Server server;
         TrayIconController icon;
         public static ConnectionStatusChangedEventArgs status;
 
@@ -21,8 +21,27 @@ namespace TouchpadServer {
             ApplicationEvents.newDataEventDataEventHandler += InputHandler.HandleOnNewDataEvent;
             ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
             ApplicationEvents.userExitRequestEventHandler += this.HandleUserExitRequest;
-            this.server = new BluetoothServer(new Guid(Properties.Resources.Guid));
-            this.icon = new TrayIconController(HandleUserExitRequest, BluetoothServer.GetAdaptersMACAddress());
+            ApplicationEvents.connectionTypeChangeRequestHandler += this.HandleConnectionTypeChangeRequest;
+            if (Properties.Settings.Default.Bluetooth)
+                this.server = new BluetoothServer(new Guid(Properties.Resources.Guid));
+            else
+                this.server = new TcpServer();
+            Properties.Settings.Default.EndpointRepresentation = this.server.GetEndpointRepresentation();
+            Properties.Settings.Default.Save();
+            this.icon = new TrayIconController();
+            this.server.GoOnline();
+        }
+
+        private void HandleConnectionTypeChangeRequest(object sender, EventArgs e) {
+            this.server.GoOffline();
+            this.server.Dispose();
+            Properties.Settings.Default.Bluetooth = !Properties.Settings.Default.Bluetooth;
+            if (Properties.Settings.Default.Bluetooth)
+                this.server = new BluetoothServer(new Guid(Properties.Resources.Guid));
+            else
+                this.server = new TcpServer();
+            Properties.Settings.Default.EndpointRepresentation = this.server.GetEndpointRepresentation();
+            Properties.Settings.Default.Save();
             this.server.GoOnline();
         }
 
@@ -34,6 +53,7 @@ namespace TouchpadServer {
             ApplicationEvents.newDataEventDataEventHandler -= InputHandler.HandleOnNewDataEvent;
             ApplicationEvents.userExitRequestEventHandler -= this.HandleUserExitRequest;
             ApplicationEvents.connectionStatusChangedEventHandler -= this.HandleConnectionStatusChanged;
+            ApplicationEvents.connectionTypeChangeRequestHandler -= this.HandleConnectionTypeChangeRequest;
             this.server.GoOffline();
             this.server.Dispose();
             this.icon.Dispose();
