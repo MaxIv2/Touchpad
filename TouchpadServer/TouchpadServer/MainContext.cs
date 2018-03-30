@@ -26,7 +26,7 @@ namespace TouchpadServer {
                 if(BluetoothServer.SupportsBluetooth())
                     this.server = new BluetoothServer(new Guid(Properties.Resources.Guid));
                 else {
-                    //add error message here
+                    MessageBox.Show("Bluetooth is either not supported or turned off on this machine");
                     Properties.Settings.Default.Bluetooth = false;
                     this.server = new TcpServer();
                 }
@@ -47,7 +47,7 @@ namespace TouchpadServer {
                 if (BluetoothServer.SupportsBluetooth())
                     this.server = new BluetoothServer(new Guid(Properties.Resources.Guid));
                 else {
-                    //add error message here
+                    MessageBox.Show("Bluetooth is either not supported or turned off on this machine");
                     Properties.Settings.Default.Bluetooth = false;
                     this.server = new TcpServer();
                 }
