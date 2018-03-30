@@ -22,8 +22,15 @@ namespace TouchpadServer {
             ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
             ApplicationEvents.userExitRequestEventHandler += this.HandleUserExitRequest;
             ApplicationEvents.connectionTypeChangeRequestHandler += this.HandleConnectionTypeChangeRequest;
-            if (Properties.Settings.Default.Bluetooth)
-                this.server = new BluetoothServer(new Guid(Properties.Resources.Guid));
+            if (Properties.Settings.Default.Bluetooth) {
+                if(BluetoothServer.SupportsBluetooth())
+                    this.server = new BluetoothServer(new Guid(Properties.Resources.Guid));
+                else {
+                    //add error message here
+                    Properties.Settings.Default.Bluetooth = false;
+                    this.server = new TcpServer();
+                }
+            }
             else
                 this.server = new TcpServer();
             Properties.Settings.Default.EndpointRepresentation = this.server.GetEndpointRepresentation();
@@ -36,8 +43,15 @@ namespace TouchpadServer {
             this.server.GoOffline();
             this.server.Dispose();
             Properties.Settings.Default.Bluetooth = !Properties.Settings.Default.Bluetooth;
-            if (Properties.Settings.Default.Bluetooth)
-                this.server = new BluetoothServer(new Guid(Properties.Resources.Guid));
+            if (Properties.Settings.Default.Bluetooth) {
+                if (BluetoothServer.SupportsBluetooth())
+                    this.server = new BluetoothServer(new Guid(Properties.Resources.Guid));
+                else {
+                    //add error message here
+                    Properties.Settings.Default.Bluetooth = false;
+                    this.server = new TcpServer();
+                }
+            }
             else
                 this.server = new TcpServer();
             Properties.Settings.Default.EndpointRepresentation = this.server.GetEndpointRepresentation();

@@ -129,5 +129,12 @@ namespace TouchpadServer {
                 throw new Exception("Primary radio is missing, or bluetooth is off");
             return String.Format("{0:C}", radio.LocalAddress);
         }
+
+        public static bool SupportsBluetooth() {
+            BluetoothRadio radio = BluetoothRadio.PrimaryRadio;
+            if (radio == null || radio.LocalAddress == null)
+                return false;
+            return true;
+        }
     }
 }
