@@ -16,6 +16,8 @@ namespace TouchpadServer {
         public SettingsWindow() {
             InitializeComponent();
             this.UpdateStatus(MainContext.status);
+            this.diconnectButton.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
+            this.blacklist.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
             this.switchConnectionType.Text = Properties.Settings.Default.Bluetooth ? "Switch to WiFi" : "Switch to Bluetooth";
             this.switchConnectionType.Click += this.SwitchConnectionTypeRequest;
             this.QRCodeContainer.BackgroundImage = RenderQrCode(Properties.Settings.Default.EndpointRepresentation);
@@ -40,6 +42,8 @@ namespace TouchpadServer {
 
         private void HandleConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e) {
             this.SafeUpdateStatus(e);
+            this.diconnectButton.Enabled = e.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
+            this.blacklist.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
         }
 
         private void UpdateStatus(ConnectionStatusChangedEventArgs status) {
