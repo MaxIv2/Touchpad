@@ -70,7 +70,7 @@
             this.Controls.Add(this.removeButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "BlacklistWindow";
-            this.Text = "BlacklistWindow";
+            this.Text = "Blacklist";
             this.ResumeLayout(false);
 
         }

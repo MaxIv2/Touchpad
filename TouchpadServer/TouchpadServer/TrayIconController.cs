@@ -10,30 +10,24 @@ namespace TouchpadServer {
         private bool settingsWindowIsOpen;
         private bool blackistWindowIsOpen;
         private NotifyIcon trayIcon;
-        private bool menuOpen = false;
         private bool disposed;
-        private SettingsWindow settingsWindow;
+        private MainWindow settingsWindow;
         private BlacklistWindow blacklistWindow;
 
         public TrayIconController() {
             this.trayIcon = new NotifyIcon();
-            MenuItem[] menuItems = { new MenuItem("Exit", ApplicationEvents.CallUserExitRequestEventHandler), new MenuItem("Blacklist",LaunchBlacklistWindow) };
-            this.trayIcon.ContextMenu = new ContextMenu(menuItems);
             this.trayIcon.Text = "Remote Touchpad";
             this.trayIcon.Icon = Properties.Resources.mouseBlack;
             this.trayIcon.Visible = true;
             this.trayIcon.Click += this.IconClick;
             ApplicationEvents.connectionStatusChangedEventHandler += ChangeAppearance;
-            this.trayIcon.ContextMenu.Popup += setMenuOpen;
-            this.trayIcon.ContextMenu.Collapse += setMenuClosed;
-        }
-
-        private void setMenuOpen(object sender, EventArgs e) {
-            this.menuOpen = true;
-        }
-
-        private void setMenuClosed(object sender, EventArgs e) {
-            this.menuOpen = false;
+            ContextMenuStrip menu = new ContextMenuStrip();
+            Tuple<string, EventHandler>[] items = { new Tuple<string, EventHandler>("Blacklist", LaunchBlacklistWindow),
+                                                     new Tuple<string,EventHandler>("Exit", ApplicationEvents.CallUserExitRequestEventHandler) };
+            foreach (Tuple<string, EventHandler> item in items) {
+                menu.Items.Add(item.Item1, null, item.Item2);
+            }
+            this.trayIcon.ContextMenuStrip = menu;
         }
 
         private void ChangeAppearance(object sender, ConnectionStatusChangedEventArgs e) {
@@ -51,7 +45,6 @@ namespace TouchpadServer {
         }
 
         private void LaunchBlacklistWindow(object sender, EventArgs e) {
-            this.menuOpen = false;
             if (!blackistWindowIsOpen) {
                 blacklistWindow = new BlacklistWindow();
                 blacklistWindow.Show();
@@ -66,13 +59,15 @@ namespace TouchpadServer {
         }
 
         private void IconClick(object sender, EventArgs e) {
-            if (!menuOpen) {
+            MouseEventArgs eventArgs = (MouseEventArgs)e;
+            if (eventArgs.Button == MouseButtons.Left) {
                 if (!settingsWindowIsOpen) {
-                    settingsWindow = new SettingsWindow();
+                    settingsWindow = new MainWindow();
                     settingsWindow.Show();
                     this.settingsWindowIsOpen = true;
                     settingsWindow.FormClosed += this.FormClosed;
-                } else {
+                }
+                else {
                     settingsWindow.WindowState = FormWindowState.Normal;
                     settingsWindow.Focus();
                     settingsWindow.BringToFront();

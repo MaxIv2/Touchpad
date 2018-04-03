@@ -10,10 +10,12 @@ using System.Windows.Forms;
 using QRCoder;
 
 namespace TouchpadServer {
-    public partial class SettingsWindow : Form {
+    public partial class MainWindow : Form {
 
-        delegate void SafeUpdateStatusDelegate(ConnectionStatusChangedEventArgs text);
-        public SettingsWindow() {
+        delegate void UpdateStatusDelegate(ConnectionStatusChangedEventArgs text);
+        delegate void UpdateButtonDelegate(ConnectionStatusChangedEventArgs text);
+
+        public MainWindow() {
             InitializeComponent();
             this.UpdateStatus(MainContext.status);
             this.diconnectButton.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
@@ -42,6 +44,15 @@ namespace TouchpadServer {
 
         private void HandleConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e) {
             this.SafeUpdateStatus(e);
+            if (this.serverStatus.InvokeRequired) {
+                UpdateButtonDelegate d = new UpdateButtonDelegate(UpdateButton);
+                this.Invoke(d, new object[] { e });
+            }
+            else
+                this.UpdateButton(e);
+        }
+
+        private void UpdateButton(ConnectionStatusChangedEventArgs e) {
             this.diconnectButton.Enabled = e.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
             this.blacklist.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
         }
@@ -63,7 +74,7 @@ namespace TouchpadServer {
 
         private void SafeUpdateStatus(ConnectionStatusChangedEventArgs status) {
             if (this.serverStatus.InvokeRequired) {
-                SafeUpdateStatusDelegate d = new SafeUpdateStatusDelegate(UpdateStatus);
+                UpdateStatusDelegate d = new UpdateStatusDelegate(UpdateStatus);
                 this.Invoke(d, new object[] { status });
             }
             else

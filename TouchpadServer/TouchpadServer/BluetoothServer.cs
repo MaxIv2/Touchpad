@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using System.Diagnostics;
 
 namespace TouchpadServer {
-    class BluetoothServer : Server, IDisposable {//TO DO: implement a handler for termination of connection request
+    class BluetoothServer : Server, IDisposable {
         public Guid identifier { get; private set; }
         private BluetoothListener listener;
         private BluetoothClient client;
@@ -55,7 +55,7 @@ namespace TouchpadServer {
                 this.ResetGetter();
                 return;
             }
-            this.StopListener();
+            this.listener.Stop();
             this.connected = true;
             this.awaitingAcknoldegement = false;
             this.stream = client.GetStream();
@@ -63,18 +63,17 @@ namespace TouchpadServer {
             this.inputBatches.Clear();
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
+
             this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, this.client.RemoteMachineName));
         }
         #endregion
 
         #region Listener Methods
         protected override void StopListener() {
-            if (this.online)
-                this.listener.Stop();
+            this.listener.Stop();
         }
         protected override void StartListener() {
-            if (!this.online)
-                this.listener.Start();
+            this.listener.Start();
         }
         protected override bool GetPending() {
             return this.listener.Pending();

@@ -30,8 +30,8 @@ namespace TouchpadServer {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             SQLiteCommand command = new SQLiteCommand(getCount, connection);
             long result = 0;
-            connection.Open();
             try {
+                connection.Open();
                 SQLiteDataReader reader = command.ExecuteReader();
                 reader.Read();
                 result = (long)reader[0];

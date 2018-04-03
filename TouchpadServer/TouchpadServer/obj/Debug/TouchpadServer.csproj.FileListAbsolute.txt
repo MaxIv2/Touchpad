@@ -19,7 +19,6 @@ C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\InThe
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\InTheHand.Net.Personal.xml
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csprojResolveAssemblyReference.cache
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.Properties.Resources.resources
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.SettingsWindow.resources
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csproj.GenerateResource.Cache
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.exe.config
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.exe
@@ -43,3 +42,4 @@ C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\Syste
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\EntityFramework.xml
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\System.Data.SQLite.xml
+C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.MainWindow.resources

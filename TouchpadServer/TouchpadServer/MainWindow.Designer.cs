@@ -1,5 +1,5 @@
 ﻿namespace TouchpadServer {
-    partial class SettingsWindow {
+    partial class MainWindow {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -101,7 +101,7 @@
             this.onAndOffButtonSwitch.Text = "On/Off";
             this.onAndOffButtonSwitch.UseVisualStyleBackColor = true;
             // 
-            // SettingsWindow
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -115,8 +115,8 @@
             this.Controls.Add(this.QRCodeContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.Name = "SettingsWindow";
-            this.Text = "SettingsWindows";
+            this.Name = "MainWindow";
+            this.Text = "Touchpad";
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
