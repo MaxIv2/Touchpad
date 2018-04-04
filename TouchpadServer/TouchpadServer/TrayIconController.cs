@@ -91,6 +91,7 @@ namespace TouchpadServer {
             if (disposed)
                 return;
             if (disposing) {
+                ApplicationEvents.connectionStatusChangedEventHandler -= ChangeAppearance;
                 trayIcon.Dispose();
             }
             disposed = true;

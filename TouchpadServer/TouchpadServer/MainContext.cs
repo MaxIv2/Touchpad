@@ -9,12 +9,9 @@ using System.Diagnostics;
 namespace TouchpadServer {
     class MainContext : ApplicationContext {
 
-        Server server;
-        TrayIconController icon;
+        private Server server;
+        private TrayIconController icon;
         public static ConnectionStatusChangedEventArgs status;
-
-        public delegate void NewDataEventHandler(object sender, Queue<byte[]> inputBatches);
-        public delegate void DisconnectedEventHandler(object sender, EventArgs e);
 
         public MainContext() : base() {
             status = new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE, "");
@@ -63,7 +60,7 @@ namespace TouchpadServer {
             status = e;
         }
 
-        public void HandleUserExitRequest(object sender, EventArgs e) {
+        private void HandleUserExitRequest(object sender, EventArgs e) {
             ApplicationEvents.newDataEventDataEventHandler -= InputHandler.HandleOnNewDataEvent;
             ApplicationEvents.userExitRequestEventHandler -= this.HandleUserExitRequest;
             ApplicationEvents.connectionStatusChangedEventHandler -= this.HandleConnectionStatusChanged;

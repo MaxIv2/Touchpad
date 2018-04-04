@@ -19,7 +19,7 @@ namespace TouchpadServer {
             InitializeComponent();
             this.UpdateStatus(MainContext.status);
             this.diconnectButton.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
-            this.blacklist.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
+            this.blacklistButton.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
             this.switchConnectionType.Text = Properties.Settings.Default.Bluetooth ? "Switch to WiFi" : "Switch to Bluetooth";
             this.switchConnectionType.Click += this.SwitchConnectionTypeRequest;
             this.QRCodeContainer.BackgroundImage = RenderQrCode(Properties.Settings.Default.EndpointRepresentation);
@@ -27,8 +27,8 @@ namespace TouchpadServer {
             this.QRCodeContainer.SizeMode = PictureBoxSizeMode.StretchImage;
             this.exitButton.Click += ApplicationEvents.CallUserExitRequestEventHandler;
             this.diconnectButton.Click += this.disconnectButtonClick;
-            this.blacklist.Click += this.blacklistButtonClick;
-            this.onAndOffButtonSwitch.Click += ApplicationEvents.CallTurnOnOffEventHandlerHandler;
+            this.blacklistButton.Click += this.blacklistButtonClick;
+            this.onAndOffButtonSwitch.Click += ApplicationEvents.CallUserTurnOnOffRequestHandler;
             ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
             this.FormClosing += this.UnsbscribeFromHandlers;
         }
@@ -54,7 +54,7 @@ namespace TouchpadServer {
 
         private void UpdateButton(ConnectionStatusChangedEventArgs e) {
             this.diconnectButton.Enabled = e.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
-            this.blacklist.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
+            this.blacklistButton.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
         }
 
         private void UpdateStatus(ConnectionStatusChangedEventArgs status) {

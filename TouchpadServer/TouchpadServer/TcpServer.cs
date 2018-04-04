@@ -21,7 +21,7 @@ namespace TouchpadServer {
             SetClientGetter();
             SetConnectivityChecker();
             SetReader();
-            ApplicationEvents.turnOnOffEventHandler += this.HandleTurnOnOff;
+            ApplicationEvents.userTurnOnOffRequestHandler += this.HandleTurnOnOff;
             ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
         }
 
@@ -129,7 +129,7 @@ namespace TouchpadServer {
                 this.connectivityChecker.Dispose();
                 this.reader.Dispose();
                 ApplicationEvents.userDisconnectRequestEventHandler -= this.HandleDisconnectRequest;
-                ApplicationEvents.turnOnOffEventHandler -= this.HandleTurnOnOff;
+                ApplicationEvents.userTurnOnOffRequestHandler -= this.HandleTurnOnOff;
             }
             this.disposed = true;
         }
@@ -140,7 +140,7 @@ namespace TouchpadServer {
         }
         private void SetListener() {
             IPAddress ipObject = GetLocalIPAddress();
-            IPEndPoint localEP = new IPEndPoint(ipObject, 50000);
+            IPEndPoint localEP = new IPEndPoint(ipObject, 0);
             string ip = ipObject.ToString();
             this.listener = new TcpListener(localEP);
             listener.Start();

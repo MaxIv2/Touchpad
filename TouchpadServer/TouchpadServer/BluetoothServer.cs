@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace TouchpadServer {
     class BluetoothServer : Server, IDisposable {
-        public Guid identifier { get; private set; }
+        private Guid identifier;
         private BluetoothListener listener;
         private BluetoothClient client;
         private NetworkStream stream;
@@ -24,7 +24,7 @@ namespace TouchpadServer {
             this.SetReader();
             this.SetClientGetter();
             this.online = false;
-            ApplicationEvents.turnOnOffEventHandler += this.HandleTurnOnOff;
+            ApplicationEvents.userTurnOnOffRequestHandler += this.HandleTurnOnOff;
             ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
         }
         protected override void BlacklistClient() {
@@ -116,7 +116,7 @@ namespace TouchpadServer {
                 this.connectivityChecker.Dispose();
                 this.reader.Dispose();
                 ApplicationEvents.userDisconnectRequestEventHandler -= this.HandleDisconnectRequest;
-                ApplicationEvents.turnOnOffEventHandler -= this.HandleTurnOnOff;
+                ApplicationEvents.userTurnOnOffRequestHandler -= this.HandleTurnOnOff;
             }
             this.disposed = true;
         }

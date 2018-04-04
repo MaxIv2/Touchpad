@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<DynamicHelp xmlns="http://msdn.microsoft.com/vsdata/xsd/vsdh.xsd" xmlns:xsi="http://www.w3.org/2000/10/XMLSchema-instance" xsi:schemaLocation="http://msdn.microsoft.com/vsdata/xsd/vsdh.xsd">	
+   <LINKGROUP ID="TouchpadServer" Title="TouchpadServer Reference Help" Priority="2100">
+      <GLYPH Expanded="vs:/ctxhelp_show.gif" Collapsed="vs:/ctxhelp_hide.gif"/>
+   </LINKGROUP>
+
+
+   <Context>
+      <Keywords>
+         <KItem Name="TouchpadServer.BlacklistWindow" />
+      </Keywords>
+      <Links>
+         <LItem URL="ms-its:TouchpadServer.chm::/topic_0000000000000001.html" LinkGroup="TouchpadServer">BlacklistWindow Class</LItem>
+      </Links>
+   </Context>
+   
+
+   <Context>
+      <Keywords>
+         <KItem Name="TouchpadServer.BlacklistWindow.BlacklistWindow" />
+      </Keywords>
+      <Links>
+         <LItem URL="ms-its:TouchpadServer.chm::/topic_0000000000000002.html" LinkGroup="TouchpadServer">BlacklistWindow Constructor</LItem>
+      </Links>
+   </Context>
+   
+
+   <Context>
+      <Keywords>
+         <KItem Name="TouchpadServer.BlacklistWindow.FillList" />
+      </Keywords>
+      <Links>
+         <LItem URL="ms-its:TouchpadServer.chm::/topic_0000000000000003.html" LinkGroup="TouchpadServer">FillList Method</LItem>
+      </Links>
+   </Context>
+   
+
+   <Context>
+      <Keywords>
+         <KItem Name="TouchpadServer.MainWindow" />
+      </Keywords>
+      <Links>
+         <LItem URL="ms-its:TouchpadServer.chm::/topic_0000000000000006.html" LinkGroup="TouchpadServer">MainWindow Class</LItem>
+      </Links>
+   </Context>
+   
+
+   <Context>
+      <Keywords>
+         <KItem Name="TouchpadServer.MainWindow.MainWindow" />
+      </Keywords>
+      <Links>
+         <LItem URL="ms-its:TouchpadServer.chm::/topic_0000000000000007.html" LinkGroup="TouchpadServer">MainWindow Constructor</LItem>
+      </Links>
+   </Context>
+   
+
+   <Context>
+      <Keywords>
+         <KItem Name="TouchpadServer.BlacklistWindow.OnBlacklistChange" />
+      </Keywords>
+      <Links>
+         <LItem URL="ms-its:TouchpadServer.chm::/topic_0000000000000004.html" LinkGroup="TouchpadServer">OnBlacklistChange Method</LItem>
+      </Links>
+   </Context>
+   
+
+   <Context>
+      <Keywords>
+         <KItem Name="TouchpadServer.BlacklistWindow.OnClosed" />
+      </Keywords>
+      <Links>
+         <LItem URL="ms-its:TouchpadServer.chm::/topic_0000000000000005.html" LinkGroup="TouchpadServer">OnClosed Method</LItem>
+      </Links>
+   </Context>
+   
+
+   <Context>
+      <Keywords>
+         <KItem Name="TouchpadServer" />
+      </Keywords>
+      <Links>
+         <LItem URL="ms-its:TouchpadServer.chm::/topic_0000000000000000.html" LinkGroup="TouchpadServer">TouchpadServer Namespace</LItem>
+      </Links>
+   </Context>
+   
+
+   <Context>
+      <Keywords>
+         <KItem Name="TouchpadServer Reference" />
+      </Keywords>
+      <Links>
+         <LItem URL="ms-its:TouchpadServer.chm::/topic_0000000000000009.html" LinkGroup="TouchpadServer">TouchpadServer Reference</LItem>
+      </Links>
+   </Context>
+   
+
+</DynamicHelp>
+

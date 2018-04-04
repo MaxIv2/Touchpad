@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace TouchpadServer {
     abstract class Server : IDisposable {
-        public bool online { get; protected set; }
+        protected bool online;
         protected bool disposed = false;
         protected bool connected = false;
         protected bool awaitingAcknoldegement = false;

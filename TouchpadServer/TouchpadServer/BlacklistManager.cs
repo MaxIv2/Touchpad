@@ -8,16 +8,15 @@ using System.Data.SQLite;
 namespace TouchpadServer {
     static class BlacklistManager {
         public static event EventHandler changeEventHandler;
-        private const string getCount = "SELECT COUNT(address) FROM blacklist";
-        private const string getAllItems = "SELECT * FROM blacklist";
-        private const string removeItem = "DELETE FROM blacklist WHERE address='{0}'";
-        private const string insertItem = "INSERT INTO blacklist (name, address) VALUES ('{0}', '{1}')";
-        private const string setConnection = "Data Source=blacklist.sqlite;Version=3;";
-        private const string createTable = "CREATE TABLE blacklist (name string, address string)";
-        private const string getItemByAddress = "SELECT * FROM blacklist WHERE address='{0}'";
-
+        private const string getCount = "SELECT COUNT(address) FROM blacklistButton";
+        private const string getAllItems = "SELECT * FROM blacklistButton";
+        private const string removeItem = "DELETE FROM blacklistButton WHERE address='{0}'";
+        private const string insertItem = "INSERT INTO blacklistButton (name, address) VALUES ('{0}', '{1}')";
+        private const string setConnection = "Data Source=blacklistButton.sqlite;Version=3;";
+        private const string createTable = "CREATE TABLE blacklistButton (name string, address string)";
+        private const string getItemByAddress = "SELECT * FROM blacklistButton WHERE address='{0}'";
         public static void SetUp() {
-            SQLiteConnection.CreateFile("blacklist.sqlite");
+            SQLiteConnection.CreateFile("blacklistButton.sqlite");
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             SQLiteCommand command = new SQLiteCommand(createTable, connection);
             connection.Open();
@@ -25,7 +24,6 @@ namespace TouchpadServer {
             connection.Close();
             BlacklistManager.OnChange();
         }
-
         public static long GetCount() {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             SQLiteCommand command = new SQLiteCommand(getCount, connection);
@@ -47,7 +45,6 @@ namespace TouchpadServer {
             }
             return result;
         }
-
         public static void Insert(string name, string address) {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             connection.Open();
@@ -66,7 +63,6 @@ namespace TouchpadServer {
             }
             BlacklistManager.OnChange();
         }
-
         public static string[][] GetAllItems() {
             string[][] result = new string[BlacklistManager.GetCount()][];
             SQLiteConnection connection = new SQLiteConnection(setConnection);
@@ -90,7 +86,6 @@ namespace TouchpadServer {
             }
             return result;
         }
-
         public static void Delete(string address) {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             connection.Open();
@@ -107,7 +102,6 @@ namespace TouchpadServer {
                 connection.Close();
             }
         }
-
         public static bool Contains(string address) {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             SQLiteCommand command = new SQLiteCommand(String.Format(getItemByAddress, address), connection);
@@ -131,7 +125,6 @@ namespace TouchpadServer {
             }
             return false;
         }
-
         private static void OnChange() {
             if (changeEventHandler != null)
                 changeEventHandler(null, new EventArgs());

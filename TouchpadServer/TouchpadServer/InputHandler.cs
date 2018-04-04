@@ -7,9 +7,9 @@ using System.Threading;
 using System.Diagnostics;
 
 namespace TouchpadServer {
-    class InputHandler {
-        public enum ActionCode { MOVE = 0, LEFTBUTTON = 1, RIGHTBUTTON = 2, SCROLL = 3, ZOOM = 4 };
-        static object locker = new object();
+    static class InputHandler {
+        private enum ActionCode { MOVE = 0, LEFTBUTTON = 1, RIGHTBUTTON = 2, SCROLL = 3, ZOOM = 4 };
+        private static object locker = new object();
 
         public static void HandleOnNewDataEvent(object sender, Queue<byte[]> inputBatches) {
             Thread th = new Thread(() => ProcessInput(inputBatches));
