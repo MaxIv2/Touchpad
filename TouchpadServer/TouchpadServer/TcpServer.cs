@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
 using System.Timers;
+using System.Net.NetworkInformation;
 using System.Diagnostics;
 
 namespace TouchpadServer {
@@ -136,10 +137,10 @@ namespace TouchpadServer {
         #endregion
 
         public override string GetEndpointRepresentation() {
-            return (listener.LocalEndpoint as IPEndPoint).Address.ToString() + ":" + port;
+            return GetLocalIPAddress() +":" + port;
         }
         private void SetListener() {
-            IPAddress ipObject = GetLocalIPAddress();
+            IPAddress ipObject = new IPAddress(new byte[] { 0, 0, 0, 0 });
             IPEndPoint localEP = new IPEndPoint(ipObject, 0);
             string ip = ipObject.ToString();
             this.listener = new TcpListener(localEP);
@@ -148,13 +149,13 @@ namespace TouchpadServer {
             listener.Stop();
         }
         private static IPAddress GetLocalIPAddress() {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList) {
-                if (ip.AddressFamily == AddressFamily.InterNetwork) {
-                    return ip;
-                }
+            string localIP;
+            using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0)) {
+                socket.Connect("8.8.8.8", 65530);
+                IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+                socket.Close();
+                return endPoint.Address;
             }
-            throw new Exception("No network adapters with an IPv4 address in the system!");
         }
     }
 }

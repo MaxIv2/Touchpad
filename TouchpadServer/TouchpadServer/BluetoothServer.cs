@@ -63,6 +63,7 @@ namespace TouchpadServer {
             this.inputBatches.Clear();
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
+            this.SendCheckAcknoledgement();
 
             this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, this.client.RemoteMachineName));
         }
