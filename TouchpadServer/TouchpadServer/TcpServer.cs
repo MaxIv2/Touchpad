@@ -59,7 +59,6 @@ namespace TouchpadServer {
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
             this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, this.client.RemoteEndPoint.ToString()));
-
         }
         public override void Disconnect(bool notifyClient = true) {
             if (this.connected) {
@@ -137,11 +136,11 @@ namespace TouchpadServer {
         #endregion
 
         public override string GetEndpointRepresentation() {
-            return GetLocalIPAddress() +":" + port;
+            return GetLocalIPAddress() +":" + (port - 1);
         }
         private void SetListener() {
             IPAddress ipObject = new IPAddress(new byte[] { 0, 0, 0, 0 });
-            IPEndPoint localEP = new IPEndPoint(ipObject, 0);
+            IPEndPoint localEP = new IPEndPoint(ipObject, this.GetFreePort());
             string ip = ipObject.ToString();
             this.listener = new TcpListener(localEP);
             listener.Start();
@@ -149,13 +148,31 @@ namespace TouchpadServer {
             listener.Stop();
         }
         private static IPAddress GetLocalIPAddress() {
-            string localIP;
-            using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0)) {
-                socket.Connect("8.8.8.8", 65530);
-                IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
-                socket.Close();
-                return endPoint.Address;
+            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
+                if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 && ni.OperationalStatus == OperationalStatus.Up) {
+                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
+                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
+                            return ip.Address;
+                        }
+                    }
+                }
             }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+        private int GetFreePort() {
+            int PortStartIndex = 1000;
+            int PortEndIndex = 2000;
+            IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] tcpEndPoints = properties.GetActiveTcpListeners();
+
+            List<int> usedPorts = tcpEndPoints.Select(p => p.Port).ToList<int>();
+
+            for (int port = PortStartIndex; port < PortEndIndex; port++) {
+                if (!usedPorts.Contains(port)) {
+                    return port;
+                }
+            }
+            return 0;
         }
     }
 }

@@ -133,6 +133,7 @@ namespace TouchpadServer {
         }
 
         private void TryToGetClient(Object source, ElapsedEventArgs e) {
+            Debug.WriteLine("Try :" + "daf");
             if (this.GetPending()) {
                 this.clientGetter.Enabled = false;
                 this.AcceptClient();
