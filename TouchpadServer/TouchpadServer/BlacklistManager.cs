@@ -8,15 +8,15 @@ using System.Data.SQLite;
 namespace TouchpadServer {
     static class BlacklistManager {
         public static event EventHandler changeEventHandler;
-        private const string getCount = "SELECT COUNT(address) FROM blacklistButton";
-        private const string getAllItems = "SELECT * FROM blacklistButton";
-        private const string removeItem = "DELETE FROM blacklistButton WHERE address='{0}'";
-        private const string insertItem = "INSERT INTO blacklistButton (name, address) VALUES ('{0}', '{1}')";
-        private const string setConnection = "Data Source=blacklistButton.sqlite;Version=3;";
-        private const string createTable = "CREATE TABLE blacklistButton (name string, address string)";
-        private const string getItemByAddress = "SELECT * FROM blacklistButton WHERE address='{0}'";
+        private const string getCount = "SELECT COUNT(address) FROM blacklist";
+        private const string getAllItems = "SELECT * FROM blacklist";
+        private const string removeItem = "DELETE FROM blacklist WHERE address='{0}'";
+        private const string insertItem = "INSERT INTO blacklist (name, address) VALUES ('{0}', '{1}')";
+        private const string setConnection = "Data Source=blacklist.sqlite;Version=3;";
+        private const string createTable = "CREATE TABLE blacklist (name string, address string)";
+        private const string getItemByAddress = "SELECT * FROM blacklist WHERE address='{0}'";
         public static void SetUp() {
-            SQLiteConnection.CreateFile("blacklistButton.sqlite");
+            SQLiteConnection.CreateFile("blacklist.sqlite");
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             SQLiteCommand command = new SQLiteCommand(createTable, connection);
             connection.Open();

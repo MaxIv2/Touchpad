@@ -128,7 +128,7 @@
         private System.Windows.Forms.PictureBox QRCodeContainer;
         private System.Windows.Forms.Button diconnectButton;
         private System.Windows.Forms.Label serverStatus;
-        private SwitchButton onAndOffButtonSwitch;
+        private TouchpadServer.SwitchButton onAndOffButtonSwitch;
         private System.Windows.Forms.Button exitButton;
         private System.Windows.Forms.Button blacklistButton;
         private System.Windows.Forms.Button switchConnectionType;
