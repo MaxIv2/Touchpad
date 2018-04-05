@@ -43,6 +43,9 @@ namespace TouchpadServer {
             int i = 0;
             while (i < merged.Length && !notEnoughBytes) {
                 byte action = merged[i];
+                if (!ActionCode.IsDefined(typeof(ActionCode), (int)action))
+                    i = merged.Length;
+                else
                 switch ((ActionCode)action) {
                     case ActionCode.MOVE:
                         if (merged.Length - i >= 3) { // 2 bytes: dx,dy + 1 type byte, 3 IN TOTAL

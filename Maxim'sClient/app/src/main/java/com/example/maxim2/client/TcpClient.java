@@ -19,7 +19,7 @@ public class TcpClient extends Client {
     private Socket clientSocket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    Object lock = new Object();
+    private Object lock = new Object();
 
 
     public TcpClient(final String ip, final int port, SessionEndEventHandler handler) throws Exception {
@@ -36,7 +36,6 @@ public class TcpClient extends Client {
                     }
                 } catch (IOException e) {
                     Log.d("TClient: ", "failed to connect");
-                    e.printStackTrace();
                     synchronized (lock){
                         lock.notifyAll();
                     }
@@ -50,10 +49,12 @@ public class TcpClient extends Client {
         if (clientSocket != null) {
             if(!clientSocket.isConnected()) {
                 Log.d("TClient: ", "failed to connect");
+                this.endSession(false);
                 throw new Exception("nope");
             }
         }
         else {
+            this.endSession(false);
             throw new Exception("nope");
         }
         this.commands = new ConcurrentLinkedQueue<>();
@@ -87,7 +88,7 @@ public class TcpClient extends Client {
             this.clientSocket.close();
         } catch (IOException e) {
             Log.d("TClient", "failed to close");
-            this.endSession();
+            this.endSession(false);
         }
     }
 
@@ -97,7 +98,7 @@ public class TcpClient extends Client {
             return this.inputStream.available();
         } catch (IOException e) {
             Log.d("TClient", "failed to get available");
-            this.endSession();
+            this.endSession(false);
             return 0;
         }
     }

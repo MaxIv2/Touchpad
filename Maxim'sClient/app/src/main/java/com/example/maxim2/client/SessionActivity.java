@@ -44,7 +44,7 @@ public class SessionActivity extends AppCompatActivity implements Client.Session
         }
         leftButton.setOnTouchListener(left);
         rightButton.setOnTouchListener(right);
-        this.surface.setOnTouchListener(surfaceListener);
+        this.surface.setOnTouchListener(new TouchSurfaceListener(this.client));
     }
 
     private final View.OnTouchListener left = new View.OnTouchListener() {
@@ -71,40 +71,7 @@ public class SessionActivity extends AppCompatActivity implements Client.Session
             return false;
         }
     };
-    private final View.OnTouchListener surfaceListener =new View.OnTouchListener() {
-        float previousX;
-        float previousY;
-        boolean previousIsRelevant = false;
-        final byte[] buffer = {0,0,0};
-        final int DX_INDEX = 1;
-        final int DY_INDEX = 2;
-        final Object locker = new Object();
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            Log.d("asdfasd",motionEvent.getAction() +"");
-            if(motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                if(!this.previousIsRelevant) {
-                    this.previousX = motionEvent.getX();
-                    this.previousY = motionEvent.getY();
-                    this.previousIsRelevant = true;
-                } else {
-                    Log.d("move: ", "px: "+ previousX +", py: " + previousY + ", x: " +motionEvent.getX() + ", y:" + motionEvent.getY());
-                    int dx = (int)((motionEvent.getX() - previousX));
-                    int dy = (int) ((motionEvent.getY() - previousY));
-                    Log.d("move:" ,"dx: "+ (byte)dx+ " dy :" + (byte)dy);
-                    buffer[DX_INDEX] = (byte) dx;
-                    buffer[DY_INDEX] = (byte) dy;
-                    this.previousX = motionEvent.getX();
-                    this.previousY = motionEvent.getY();
-                    SessionActivity.this.client.addToQueue(buffer);
-                }
-            }
-            if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                previousIsRelevant = false;
-            }
-            return false;
-        }
-    };
+
 
     final static private Pattern macPattern = Pattern.compile("(([0-9A-Fa-f]){2}:){5}([0-9A-Fa-f]){2}");
     private static boolean IsMACADress(String address) {
@@ -137,7 +104,6 @@ public class SessionActivity extends AppCompatActivity implements Client.Session
 
     @Override
     public void HandleSessionEnd() {
-        Toast.makeText(this, "Disconnected!", Toast.LENGTH_LONG).show();
         this.finish();
     }
 }

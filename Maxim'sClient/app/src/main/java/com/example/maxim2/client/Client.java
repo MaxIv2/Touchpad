@@ -153,11 +153,17 @@ public abstract class Client {
     private void onSessionEnd(){
         sessionEndHandler.HandleSessionEnd();
     }
+
     public void endSession() {
+        endSession(true);
+    }
+
+    public void endSession(boolean notifyServer) {
         if(this.sessionEnded)
             return;
         this.sessionEnded = true;
-        this.sendTerminationMessage();
+        if(notifyServer)
+            this.sendTerminationMessage();
         this.connectionCheckQuerySender.cancel();
         this.connectionCheckQuerySender.purge();
         this.messageChecker.cancel();

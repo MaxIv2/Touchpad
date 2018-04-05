@@ -24,11 +24,13 @@ public class BluetoothClient extends Client {
     public BluetoothClient(String address, SessionEndEventHandler handler) throws Exception {
         super(handler);
         BluetoothAdapter adapter =BluetoothAdapter.getDefaultAdapter();
+        while(!adapter.isEnabled())
+            adapter.enable();
         this.serverDevice = adapter.getRemoteDevice(address);
         if(!isPaired(this.serverDevice)) {
             if(!tryToPair(this.serverDevice)) {
                 Log.d("BClient", "Couldn't pair");
-                this.endSession();
+                this.endSession(false);
                 throw new Exception("Failed to connect");
             }
         }
@@ -83,7 +85,7 @@ public class BluetoothClient extends Client {
             this.socket.close();
         } catch (IOException e) {
             Log.d("BClient", "Close falied");
-            this.endSession();
+            this.endSession(false);
         }
     }
 
@@ -92,7 +94,7 @@ public class BluetoothClient extends Client {
         try {
             return this.socket.getInputStream().available();
         } catch (IOException e) {
-            this.endSession();
+            this.endSession(false);
             return 0;
         }
     }
