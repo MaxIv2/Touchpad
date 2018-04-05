@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Client</string>
+    <string name="EXTRA_QR_DATA">com.example.maxim2.QR_DATA</string>
+</resources>
