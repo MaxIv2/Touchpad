@@ -4,6 +4,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.security.PrivilegedAction;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.RecursiveTask;
+
 /**
  * Created by Maxim2 on 4/5/2018.
  */
@@ -11,10 +16,15 @@ import android.view.View;
 public class TouchSurfaceListener implements View.OnTouchListener {
     public TouchSurfaceListener(Client c) {
        this.c = c;
+       this.tapTimer = new Timer();
     }
+
+    private Timer tapTimer;
+    private boolean tap;
+
+
     private Client c;
-    private float previousX;
-    private float previousY;
+    private final byte[] tapBuffer = {1,0,1,1};
     private final byte[] bufferMove = {0,0,0};
     private final byte[] bufferScroll = {3,0};
     private final byte[] bufferPinch = {4,0};
@@ -23,9 +33,18 @@ public class TouchSurfaceListener implements View.OnTouchListener {
     private static final int EXTRA_INDEX = 1;
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            this.previousX = motionEvent.getX();
-            this.previousY = motionEvent.getY();
+        if(tap  && motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            this.c.addToQueue(tapBuffer);
+            Log.d("", "tap that shit");
+        } else if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            this.tap = true;
+            Log.d("", "timers: roll out");
+            this.tapTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    TouchSurfaceListener.this.tap = false;
+                }
+            }, 150);
         }
         else if (motionEvent.getPointerCount() == 1)
             this.onOneFinger(motionEvent);
@@ -36,30 +55,29 @@ public class TouchSurfaceListener implements View.OnTouchListener {
 
     private void onOneFinger(MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-            Log.d("move: ", "px: " + previousX + ", py: " + previousY + ", x: " + motionEvent.getX() + ", y:" + motionEvent.getY());
-            int dx = (int) ((motionEvent.getX() - previousX));
-            int dy = (int) ((motionEvent.getY() - previousY));
-            Log.d("move:", "dx: " + (byte) dx + " dy :" + (byte) dy);
+            if(motionEvent.getHistorySize() < 1)
+                return;
+            this.tap = false;
+            int dx = (int) (motionEvent.getX() - motionEvent.getHistoricalX(0));
+            int dy = (int) (motionEvent.getY() - motionEvent.getHistoricalY(0));
             bufferMove[DX_INDEX] = (byte) dx;
             bufferMove[DY_INDEX] = (byte) dy;
-            this.previousX = motionEvent.getX();
-            this.previousY = motionEvent.getY();
             c.addToQueue(bufferMove);
         }
     }
     private void onTwoFingers(MotionEvent motionEvent) {
-        int action = motionEvent.getActionMasked();
+        int action = motionEvent.getAction();
         if(action == MotionEvent.ACTION_MOVE) {
             int pinch = isPinch(motionEvent);
-            if(isPinch(motionEvent) != 0) {
+            if(pinch != 0) {
                 bufferPinch[EXTRA_INDEX] = (byte) pinch;
                 c.addToQueue(bufferPinch);
             } else {
-                int dy = (int) (motionEvent.getY() - previousY);
-                bufferScroll[EXTRA_INDEX] = (byte) dy;
+                if(motionEvent.getHistorySize() < 1)
+                    return;
+                int dy = (int) (motionEvent.getY() - motionEvent.getHistoricalY(0));
+                bufferScroll[EXTRA_INDEX] = (byte)  (dy * 5);
                 c.addToQueue(bufferScroll);
-                previousY = motionEvent.getY();
-                Log.d("ispinch " , isPinch(motionEvent) + "");
             }
         }
     }
@@ -92,11 +110,13 @@ public class TouchSurfaceListener implements View.OnTouchListener {
         MotionEvent.PointerCoords vector0Move = new MotionEvent.PointerCoords();
         vector0Move.x = a0.x - h0.x;
         vector0Move.y = a0.y - h0.y;
+
+        double piBy6 = Math.PI / 6;
         double a = getAngle(vector0Move, vector0to1);
-        if(a > Math.PI / 6 && a < Math.PI * 5 / 6)
+        if(a > piBy6 && a < piBy6 * 5)
             return 0;
         a = getAngle(vector1Move, vector0to1);
-        if(a > Math.PI / 6 && a < Math.PI * 5 / 6)
+        if(a > piBy6 && a < piBy6 * 5)
             return 0;
         double res = Math.sqrt(Math.pow(vector0Move.x+ vector1Move.x, 2) + Math.pow(vector0Move.y+ vector1Move.y, 2));
         if (a <  Math.PI / 6)

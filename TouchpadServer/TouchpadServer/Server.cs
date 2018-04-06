@@ -109,13 +109,11 @@ namespace TouchpadServer {
                         break;
                     case MessageType.MOUSE:
                         byte[] buffer = this.ReceiveData(length);
-                        if (buffer == null) {
+                        if (buffer.Length < length) {
                             missing = length;
                             return;
                         }
-                        for (int j = 0; j < length; j++) {
-                            this.inputBatches.Enqueue(buffer);
-                        }
+                        this.inputBatches.Enqueue(buffer);
                         OnNewData(inputBatches);
                         break;
                     default:
