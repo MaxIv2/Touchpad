@@ -12,6 +12,7 @@ namespace TouchpadServer {
         private static object locker = new object();
 
         public static void HandleOnNewDataEvent(object sender, Queue<byte[]> inputBatches) {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(ProcessInput), inputBatches);
             Thread th = new Thread(() => ProcessInput(inputBatches));
             th.Start();
         }
@@ -49,8 +50,8 @@ namespace TouchpadServer {
                 switch ((ActionCode)action) {
                     case ActionCode.MOVE:
                         if (merged.Length - i >= 3) { // 2 bytes: dx,dy + 1 type byte, 3 IN TOTAL
-                            sbyte dx = (sbyte)merged[i + 1];
-                            sbyte dy = (sbyte)merged[i + 2];
+                            int dx = (sbyte)merged[i + 1] * Properties.Settings.Default.Move / 10;
+                            int dy = (sbyte)merged[i + 2] * Properties.Settings.Default.Move / 10;
                             MouseController.Move(dx, dy);
                             i += 3;
                         }
@@ -60,7 +61,7 @@ namespace TouchpadServer {
                         break;
                     case ActionCode.LEFTBUTTON:
                         if (merged.Length - i >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
-                            byte status = merged[i + 1];
+                            byte status = merged[i + 1] ;
                             MouseController.Left(status);
                             i += 2;
                         }
@@ -80,7 +81,7 @@ namespace TouchpadServer {
                         break;
                     case ActionCode.SCROLL:
                         if (merged.Length - i >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
-                            sbyte scroll = (sbyte)merged[i + 1];
+                            int scroll = (sbyte)merged[i + 1] * Properties.Settings.Default.Scroll / 10;
                             MouseController.Scroll(scroll);
                             i += 2;
                         }
@@ -90,7 +91,7 @@ namespace TouchpadServer {
                         break;
                     case ActionCode.ZOOM:
                         if (merged.Length - i >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
-                            sbyte zoom = (sbyte)merged[i + 1];
+                            int zoom = (sbyte)merged[i + 1] * Properties.Settings.Default.Scale / 10;
                             MouseController.Zoom(zoom);
                             i += 2;
                         }

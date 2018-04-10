@@ -109,7 +109,7 @@ namespace TouchpadServer {
                         break;
                     case MessageType.MOUSE:
                         byte[] buffer = this.ReceiveData(length);
-                        if (buffer.Length < length) {
+                        if (buffer == null || buffer.Length < length) {
                             missing = length;
                             return;
                         }
@@ -131,7 +131,6 @@ namespace TouchpadServer {
         }
 
         private void TryToGetClient(Object source, ElapsedEventArgs e) {
-            Debug.WriteLine("Try :" + "daf");
             if (this.GetPending()) {
                 this.clientGetter.Enabled = false;
                 this.AcceptClient();

@@ -103,6 +103,7 @@ namespace TouchpadServer {
             }
         }
         public static bool Contains(string address) {
+            SetUp();
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             SQLiteCommand command = new SQLiteCommand(String.Format(getItemByAddress, address), connection);
             connection.Open();

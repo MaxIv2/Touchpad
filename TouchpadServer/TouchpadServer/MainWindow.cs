@@ -96,5 +96,27 @@ namespace TouchpadServer {
             ApplicationEvents.CallConnectionTypeChangeRequestHandler(this, null);
             this.Close();
         }
+
+
+
+        private void MoveSensitivityChanged(object sender, EventArgs e)
+        {
+            int value = this.moveBar.Value + 1;
+            Properties.Settings.Default.Move = value;
+            Properties.Settings.Default.Save();
+        }
+        private void ScrollSensitivityChanged(object sender, EventArgs e)
+        {
+            int value = this.scrollBar.Value + 1;
+            Properties.Settings.Default.Scroll = value;
+            Properties.Settings.Default.Save();
+        }
+        private void ScaleSensitivityChanged(object sender, EventArgs e)
+        {
+            int value = this.scaleBar.Value + 1;
+            Properties.Settings.Default.Scale = value;
+            Properties.Settings.Default.Save();
+        }
+
     }
 }

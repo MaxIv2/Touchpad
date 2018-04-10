@@ -25,10 +25,7 @@ C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\Touchpa
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.pdb
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\InTheHand.Net.Personal.dll
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\InTheHand.Net.Personal.xml
-C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csprojResolveAssemblyReference.cache
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.Properties.Resources.resources
-C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.Resources.resources
-C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.SettingsWindow.resources
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csproj.GenerateResource.Cache
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csproj.CoreCompileInputs.cache
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.exe
@@ -44,3 +41,16 @@ C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\Entit
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\System.Data.SQLite.xml
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.MainWindow.resources
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.XML
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.XML
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\EntityFramework.dll
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\System.Data.SQLite.dll
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\EntityFramework.xml
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\System.Data.SQLite.xml
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\System.Data.SQLite.dll.config
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.BlacklistWindow.resources
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.MainWindow.resources
+C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csprojResolveAssemblyReference.cache
