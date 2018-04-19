@@ -15,7 +15,7 @@ namespace TouchpadServer {
 
         public MainContext() : base() {
             status = new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE, "");
-            ApplicationEvents.newDataEventDataEventHandler += InputHandler.HandleOnNewDataEvent;
+            ApplicationEvents.newDataEventHandler += InputHandler.HandleOnNewDataEvent;
             ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
             ApplicationEvents.userExitRequestEventHandler += this.HandleUserExitRequest;
             ApplicationEvents.connectionTypeChangeRequestHandler += this.HandleConnectionTypeChangeRequest;
@@ -61,7 +61,7 @@ namespace TouchpadServer {
         }
 
         private void HandleUserExitRequest(object sender, EventArgs e) {
-            ApplicationEvents.newDataEventDataEventHandler -= InputHandler.HandleOnNewDataEvent;
+            ApplicationEvents.newDataEventHandler -= InputHandler.HandleOnNewDataEvent;
             ApplicationEvents.userExitRequestEventHandler -= this.HandleUserExitRequest;
             ApplicationEvents.connectionStatusChangedEventHandler -= this.HandleConnectionStatusChanged;
             ApplicationEvents.connectionTypeChangeRequestHandler -= this.HandleConnectionTypeChangeRequest;

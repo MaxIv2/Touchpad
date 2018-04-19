@@ -15,15 +15,8 @@ namespace TouchpadServer {
         private Socket client;
         private int port;
         
-        public TcpServer() {
+        public TcpServer() : base() {
             this.SetListener();
-            this.online = false;
-            this.inputBatches = new Queue<byte[]>();
-            SetClientGetter();
-            SetConnectivityChecker();
-            SetReader();
-            ApplicationEvents.userTurnOnOffRequestHandler += this.HandleTurnOnOff;
-            ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
         }
 
         protected override void BlacklistClient() {
@@ -55,7 +48,6 @@ namespace TouchpadServer {
             this.connected = true;
             this.awaitingAcknoldegement = false;
             this.missing = 0;
-            this.inputBatches.Clear();
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
             this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, this.client.RemoteEndPoint.ToString()));

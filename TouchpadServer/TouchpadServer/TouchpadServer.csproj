@@ -62,6 +62,8 @@
     <Reference Include="System.Data.SQLite.Linq">
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.108.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -81,6 +83,7 @@
       <DependentUpon>BlacklistWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="BluetoothServer.cs" />
+    <Compile Include="Command.cs" />
     <Compile Include="ConnectionStatusChangedEventArgs.cs" />
     <Compile Include="InputHandler.cs" />
     <Compile Include="Server.cs" />

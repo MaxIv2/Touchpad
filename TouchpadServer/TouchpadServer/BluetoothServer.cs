@@ -15,17 +15,10 @@ namespace TouchpadServer {
         private BluetoothClient client;
         private NetworkStream stream;
 
-        public BluetoothServer(Guid guid) {
+        public BluetoothServer(Guid guid) : base(){
             this.online = false;
             this.identifier = guid;
             this.listener = new BluetoothListener(guid);
-            this.inputBatches = new Queue<byte[]>();
-            this.SetConnectivityChecker();
-            this.SetReader();
-            this.SetClientGetter();
-            this.online = false;
-            ApplicationEvents.userTurnOnOffRequestHandler += this.HandleTurnOnOff;
-            ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
         }
         protected override void BlacklistClient() {
             BlacklistManager.Insert(client.GetRemoteMachineName(client.RemoteEndPoint.Address), client.RemoteEndPoint.Address.ToString());
@@ -60,7 +53,6 @@ namespace TouchpadServer {
             this.awaitingAcknoldegement = false;
             this.stream = client.GetStream();
             this.missing = 0;
-            this.inputBatches.Clear();
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
 

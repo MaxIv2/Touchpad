@@ -15,10 +15,17 @@ namespace TouchpadServer {
         protected Timer connectivityChecker;
         protected Timer reader;
         protected Timer clientGetter;
-        protected Queue<byte[]> inputBatches;
         private object readerLock = new object();
         protected byte missing = 0;
-        
+
+        protected Server() {
+            this.SetConnectivityChecker();
+            this.SetReader();
+            this.SetClientGetter();
+            this.online = false;
+            ApplicationEvents.userTurnOnOffRequestHandler += this.HandleTurnOnOff;
+            ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
+        }
 
         protected enum MessageType { MOUSE = 0, CONNECTION_CHECK = 1, CHECK_ACKNOLEDGEMENT = 2, TERMINATE_CONNECTION = 3 }
 
@@ -76,18 +83,6 @@ namespace TouchpadServer {
 
         private void ReadData(Object source, ElapsedEventArgs e) {
             lock (readerLock) {
-                if (missing > 0) {
-                    Debug.WriteLine("compliting missing data...");
-                    byte[] buffer = this.ReceiveData(missing);
-                    if (buffer == null)
-                        return;
-                    Debug.WriteLine("using found data...");
-                    for (int j = 0; j < missing; j++) {
-                        this.inputBatches.Enqueue(buffer);
-                    }
-                    OnNewData(inputBatches);
-                }
-
                 byte[] outerHeader = this.ReceiveData(2);
                 if (outerHeader == null)
                     return;
@@ -113,12 +108,10 @@ namespace TouchpadServer {
                             missing = length;
                             return;
                         }
-                        this.inputBatches.Enqueue(buffer);
-                        OnNewData(inputBatches);
+                        OnNewData(buffer);
                         break;
                     default:
                         Debug.WriteLine("wut");
-                        inputBatches.Clear();
                         break;
                 }
             }
@@ -148,8 +141,8 @@ namespace TouchpadServer {
             ApplicationEvents.CallConnectionStatusChangedEventHandler(this, args);
         }
 
-        protected void OnNewData(Queue<byte[]> info) {
-            ApplicationEvents.CallNewEventDataEventHandler(this, info);
+        protected void OnNewData(byte[] info) {
+            ApplicationEvents.CallNewDataEventHandler(this, info);
         }
         #endregion
 

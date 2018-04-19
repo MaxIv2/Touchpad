@@ -5,113 +5,146 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
+using System.Web.Script.Serialization;
+using System.Net.Http;
+
 
 namespace TouchpadServer {
     static class InputHandler {
-        private enum ActionCode { MOVE = 0, LEFTBUTTON = 1, RIGHTBUTTON = 2, SCROLL = 3, ZOOM = 4 };
-        private static object locker = new object();
+        private static Queue<Command> commandsToExecute;
+        private static Queue<Command> commandsToSend;
+        private static Thread worker;
 
-        public static void HandleOnNewDataEvent(object sender, Queue<byte[]> inputBatches) {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(ProcessInput), inputBatches);
-            Thread th = new Thread(() => ProcessInput(inputBatches));
-            th.Start();
-        }
-
-        private static void ProcessInput(object inputBatches) {
-            lock (locker) {
-                Debug.WriteLine("Trying to control mouse");
-                int lastIndx = -1;
-                byte[] previousBatch = null;
-                int lengthNow = ((Queue<byte[]>)inputBatches).Count;
-                for (int i = 0; i < lengthNow; i++) {
-                    byte[] batch = ((Queue<byte[]>)inputBatches).Dequeue();
-                    lastIndx = ProccessBatch(batch, previousBatch, lastIndx);
-                    previousBatch = batch;
-                }
+        private static void ProcessAndValidate(byte[] input) {
+            if (commandsToExecute == null) {
+                commandsToExecute = new Queue<Command>();
+                commandsToSend = new Queue<Command>();
             }
-        }
-
-        public static int ProccessBatch(byte[] batch, byte[] previousBatch = null, int lastIndx = -1) {
-            byte[] merged;
-            if (lastIndx == -1) {
-                merged = batch;
-                lastIndx = 0;
-            }
-            else
-                merged = Merge(lastIndx, previousBatch, batch);
-            
-            bool notEnoughBytes = false;
+            byte[] batch = (byte[])input;
             int i = 0;
-            while (i < merged.Length && !notEnoughBytes) {
-                byte action = merged[i];
-                if (!ActionCode.IsDefined(typeof(ActionCode), (int)action))
-                    i = merged.Length;
-                else
-                switch ((ActionCode)action) {
-                    case ActionCode.MOVE:
-                        if (merged.Length - i >= 3) { // 2 bytes: dx,dy + 1 type byte, 3 IN TOTAL
-                            int dx = (sbyte)merged[i + 1] * Properties.Settings.Default.Move / 10;
-                            int dy = (sbyte)merged[i + 2] * Properties.Settings.Default.Move / 10;
-                            MouseController.Move(dx, dy);
-                            i += 3;
-                        }
-                        else {
-                            notEnoughBytes = true;
-                        }
+            while (i < batch.Length) {
+                byte action = batch[i];
+                if (!Command.ActionCode.IsDefined(typeof(Command.ActionCode), action))
+                    i = batch.Length;
+                else {
+                    Command c;
+                    switch ((Command.ActionCode)action) {
+                        case Command.ActionCode.MOVE:
+                            if (batch.Length - i >= 3) { // 2 bytes: dx,dy + 1 type byte, 3 IN TOTAL
+                                c = new Command.Move((sbyte)batch[i + 1], (sbyte)batch[i + 2]);
+                                EnqueueCommand(c);
+                                i += 3;
+                            }
+                            else {
+                                i = batch.Length;
+                            }
+                            break;
+                        case Command.ActionCode.LEFTBUTTON:
+                            if (batch.Length - i >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
+                                c = new Command.LeftButton(batch[i + 1]);
+                                EnqueueCommand(c);
+                                i += 2;
+                            }
+                            else {
+                                i = batch.Length;
+                            }
+                            break;
+                        case Command.ActionCode.RIGHTBUTTON:
+                            if (batch.Length - i >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
+                                c = new Command.RightButton(batch[i + 1]);
+                                EnqueueCommand(c);
+                                i += 2;
+                            }
+                            else {
+                                i = batch.Length;
+                            }
+                            break;
+                        case Command.ActionCode.SCROLL:
+                            if (batch.Length - i >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
+                                c = new Command.Scroll((sbyte)batch[i + 1]);
+                                EnqueueCommand(c);
+                                i += 2;
+                            }
+                            else {
+                                i = batch.Length;
+                            }
+                            break;
+                        case Command.ActionCode.ZOOM:
+                            if (batch.Length - i >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
+                                c = new Command.Zoom((sbyte)batch[i + 1]);
+                                EnqueueCommand(c);
+                                i += 2;
+                            }
+                            else {
+                                i = batch.Length;
+                            }
+                            break;
+                    }
+                }
+            }
+            NotifyThread();
+            if(commandsToSend.Count > 50)
+                SendDataToServer();
+        }
+
+        private static void EnqueueCommand(Command c) {
+            commandsToExecute.Enqueue(c);
+            commandsToSend.Enqueue(c);
+        }
+
+        private static void NotifyThread() {
+            if (worker == null || !worker.IsAlive) {
+                worker = new Thread(HandleInput);
+                worker.Start();
+            }
+        }
+
+        public static void HandleOnNewDataEvent(object sender, byte[] batch) {
+            ProcessAndValidate(batch);
+        }
+
+        private static void HandleInput() {
+            while (commandsToExecute.Count > 0) {
+                switch (commandsToExecute.Peek().code) {
+                    case Command.ActionCode.MOVE:
+                        Command.Move move = (Command.Move)commandsToExecute.Dequeue();
+                        MouseController.Move(move.dx * Properties.Settings.Default.Move, move.dy * Properties.Settings.Default.Move);
                         break;
-                    case ActionCode.LEFTBUTTON:
-                        if (merged.Length - i >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
-                            byte status = merged[i + 1] ;
-                            MouseController.Left(status);
-                            i += 2;
-                        }
-                        else {
-                            notEnoughBytes = true;
-                        }
+                    case Command.ActionCode.LEFTBUTTON:
+                        Command.LeftButton left = (Command.LeftButton)commandsToExecute.Dequeue();
+                        MouseController.Left(left.state);
                         break;
-                    case ActionCode.RIGHTBUTTON:
-                        if (merged.Length - i >= 2) { // 1 byte: status + 1 type byte, 2 IN TOTAL
-                            byte status = merged[i + 1];
-                            MouseController.Right(status);
-                            i += 2;
-                        }
-                        else {
-                            notEnoughBytes = true;
-                        }
+                    case Command.ActionCode.RIGHTBUTTON:
+                        Command.RightButton right = (Command.RightButton)commandsToExecute.Dequeue();
+                        MouseController.Right(right.state);
                         break;
-                    case ActionCode.SCROLL:
-                        if (merged.Length - i >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
-                            int scroll = (sbyte)merged[i + 1] * Properties.Settings.Default.Scroll / 10;
-                            MouseController.Scroll(scroll);
-                            i += 2;
-                        }
-                        else {
-                            notEnoughBytes = true;
-                        }
+                    case Command.ActionCode.SCROLL:
+                        Command.Scroll scroll = (Command.Scroll)commandsToExecute.Dequeue();
+                        MouseController.Scroll(scroll.scroll);
                         break;
-                    case ActionCode.ZOOM:
-                        if (merged.Length - i >= 2) {  // 1 byte: data + 1 type byte, 2 IN TOTAL
-                            int zoom = (sbyte)merged[i + 1] * Properties.Settings.Default.Scale / 10;
-                            MouseController.Zoom(zoom);
-                            i += 2;
-                        }
-                        else {
-                            notEnoughBytes = true;
-                        }
+                    case Command.ActionCode.ZOOM:
+                        Command.Zoom zoom = (Command.Zoom)commandsToExecute.Dequeue();
+                        MouseController.Zoom(zoom.zoom);
                         break;
                 }
             }
-            if (!notEnoughBytes)
-                return 0;
-            return i - lastIndx;
         }
 
-        public static byte[] Merge(int startIndx, byte[] first, byte[] second) {
-            byte[] merged = new byte[second.Length + first.Length - startIndx];
-            Array.Copy(first, startIndx, merged, 0, first.Length - startIndx);
-            Array.Copy(second, 0, merged, first.Length - startIndx, second.Length);
-            return merged;
-        }
+        private static void SendDataToServer() {
+            HttpClient client = new HttpClient();
+            try {
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                string jsons = "\"itmes\":" + serializer.Serialize(commandsToSend);
+                commandsToSend.Clear();
+                StringContent content = new StringContent(jsons, Encoding.ASCII, "application/json");
+                client.PostAsync("https://www.google.com", content);
+                Debug.WriteLine(jsons);
+            } catch {
 
+            } finally {
+                client.Dispose();
+            }
+        }
     }
 }
+

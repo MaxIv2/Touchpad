@@ -31,6 +31,7 @@ namespace TouchpadServer {
             this.onAndOffButtonSwitch.Click += ApplicationEvents.CallUserTurnOnOffRequestHandler;
             ApplicationEvents.connectionStatusChangedEventHandler += this.HandleConnectionStatusChanged;
             this.FormClosing += this.UnsbscribeFromHandlers;
+            this.SetBars();
         }
 
         private void disconnectButtonClick(object sender, EventArgs e) {
@@ -99,9 +100,17 @@ namespace TouchpadServer {
 
 
 
+        private void SetBars() {
+            this.moveBar.Value = Properties.Settings.Default.Move;
+            this.scaleBar.Value = Properties.Settings.Default.Scale;
+            this.scrollBar.Value = Properties.Settings.Default.Scroll;
+            this.moveBar.ValueChanged += this.MoveSensitivityChanged;
+            this.scaleBar.ValueChanged += this.ScaleSensitivityChanged;
+            this.scrollBar.ValueChanged += this.ScrollSensitivityChanged;
+        }
         private void MoveSensitivityChanged(object sender, EventArgs e)
         {
-            int value = this.moveBar.Value + 1;
+            int value = this.moveBar.Value;
             Properties.Settings.Default.Move = value;
             Properties.Settings.Default.Save();
         }
@@ -116,7 +125,6 @@ namespace TouchpadServer {
             int value = this.scaleBar.Value + 1;
             Properties.Settings.Default.Scale = value;
             Properties.Settings.Default.Save();
-        }
-
+        } 
     }
 }

@@ -136,7 +136,6 @@
             this.scaleText.Size = new System.Drawing.Size(35, 13);
             this.scaleText.TabIndex = 11;
             this.scaleText.Text = "Scale Sensitivity";
-            this.scaleBar.ValueChanged += this.ScaleSensitivityChanged;
             // 
             // moveBar
             // 
@@ -144,7 +143,8 @@
             this.moveBar.Name = "moveBar";
             this.moveBar.Size = new System.Drawing.Size(315, 45);
             this.moveBar.TabIndex = 12;
-            this.moveBar.ValueChanged += this.MoveSensitivityChanged;
+            this.moveBar.Minimum = 1;
+            this.moveBar.Maximum = 11;
             // 
             // scrollBar
             // 
@@ -152,14 +152,17 @@
             this.scrollBar.Name = "scrollBar";
             this.scrollBar.Size = new System.Drawing.Size(316, 45);
             this.scrollBar.TabIndex = 13;
-            this.scrollBar.ValueChanged += this.ScrollSensitivityChanged;
+            this.scrollBar.Minimum = 1;
+            this.scrollBar.Maximum = 11;
             // 
-            // trackBar3
+            // scaleBar
             // 
             this.scaleBar.Location = new System.Drawing.Point(414, 249);
             this.scaleBar.Name = "trackBar3";
             this.scaleBar.Size = new System.Drawing.Size(315, 45);
             this.scaleBar.TabIndex = 14;
+            this.scaleBar.Minimum = 1;
+            this.scaleBar.Maximum = 11;
             // 
             // MainWindow
             // 
