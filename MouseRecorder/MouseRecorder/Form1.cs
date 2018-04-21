@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SQLite;
+using System.IO;
 
 namespace MouseRecorder
 {
@@ -96,8 +89,8 @@ namespace MouseRecorder
             string filename = "";
             OpenFileDialog sfd = new OpenFileDialog();
 
-            sfd.Title = "LoadFileDialog ImportFromFile";
-            sfd.Filter = "Text File (.txt) | *.txt";
+            sfd.Title = "Load File Dialog";
+            sfd.Filter = "Text file (*.txt)|*.txt|Sqlite files (*.sqlite)|*.sqlite";
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
@@ -116,7 +109,7 @@ namespace MouseRecorder
                                 lv.SubItems.Add("0");
                                 lv.SubItems.Add("0");
                             }else{
-                                lv.SubItems.Add((int.Parse(spl[0]) - int.Parse(listView1.Items[b-1].SubItems[0].Text)).ToString());
+                                lv.SubItems.Add((int.Parse(spl[0]) - int.Parse(listView1.Items[b - 1].SubItems[0].Text)).ToString());
                                 lv.SubItems.Add((int.Parse(spl[1]) - int.Parse(listView1.Items[b - 1].SubItems[1].Text)).ToString());
                             }
                             lv.SubItems.Add(spl[2]);
@@ -124,6 +117,37 @@ namespace MouseRecorder
                             b++;
                         }
                     }
+                }
+                if (filename.EndsWith(".sqlite"))
+                {
+                    SQLiteConnection m_dbConnection = new SQLiteConnection(string.Format("Data Source={0};Version=3;", filename));
+                    m_dbConnection.Open();
+
+                    string sql = "select * from MouseRecord";
+                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (Regex.IsMatch(reader["X"].ToString(), @"^\d+$") && Regex.IsMatch(reader["Y"].ToString(), @"^\d+$") && Enum.IsDefined(typeof(MouseAction), reader["Action"].ToString()))
+                        {
+                            lv = new ListViewItem(((int)reader["X"]).ToString());
+                            lv.SubItems.Add(((int)reader["Y"]).ToString());
+                            if (b == 0)
+                            {
+                                lv.SubItems.Add("0");
+                                lv.SubItems.Add("0");
+                            }
+                            else
+                            {
+                                lv.SubItems.Add((int.Parse(lv.SubItems[0].Text) - int.Parse(listView1.Items[b - 1].SubItems[0].Text)).ToString());
+                                lv.SubItems.Add((int.Parse(lv.SubItems[1].Text) - int.Parse(listView1.Items[b - 1].SubItems[1].Text)).ToString());
+                            }
+                            lv.SubItems.Add((string)reader["Action"]);
+                            listView1.Items.Add(lv);
+                            b++;
+                        }
+                    }
+                    m_dbConnection.Close();
                 }
             }
         }
@@ -135,21 +159,37 @@ namespace MouseRecorder
             string filename = "";
             SaveFileDialog sfd = new SaveFileDialog();
 
-            sfd.Title = "SaveFileDialog Export2File";
-            sfd.Filter = "Text File (.txt) | *.txt";
+            sfd.Title = "Save File Dialog";
+            sfd.Filter = "Text file (*.txt)|*.txt|Sqlite files (*.sqlite)|*.sqlite";
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 filename = sfd.FileName.ToString();
-                if (filename != "")
-                {
-                    using (StreamWriter sw = new StreamWriter(filename))
-                    {
+                if (filename.EndsWith(".txt"))
+                { 
+                    using (StreamWriter sw = new StreamWriter(filename)){
                         foreach (ListViewItem item in listView1.Items)
-                        {
                             sw.WriteLine("{0}{1}{2}{3}{4}", item.SubItems[0].Text, '\t', item.SubItems[1].Text, '\t', item.SubItems[4].Text);
-                        }
                     }
+                }
+                if (filename.EndsWith(".sqlite"))
+                {
+                    SQLiteConnection.CreateFile(filename);
+                    SQLiteConnection m_dbConnection = new SQLiteConnection(string.Format("Data Source={0};Version=3;", filename));
+                    m_dbConnection.Open();
+
+                    string sql = "create table MouseRecord (X int, Y int, Action char(10))";
+                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                    command.ExecuteNonQuery();
+
+                    foreach (ListViewItem item in listView1.Items)
+                    {
+                        sql = string.Format("insert into MouseRecord (X, Y, Action) values ({0}, {1}, '{2}')", item.SubItems[0].Text, item.SubItems[1].Text, item.SubItems[4].Text);
+                        command = new SQLiteCommand(sql, m_dbConnection);
+                        command.ExecuteNonQuery();
+                    }
+
+                    m_dbConnection.Close();
                 }
             }
         }
@@ -346,210 +386,4 @@ namespace MouseRecorder
 
         #endregion
     }
-
-    public static class MouseController
-    {
-        [DllImport("user32.dll")]
-        private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, UIntPtr dwExtraInfo);
-        private enum Flag {
-            ABSOLUTE,
-            LEFTDOWN,
-            LEFTUP,
-            MIDDLEDOWN,
-            MIDDLEUP,
-            MOVE,
-            RIGHTDOWN,
-            RIGHTUP
-        };
-        private static int GetFlag(Flag mf)
-        {
-            switch (mf)
-            {
-                case Flag.ABSOLUTE:
-                    return 0x8000;
-                case Flag.LEFTDOWN:
-                    return 0x0002;
-                case Flag.LEFTUP:
-                    return 0x0004;
-                case Flag.MIDDLEDOWN:
-                    return 0x0020;
-                case Flag.MIDDLEUP:
-                    return 0x0040;
-                case Flag.MOVE:
-                    return 0x0001;
-                case Flag.RIGHTDOWN:
-                    return 0x0008;
-                case Flag.RIGHTUP:
-                    return 0x0010;
-                default:
-                    return 0;
-            }
-        }
-        public static void RightDown()
-        {
-            mouse_event(GetFlag(Flag.RIGHTDOWN), 0, 0, 0, new UIntPtr(0));
-        }
-        public static void RightUp()
-        {
-            mouse_event(GetFlag(Flag.RIGHTUP), 0, 0, 0, new UIntPtr(0));
-        }
-        public static void LeftDown()
-        {
-            mouse_event(GetFlag(Flag.LEFTDOWN), 0, 0, 0, new UIntPtr(0));
-        }
-        public static void LeftUp()
-        {
-            mouse_event(GetFlag(Flag.LEFTUP), 0, 0, 0, new UIntPtr(0));
-        }
-        public static void MiddleDown()
-        {
-            mouse_event(GetFlag(Flag.MIDDLEDOWN), 0, 0, 0, new UIntPtr(0));
-        }
-        public static void MiddleUp()
-        {
-            mouse_event(GetFlag(Flag.MIDDLEUP), 0, 0, 0, new UIntPtr(0));
-        }
-        public static void MoveCursor(int dx, int dy)
-        {
-            mouse_event(GetFlag(Flag.MOVE), dx, dy, 0, new UIntPtr());
-        }
-
-        public static void MouseEvent(int dwFlags, int dx, int dy, int dwData)
-        {
-            mouse_event(dwFlags, dx, dy, dwData, new UIntPtr());
-        }
-    }
-
-    public static class MouseHook
-    {
-        public static event EventHandler MouseActionLD = delegate { };
-        public static event EventHandler MouseActionRD = delegate { };
-        public static event EventHandler MouseActionMD = delegate { };
-        public static event EventHandler MouseActionLU = delegate { };
-        public static event EventHandler MouseActionRU = delegate { };
-        public static event EventHandler MouseActionMU = delegate { };
-
-        private enum MouseMessages
-        {
-            WM_LBUTTONDOWN = 0x0201,     //The left mouse button was pressed.
-            WM_LBUTTONUP = 0x0202,       //The left mouse button was released.
-            WM_RBUTTONDOWN = 0x0204,     //The right mouse button was pressed.
-            WM_RBUTTONUP = 0x0205,       //The right mouse button was released.
-            WM_MBUTTONDOWN = 0x0207,     //The middle mouse button was pressed.
-            WM_MBUTTONUP = 0x0208,       //The middle mouse button was released.
-
-            WM_MOUSEWHEEL = 0x020A,
-
-            //most likely useless:
-            MK_CONTROL = 0x0008,
-            WM_MOUSEMOVE = 0x0200,
-            WM_LBUTTONDBLCLK = 0x0203,   //The left mouse button was double-clicked.
-            WM_RBUTTONDBLCLK = 0x0206,   //The right mouse button was double-clicked.
-            WM_MBUTTONDBLCLK = 0x0209    //The middle mouse button was double-clicked.
-        }
-
-        private static IntPtr HookCallback(
-          int nCode, IntPtr wParam, IntPtr lParam)
-        {
-            if (nCode >= 0 && MouseMessages.WM_LBUTTONDOWN == (MouseMessages)wParam){
-                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                MouseActionLD(null, new EventArgs());
-            }
-
-            if (nCode >= 0 && MouseMessages.WM_RBUTTONDOWN == (MouseMessages)wParam){
-                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                MouseActionRD(null, new EventArgs());
-            }
-
-            if (nCode >= 0 && MouseMessages.WM_MBUTTONDOWN == (MouseMessages)wParam){
-                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                MouseActionMD(null, new EventArgs());
-            }
-
-            if (nCode >= 0 && MouseMessages.WM_LBUTTONUP == (MouseMessages)wParam)
-            {
-                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                MouseActionLU(null, new EventArgs());
-            }
-
-            if (nCode >= 0 && MouseMessages.WM_RBUTTONUP == (MouseMessages)wParam)
-            {
-                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                MouseActionRU(null, new EventArgs());
-            }
-
-            if (nCode >= 0 && MouseMessages.WM_MBUTTONUP == (MouseMessages)wParam)
-            {
-                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                MouseActionMU(null, new EventArgs());
-            }
-
-            return CallNextHookEx(_hookID, nCode, wParam, lParam);
-        }
-
-        #region
-
-        private static LowLevelMouseProc _proc = HookCallback;
-        private static IntPtr _hookID = IntPtr.Zero;
-
-        public static void Start()
-        {
-            _hookID = SetHook(_proc);
-        }
-
-        public static void stop()
-        {
-            UnhookWindowsHookEx(_hookID);
-        }
-
-        private static IntPtr SetHook(LowLevelMouseProc proc)
-        {
-            using (Process curProcess = Process.GetCurrentProcess())
-            using (ProcessModule curModule = curProcess.MainModule)
-            {
-                return SetWindowsHookEx(WH_MOUSE_LL, proc,
-                  GetModuleHandle(curModule.ModuleName), 0);
-            }
-        }
-
-        private delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);     
-
-        private const int WH_MOUSE_LL = 14;
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct POINT
-        {
-            public int x;
-            public int y;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct MSLLHOOKSTRUCT
-        {
-            public POINT pt;
-            public uint mouseData;
-            public uint flags;
-            public uint time;
-            public IntPtr dwExtraInfo;
-        }
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr SetWindowsHookEx(int idHook,
-          LowLevelMouseProc lpfn, IntPtr hMod, uint dwThreadId);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool UnhookWindowsHookEx(IntPtr hhk);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
-          IntPtr wParam, IntPtr lParam);
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr GetModuleHandle(string lpModuleName);
-
-        #endregion
-    }
 }
-
-//roll up/down

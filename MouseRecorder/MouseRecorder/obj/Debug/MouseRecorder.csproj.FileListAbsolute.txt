@@ -7,3 +7,25 @@ c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder
 c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.csproj.GenerateResource.Cache
 c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.exe
 c:\users\talma\documents\visual studio 2015\Projects\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.pdb
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\bin\Debug\MouseRecorder.exe.config
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.exe
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.pdb
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\bin\Debug\MouseRecorder.exe
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\bin\Debug\MouseRecorder.pdb
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.csprojResolveAssemblyReference.cache
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.Form1.resources
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.Properties.Resources.resources
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\obj\Debug\MouseRecorder.csproj.GenerateResource.Cache
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\bin\Debug\System.Data.SQLite.dll
+C:\Users\talma\Desktop\MouseRecorder\MouseRecorder\bin\Debug\System.Data.SQLite.xml
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\bin\Debug\MouseRecorder.exe.config
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\obj\Debug\MouseRecorder.exe
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\obj\Debug\MouseRecorder.pdb
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\bin\Debug\MouseRecorder.exe
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\bin\Debug\MouseRecorder.pdb
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\bin\Debug\System.Data.SQLite.dll
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\bin\Debug\System.Data.SQLite.xml
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\obj\Debug\MouseRecorder.csprojResolveAssemblyReference.cache
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\obj\Debug\MouseRecorder.Form1.resources
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\obj\Debug\MouseRecorder.Properties.Resources.resources
+C:\Users\talma\Desktop\MouseRecorder_0.02\MouseRecorder\obj\Debug\MouseRecorder.csproj.GenerateResource.Cache
