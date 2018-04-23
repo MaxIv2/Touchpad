@@ -10,7 +10,7 @@ using System.Net.NetworkInformation;
 using System.Diagnostics;
 
 namespace TouchpadServer {
-    class TcpServer : Server, IDisposable {
+    sealed class TcpServer : Server, IDisposable {
         private TcpListener listener;
         private Socket client;
         private int port;
@@ -111,7 +111,7 @@ namespace TouchpadServer {
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing) {
+        protected void Dispose(bool disposing) {
             if (this.disposed)
                 return;
             if (disposing) {

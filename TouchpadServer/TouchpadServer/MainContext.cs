@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 
 namespace TouchpadServer {
-    class MainContext : ApplicationContext {
+    sealed class MainContext : ApplicationContext {
 
         private Server server;
         private TrayIconController icon;

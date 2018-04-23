@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TouchpadServer {
-    class TrayIconController : IDisposable {
+    sealed class TrayIconController : IDisposable {
         private bool settingsWindowIsOpen;
         private bool blackistWindowIsOpen;
         private NotifyIcon trayIcon;
@@ -87,7 +87,7 @@ namespace TouchpadServer {
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing) {
+        protected void Dispose(bool disposing) {
             if (disposed)
                 return;
             if (disposing) {

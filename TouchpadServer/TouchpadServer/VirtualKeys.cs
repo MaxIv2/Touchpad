@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TouchpadServer {
-    class VirtualKeys {
+    static class VirtualKeys {
         public const byte CONTROL = 0X11;
     }
 }

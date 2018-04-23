@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 
 namespace TouchpadServer {
-    class SwitchButton : Button {
+    sealed class SwitchButton : Button {
         public bool isOn { get; private set; }
         private bool disposed;
 

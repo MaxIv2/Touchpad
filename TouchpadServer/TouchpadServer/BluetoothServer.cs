@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using System.Diagnostics;
 
 namespace TouchpadServer {
-    class BluetoothServer : Server, IDisposable {
+    sealed class BluetoothServer : Server, IDisposable {
         private Guid identifier;
         private BluetoothListener listener;
         private BluetoothClient client;
@@ -97,7 +97,7 @@ namespace TouchpadServer {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        protected virtual void Dispose(bool disposing) {
+        protected void Dispose(bool disposing) {
             if (this.disposed)
                 return;
             if (disposing) {

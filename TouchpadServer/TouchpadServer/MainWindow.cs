@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using QRCoder;
 
 namespace TouchpadServer {
-    public partial class MainWindow : Form {
+    public sealed partial class MainWindow : Form {
 
         delegate void UpdateStatusDelegate(ConnectionStatusChangedEventArgs text);
         delegate void UpdateButtonDelegate(ConnectionStatusChangedEventArgs text);

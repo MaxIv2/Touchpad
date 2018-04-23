@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace TouchpadServer {
-    class MouseController {
+    static class MouseController {
         //(mouse_event flags)
         public enum Flags { Absolute = 0x8000, LeftDown = 0x0002, LeftUp = 0x0004, Move = 0x0001, RightDown = 0x0008, RightUp = 0x0010, Wheel = 0x0800 }
         //(keybd_event flags)

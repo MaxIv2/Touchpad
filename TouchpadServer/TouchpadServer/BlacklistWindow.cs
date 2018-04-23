@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TouchpadServer {
-    public partial class BlacklistWindow : Form {
+    public sealed partial class BlacklistWindow : Form {
         public BlacklistWindow() {
             InitializeComponent();
             this.FillList();
