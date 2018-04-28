@@ -32,7 +32,7 @@ namespace TouchpadServer {
                 this.server = new TcpServer();
             Properties.Settings.Default.EndpointRepresentation = this.server.GetEndpointRepresentation();
             Properties.Settings.Default.Save();
-            this.icon = new TrayIconController();
+            this.icon = TrayIconController.Instance;
             this.server.GoOnline();
         }
 

@@ -83,13 +83,11 @@ namespace TouchpadServer {
                 }
             }
             NotifyThread();
-            if(commandsToSend.Count > 50)
-                SendDataToServer();
         }
 
         private static void EnqueueCommand(Command c) {
             commandsToExecute.Enqueue(c);
-            commandsToSend.Enqueue(c);
+            ReportClient.Instance.EnqueueCommand(c);
         }
 
         private static void NotifyThread() {

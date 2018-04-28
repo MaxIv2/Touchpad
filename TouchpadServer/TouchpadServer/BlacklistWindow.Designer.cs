@@ -68,6 +68,8 @@
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Controls.Add(this.blacklistView);
             this.Controls.Add(this.removeButton);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "BlacklistWindow";
             this.Text = "Blacklist";

@@ -182,8 +182,9 @@
             this.Controls.Add(this.serverStatus);
             this.Controls.Add(this.diconnectButton);
             this.Controls.Add(this.QRCodeContainer);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "MainWindow";
             this.Text = "Touchpad";
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).EndInit();

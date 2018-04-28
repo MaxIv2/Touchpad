@@ -97,7 +97,7 @@ namespace TouchpadServer {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        protected void Dispose(bool disposing) {
+        private void Dispose(bool disposing) {
             if (this.disposed)
                 return;
             if (disposing) {

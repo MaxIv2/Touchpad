@@ -7,14 +7,18 @@ using System.Windows.Forms;
 
 namespace TouchpadServer {
     sealed class TrayIconController : IDisposable {
-        private bool settingsWindowIsOpen;
-        private bool blackistWindowIsOpen;
         private NotifyIcon trayIcon;
         private bool disposed;
-        private MainWindow settingsWindow;
-        private BlacklistWindow blacklistWindow;
+        private static TrayIconController instance;
+        public static TrayIconController Instance {
+            get {
+                if (instance == null)
+                    instance = new TrayIconController();
+                return instance;
+            }
+        }
 
-        public TrayIconController() {
+        private TrayIconController() {
             this.trayIcon = new NotifyIcon();
             this.trayIcon.Text = "Remote Touchpad";
             this.trayIcon.Icon = Properties.Resources.mouseBlack;
@@ -23,11 +27,17 @@ namespace TouchpadServer {
             ApplicationEvents.connectionStatusChangedEventHandler += ChangeAppearance;
             ContextMenuStrip menu = new ContextMenuStrip();
             Tuple<string, EventHandler>[] items = { new Tuple<string, EventHandler>("Blacklist", LaunchBlacklistWindow),
-                                                     new Tuple<string,EventHandler>("Exit", ApplicationEvents.CallUserExitRequestEventHandler) };
+                                                      new Tuple<string,EventHandler> ("Log in", LaunchLoginWindow),
+                                                      new Tuple<string,EventHandler>("Exit", ApplicationEvents.CallUserExitRequestEventHandler)};
             foreach (Tuple<string, EventHandler> item in items) {
                 menu.Items.Add(item.Item1, null, item.Item2);
             }
             this.trayIcon.ContextMenuStrip = menu;
+        }
+
+        private void LaunchLoginWindow(object sender, EventArgs e) {
+            LoginForm a = LoginForm.Form;
+            a.Show();
         }
 
         private void ChangeAppearance(object sender, ConnectionStatusChangedEventArgs e) {
@@ -45,41 +55,16 @@ namespace TouchpadServer {
         }
 
         private void LaunchBlacklistWindow(object sender, EventArgs e) {
-            if (!blackistWindowIsOpen) {
-                blacklistWindow = new BlacklistWindow();
-                blacklistWindow.Show();
-                this.blackistWindowIsOpen = true;
-                blacklistWindow.FormClosed += this.FormClosed;
-            }
-            else {
-                blacklistWindow.WindowState = FormWindowState.Normal;
-                blacklistWindow.Focus();
-                blacklistWindow.BringToFront();
-            }
+            BlacklistWindow blacklistWindow = BlacklistWindow.Form;
+            blacklistWindow.Show();
         }
 
         private void IconClick(object sender, EventArgs e) {
             MouseEventArgs eventArgs = (MouseEventArgs)e;
             if (eventArgs.Button == MouseButtons.Left) {
-                if (!settingsWindowIsOpen) {
-                    settingsWindow = new MainWindow();
-                    settingsWindow.Show();
-                    this.settingsWindowIsOpen = true;
-                    settingsWindow.FormClosed += this.FormClosed;
-                }
-                else {
-                    settingsWindow.WindowState = FormWindowState.Normal;
-                    settingsWindow.Focus();
-                    settingsWindow.BringToFront();
-                }
+                MainWindow settingsWindow = MainWindow.Form;
+                settingsWindow.Show();
             }
-        }
-
-        private void FormClosed(object sender, EventArgs e) {
-            if (sender is BlacklistWindow)
-                this.blackistWindowIsOpen = false;
-            else
-                this.settingsWindowIsOpen = false;
         }
 
         public void Dispose() {
@@ -87,13 +72,15 @@ namespace TouchpadServer {
             GC.SuppressFinalize(this);
         }
 
-        protected void Dispose(bool disposing) {
+        private void Dispose(bool disposing) {
             if (disposed)
                 return;
             if (disposing) {
                 ApplicationEvents.connectionStatusChangedEventHandler -= ChangeAppearance;
+                trayIcon.Visible = false;
                 trayIcon.Dispose();
             }
+            instance = null;
             disposed = true;
         }
     }

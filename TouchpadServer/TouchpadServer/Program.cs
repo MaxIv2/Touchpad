@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace TouchpadServer {
     static class Program {
-        static Mutex mutex = new Mutex(true, "Touchpad one instance only");
+        static Mutex mutex = new Mutex(true, "ddf2b72a-6daf-4e75-a440-2cf3be9f58db");
 
         /// <summary>
         /// The main entry point for the application.

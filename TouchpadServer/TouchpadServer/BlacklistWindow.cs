@@ -10,7 +10,17 @@ using System.Windows.Forms;
 
 namespace TouchpadServer {
     public sealed partial class BlacklistWindow : Form {
-        public BlacklistWindow() {
+        private static BlacklistWindow form;
+
+        public static BlacklistWindow Form {
+            get {
+                if (form == null)
+                    form = new BlacklistWindow();
+                return form;
+            }
+        }
+
+        private BlacklistWindow() {
             InitializeComponent();
             this.FillList();
             BlacklistManager.changeEventHandler += OnBlacklistChange;
@@ -31,6 +41,7 @@ namespace TouchpadServer {
 
         protected override void OnClosed(EventArgs e) {
             BlacklistManager.changeEventHandler -= OnBlacklistChange;
+            form = null;
             base.OnClosed(e);
         }
 

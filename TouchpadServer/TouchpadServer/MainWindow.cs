@@ -15,7 +15,16 @@ namespace TouchpadServer {
         delegate void UpdateStatusDelegate(ConnectionStatusChangedEventArgs text);
         delegate void UpdateButtonDelegate(ConnectionStatusChangedEventArgs text);
 
-        public MainWindow() {
+        private static MainWindow form;
+        public static MainWindow Form {
+            get {
+                if (form == null)
+                    form = new MainWindow();
+                return form;
+            }
+        }
+
+        private MainWindow() {
             InitializeComponent();
             this.UpdateStatus(MainContext.status);
             this.diconnectButton.Enabled = MainContext.status.status == ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED;
@@ -99,6 +108,10 @@ namespace TouchpadServer {
         }
 
 
+        protected override void OnClosed(EventArgs e) {
+            form = null;
+            base.OnClosed(e);
+        }
 
         private void SetBars() {
             this.moveBar.Value = Properties.Settings.Default.Move;

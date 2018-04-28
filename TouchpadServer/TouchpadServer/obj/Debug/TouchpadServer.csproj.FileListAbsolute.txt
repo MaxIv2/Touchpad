@@ -54,3 +54,4 @@ C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\System.
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.BlacklistWindow.resources
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.MainWindow.resources
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csprojResolveAssemblyReference.cache
+C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.LoginForm.resources
