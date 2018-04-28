@@ -40,7 +40,6 @@ C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\Entit
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\System.Data.SQLite.xml
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.MainWindow.resources
-C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.XML
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\TouchpadServer.XML
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\EntityFramework.dll
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\EntityFramework.SqlServer.dll

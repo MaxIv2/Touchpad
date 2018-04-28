@@ -10,15 +10,13 @@ using System.Diagnostics;
 
 namespace TouchpadServer {
     sealed class BluetoothServer : Server, IDisposable {
-        private Guid identifier;
         private BluetoothListener listener;
         private BluetoothClient client;
         private NetworkStream stream;
 
-        public BluetoothServer(Guid guid) : base(){
+        public BluetoothServer() : base(){
             this.online = false;
-            this.identifier = guid;
-            this.listener = new BluetoothListener(guid);
+            this.listener = new BluetoothListener(new Guid(Properties.Resources.Guid));
         }
         protected override void BlacklistClient() {
             BlacklistManager.Insert(client.GetRemoteMachineName(client.RemoteEndPoint.Address), client.RemoteEndPoint.Address.ToString());
@@ -52,7 +50,6 @@ namespace TouchpadServer {
             this.connected = true;
             this.awaitingAcknoldegement = false;
             this.stream = client.GetStream();
-            this.missing = 0;
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
 
@@ -120,7 +117,6 @@ namespace TouchpadServer {
                 throw new Exception("Primary radio is missing, or bluetooth is off");
             return String.Format("{0:C}", radio.LocalAddress);
         }
-
         public static bool SupportsBluetooth() {
             BluetoothRadio radio = BluetoothRadio.PrimaryRadio;
             if (radio == null || radio.LocalAddress == null)

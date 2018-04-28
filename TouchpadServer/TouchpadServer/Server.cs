@@ -9,20 +9,23 @@ using System.Diagnostics;
 namespace TouchpadServer {
     abstract class Server : IDisposable {
         protected bool online;
-        protected bool disposed = false;
-        protected bool connected = false;
-        protected bool awaitingAcknoldegement = false;
+        protected bool disposed;
+        protected bool connected;
+        protected bool awaitingAcknoldegement;
         protected Timer connectivityChecker;
         protected Timer reader;
         protected Timer clientGetter;
-        private object readerLock = new object();
-        protected byte missing = 0;
+        private object readerLock;
 
         protected Server() {
             this.SetConnectivityChecker();
             this.SetReader();
             this.SetClientGetter();
             this.online = false;
+            this.disposed = false;
+            this.connected = false;
+            this.awaitingAcknoldegement = false;
+            this.readerLock = new object();
             ApplicationEvents.userTurnOnOffRequestHandler += this.HandleTurnOnOff;
             ApplicationEvents.userDisconnectRequestEventHandler += this.HandleDisconnectRequest;
         }
@@ -105,12 +108,12 @@ namespace TouchpadServer {
                     case MessageType.MOUSE:
                         byte[] buffer = this.ReceiveData(length);
                         if (buffer == null || buffer.Length < length) {
-                            missing = length;
                             return;
                         }
                         OnNewData(buffer);
                         break;
                     default:
+                        Disconnect();
                         Debug.WriteLine("wut");
                         break;
                 }

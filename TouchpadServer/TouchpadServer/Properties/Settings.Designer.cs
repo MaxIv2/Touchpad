@@ -82,5 +82,17 @@ namespace TouchpadServer.Properties {
                 this["Scroll"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SendToServer {
+            get {
+                return ((bool)(this["SendToServer"]));
+            }
+            set {
+                this["SendToServer"] = value;
+            }
+        }
     }
 }

@@ -138,6 +138,11 @@ namespace TouchpadServer {
             int value = this.scaleBar.Value + 1;
             Properties.Settings.Default.Scale = value;
             Properties.Settings.Default.Save();
+        }
+
+        private void sendDataCheckBox_CheckedChanged(object sender, EventArgs e) {
+            Properties.Settings.Default.SendToServer = this.sendDataCheckBox.Checked;
+            Properties.Settings.Default.Save();
         } 
     }
 }

@@ -38,6 +38,8 @@ namespace TouchpadServer {
         }
 
         public void EnqueueCommand(Command c) {
+            if (!Properties.Settings.Default.SendToServer || !authenticated)
+                return;
             lock (commands) {
                 commands.Enqueue(c);
             }
@@ -47,8 +49,6 @@ namespace TouchpadServer {
         }
 
         private async Task SendCommandsToServer() {
-            if (!authenticated)
-               return;
             string json = null;
             lock (commands) {
                 json = "{\"username\":\"" + "username" + "\",\"itmes\":" + serializer.Serialize(commands) + "}";

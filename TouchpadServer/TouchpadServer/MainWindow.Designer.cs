@@ -36,6 +36,7 @@
             this.moveBar = new System.Windows.Forms.TrackBar();
             this.scrollBar = new System.Windows.Forms.TrackBar();
             this.scaleBar = new System.Windows.Forms.TrackBar();
+            this.sendDataCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scrollBar)).BeginInit();
@@ -115,7 +116,7 @@
             this.moveText.AutoSize = true;
             this.moveText.Location = new System.Drawing.Point(306, 181);
             this.moveText.Name = "moveText";
-            this.moveText.Size = new System.Drawing.Size(35, 13);
+            this.moveText.Size = new System.Drawing.Size(84, 13);
             this.moveText.TabIndex = 9;
             this.moveText.Text = "Move Sensitivity";
             // 
@@ -124,51 +125,67 @@
             this.scrollText.AutoSize = true;
             this.scrollText.Location = new System.Drawing.Point(306, 217);
             this.scrollText.Name = "scrollText";
-            this.scrollText.Size = new System.Drawing.Size(35, 13);
+            this.scrollText.Size = new System.Drawing.Size(81, 13);
             this.scrollText.TabIndex = 10;
             this.scrollText.Text = "Scroll sensitivity";
             // 
-            // label3
+            // scaleText
             // 
             this.scaleText.AutoSize = true;
             this.scaleText.Location = new System.Drawing.Point(306, 249);
             this.scaleText.Name = "scaleText";
-            this.scaleText.Size = new System.Drawing.Size(35, 13);
+            this.scaleText.Size = new System.Drawing.Size(84, 13);
             this.scaleText.TabIndex = 11;
             this.scaleText.Text = "Scale Sensitivity";
             // 
             // moveBar
             // 
             this.moveBar.Location = new System.Drawing.Point(414, 181);
+            this.moveBar.Maximum = 11;
+            this.moveBar.Minimum = 1;
             this.moveBar.Name = "moveBar";
             this.moveBar.Size = new System.Drawing.Size(315, 45);
             this.moveBar.TabIndex = 12;
-            this.moveBar.Minimum = 1;
-            this.moveBar.Maximum = 11;
+            this.moveBar.Value = 1;
             // 
             // scrollBar
             // 
             this.scrollBar.Location = new System.Drawing.Point(414, 217);
+            this.scrollBar.Maximum = 11;
+            this.scrollBar.Minimum = 1;
             this.scrollBar.Name = "scrollBar";
             this.scrollBar.Size = new System.Drawing.Size(316, 45);
             this.scrollBar.TabIndex = 13;
-            this.scrollBar.Minimum = 1;
-            this.scrollBar.Maximum = 11;
+            this.scrollBar.Value = 1;
             // 
             // scaleBar
             // 
             this.scaleBar.Location = new System.Drawing.Point(414, 249);
-            this.scaleBar.Name = "trackBar3";
+            this.scaleBar.Maximum = 11;
+            this.scaleBar.Minimum = 1;
+            this.scaleBar.Name = "scaleBar";
             this.scaleBar.Size = new System.Drawing.Size(315, 45);
             this.scaleBar.TabIndex = 14;
-            this.scaleBar.Minimum = 1;
-            this.scaleBar.Maximum = 11;
+            this.scaleBar.Value = 1;
+            // 
+            // sendDataCheckBox
+            // 
+            this.sendDataCheckBox.AutoSize = true;
+            this.sendDataCheckBox.Checked = global::TouchpadServer.Properties.Settings.Default.SendToServer;
+            this.sendDataCheckBox.Location = new System.Drawing.Point(611, 64);
+            this.sendDataCheckBox.Name = "sendDataCheckBox";
+            this.sendDataCheckBox.Size = new System.Drawing.Size(119, 17);
+            this.sendDataCheckBox.TabIndex = 15;
+            this.sendDataCheckBox.Text = "Send data to server";
+            this.sendDataCheckBox.UseVisualStyleBackColor = true;
+            this.sendDataCheckBox.CheckedChanged += new System.EventHandler(this.sendDataCheckBox_CheckedChanged);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(741, 324);
+            this.Controls.Add(this.sendDataCheckBox);
             this.Controls.Add(this.switchConnectionType);
             this.Controls.Add(this.scaleBar);
             this.Controls.Add(this.scrollBar);
@@ -182,9 +199,9 @@
             this.Controls.Add(this.serverStatus);
             this.Controls.Add(this.diconnectButton);
             this.Controls.Add(this.QRCodeContainer);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "MainWindow";
             this.Text = "Touchpad";
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).EndInit();
@@ -210,5 +227,6 @@
         private System.Windows.Forms.TrackBar moveBar;
         private System.Windows.Forms.TrackBar scrollBar;
         private System.Windows.Forms.TrackBar scaleBar;
+        private System.Windows.Forms.CheckBox sendDataCheckBox;
     }
 }

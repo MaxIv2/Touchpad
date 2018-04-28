@@ -47,7 +47,6 @@ namespace TouchpadServer {
             this.listener.Stop();
             this.connected = true;
             this.awaitingAcknoldegement = false;
-            this.missing = 0;
             this.connectivityChecker.Enabled = true;
             this.reader.Enabled = true;
             this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, this.client.RemoteEndPoint.ToString()));
