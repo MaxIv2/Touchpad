@@ -127,22 +127,6 @@ namespace TouchpadServer {
                 }
             }
         }
-
-        private static void SendDataToServer() {
-            HttpClient client = new HttpClient();
-            try {
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                string jsons = "\"itmes\":" + serializer.Serialize(commandsToSend);
-                commandsToSend.Clear();
-                StringContent content = new StringContent(jsons, Encoding.ASCII, "application/json");
-                client.PostAsync("https://www.google.com", content);
-                Debug.WriteLine(jsons);
-            } catch {
-
-            } finally {
-                client.Dispose();
-            }
-        }
     }
 }
 

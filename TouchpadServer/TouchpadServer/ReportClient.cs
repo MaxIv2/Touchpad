@@ -51,13 +51,13 @@ namespace TouchpadServer {
         private async Task SendCommandsToServer() {
             string json = null;
             lock (commands) {
-                json = "{\"username\":\"" + "username" + "\",\"itmes\":" + serializer.Serialize(commands) + "}";
+                json = "{\"items\":" + serializer.Serialize(commands) + "}";
                 commands.Clear();
             }
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = null;
             try {
-                response = await client.PostAsync(authUri, content);
+                response = await client.PostAsync(addActionUri, content);
                 string result = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine(result);
             }

@@ -203,8 +203,23 @@ namespace TouchpadServer {
         protected abstract void BlacklistClient();
 
         public abstract string GetEndpointRepresentation();
+        public void Dispose() {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-        public abstract void Dispose();
+        protected virtual void Dispose(bool disposing) {
+            if (disposed)
+                return;
+            if (disposing) {
+                ApplicationEvents.userTurnOnOffRequestHandler -= this.HandleTurnOnOff;
+                ApplicationEvents.userDisconnectRequestEventHandler -= this.HandleDisconnectRequest;
+            }
+            this.reader.Dispose();
+            this.clientGetter.Dispose();
+            this.connectivityChecker.Dispose();
+            this.disposed = true;
+        }
 
     }
 }

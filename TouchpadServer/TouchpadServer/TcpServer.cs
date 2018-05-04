@@ -10,12 +10,13 @@ using System.Net.NetworkInformation;
 using System.Diagnostics;
 
 namespace TouchpadServer {
-    sealed class TcpServer : Server, IDisposable {
+    sealed class TcpServer : Server {
         private TcpListener listener;
         private Socket client;
         private int port;
-        
-        public TcpServer() : base() {
+
+        public TcpServer()
+            : base() {
             this.SetListener();
         }
 
@@ -33,7 +34,7 @@ namespace TouchpadServer {
                 name = "Unknown";
             }
             BlacklistManager.Insert(name, address);
-        } 
+        }
 
         #region Connectivity
         public override void AcceptClient() {
@@ -67,11 +68,11 @@ namespace TouchpadServer {
         #endregion Connectivity
 
         #region Listener Methods
-        protected override void StopListener() {                
+        protected override void StopListener() {
             this.listener.Stop();
         }
         protected override void StartListener() {
-           this.listener.Start();
+            this.listener.Start();
         }
         protected override bool GetPending() {
             return this.listener.Pending();
@@ -105,29 +106,25 @@ namespace TouchpadServer {
         #endregion
 
         #region IDisposable implementation
-        public override void Dispose() {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing) {
+        protected override void Dispose(bool disposing) {
+            base.Dispose(disposing);
             if (this.disposed)
                 return;
             if (disposing) {
-                if (this.connected) {
-                    this.client.Dispose();
+                if (this.listener != null) {
+                    this.listener.Stop();
+                    this.listener = null;
                 }
-                this.connectivityChecker.Dispose();
-                this.reader.Dispose();
-                ApplicationEvents.userDisconnectRequestEventHandler -= this.HandleDisconnectRequest;
-                ApplicationEvents.userTurnOnOffRequestHandler -= this.HandleTurnOnOff;
+            }
+            if (this.connected) {
+                this.client.Dispose();
             }
             this.disposed = true;
         }
         #endregion
 
         public override string GetEndpointRepresentation() {
-            return GetLocalIPAddress() +":" + (port - 1);
+            return GetLocalIPAddress() + ":" + (port - 1);
         }
         private void SetListener() {
             IPAddress ipObject = new IPAddress(new byte[] { 0, 0, 0, 0 });
