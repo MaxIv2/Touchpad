@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TouchpadServer", "TouchpadS
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Touchpad", "Touchpad\Touchpad.vdproj", "{3A795A33-F8C3-4007-8AEF-6C49903CF807}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MouseRecorder", "MouseRecorder\MouseRecorder.csproj", "{32EED81C-F47A-468B-8A0B-0BA1F39B8BE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{15919FC8-8A63-46A3-A2E5-EB63CF53248B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3A795A33-F8C3-4007-8AEF-6C49903CF807}.Debug|Any CPU.ActiveCfg = Debug
 		{3A795A33-F8C3-4007-8AEF-6C49903CF807}.Release|Any CPU.ActiveCfg = Release
+		{32EED81C-F47A-468B-8A0B-0BA1F39B8BE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32EED81C-F47A-468B-8A0B-0BA1F39B8BE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32EED81C-F47A-468B-8A0B-0BA1F39B8BE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32EED81C-F47A-468B-8A0B-0BA1F39B8BE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

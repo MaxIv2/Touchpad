@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MouseRecorder;
 
 namespace TouchpadServer {
+
     sealed class TrayIconController : IDisposable {
         private NotifyIcon trayIcon;
         private bool disposed;
@@ -27,12 +29,18 @@ namespace TouchpadServer {
             ApplicationEvents.connectionStatusChangedEventHandler += ChangeAppearance;
             ContextMenuStrip menu = new ContextMenuStrip();
             Tuple<string, EventHandler>[] items = { new Tuple<string, EventHandler>("Blacklist", LaunchBlacklistWindow),
+                                                      new Tuple<string,EventHandler>("Mouse Recorder", LaunchMouseRecorder),
                                                       new Tuple<string,EventHandler> ("Log in", LaunchLoginWindow),
                                                       new Tuple<string,EventHandler>("Exit", ApplicationEvents.CallUserExitRequestEventHandler)};
             foreach (Tuple<string, EventHandler> item in items) {
                 menu.Items.Add(item.Item1, null, item.Item2);
             }
             this.trayIcon.ContextMenuStrip = menu;
+        }
+
+        private void LaunchMouseRecorder(object sender, EventArgs e) {
+            MouseRecorderWindow window = new MouseRecorderWindow();
+            window.Show();
         }
 
         private void LaunchLoginWindow(object sender, EventArgs e) {

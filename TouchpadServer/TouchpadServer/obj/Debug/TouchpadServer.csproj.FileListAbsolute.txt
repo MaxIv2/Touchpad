@@ -54,3 +54,5 @@ C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\Touchpa
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.MainWindow.resources
 C:\Users\talmid\Desktop\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.csprojResolveAssemblyReference.cache
 C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\obj\Debug\TouchpadServer.LoginForm.resources
+C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\MouseRecorder.dll
+C:\Users\Maxim2\Documents\Touchpad\TouchpadServer\TouchpadServer\bin\Debug\MouseRecorder.pdb
