@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TouchpadServer {
-    sealed public partial class LoginForm : Form {
+    public partial class LoginForm : Form {
         private static LoginForm form;
 
         public static LoginForm Form {
@@ -49,7 +49,7 @@ namespace TouchpadServer {
             }
             else {
                 this.Close();
-            } 
+            }
         }
     }
 }

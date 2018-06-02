@@ -1,16 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
-using System.Diagnostics;
-using System.Web.Script.Serialization;
-using System.Net.Http;
-
 
 namespace TouchpadServer {
-    static class InputHandler {
+    class InputHandler {
         private static Queue<Command> commandsToExecute;
         private static Queue<Command> commandsToSend;
         private static Thread worker;
@@ -97,7 +92,7 @@ namespace TouchpadServer {
             }
         }
 
-        public static void HandleOnNewDataEvent(object sender, byte[] batch) {
+        public static void HandleData(byte[] batch) {
             ProcessAndValidate(batch);
         }
 
@@ -106,7 +101,7 @@ namespace TouchpadServer {
                 switch (commandsToExecute.Peek().code) {
                     case Command.ActionCode.MOVE:
                         Command.Move move = (Command.Move)commandsToExecute.Dequeue();
-                        MouseController.Move(move.dx * Properties.Settings.Default.Move, move.dy * Properties.Settings.Default.Move);
+                        MouseController.Move(move.dx * Properties.Settings.Default.Move / 5, move.dy * Properties.Settings.Default.Move / 5);
                         break;
                     case Command.ActionCode.LEFTBUTTON:
                         Command.LeftButton left = (Command.LeftButton)commandsToExecute.Dequeue();
@@ -118,15 +113,14 @@ namespace TouchpadServer {
                         break;
                     case Command.ActionCode.SCROLL:
                         Command.Scroll scroll = (Command.Scroll)commandsToExecute.Dequeue();
-                        MouseController.Scroll(scroll.scroll);
+                        MouseController.Scroll(scroll.scroll * Properties.Settings.Default.Scroll / 5);
                         break;
                     case Command.ActionCode.ZOOM:
                         Command.Zoom zoom = (Command.Zoom)commandsToExecute.Dequeue();
-                        MouseController.Zoom(zoom.zoom);
+                        MouseController.Zoom(zoom.zoom * Properties.Settings.Default.Zoom / 2);
                         break;
                 }
             }
         }
     }
 }
-

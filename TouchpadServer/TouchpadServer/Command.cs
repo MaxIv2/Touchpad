@@ -14,7 +14,8 @@ namespace TouchpadServer {
         }
 
         public sealed class Move : Command {
-            public Move(sbyte dx, sbyte dy) : base(ActionCode.MOVE) {
+            public Move(sbyte dx, sbyte dy)
+                : base(ActionCode.MOVE) {
                 this.dx = dx;
                 this.dy = dy;
             }
@@ -23,28 +24,32 @@ namespace TouchpadServer {
             public sbyte dy;
         }
         public sealed class LeftButton : Command {
-            public LeftButton(byte state) : base(ActionCode.LEFTBUTTON) {
+            public LeftButton(byte state)
+                : base(ActionCode.LEFTBUTTON) {
                 this.state = state;
             }
 
             public byte state;
         }
         public sealed class RightButton : Command {
-            public RightButton(byte state) : base(ActionCode.RIGHTBUTTON) {
+            public RightButton(byte state)
+                : base(ActionCode.RIGHTBUTTON) {
                 this.state = state;
             }
 
             public byte state;
         }
         public sealed class Scroll : Command {
-            public Scroll(sbyte scroll) : base(ActionCode.SCROLL) {
+            public Scroll(sbyte scroll)
+                : base(ActionCode.SCROLL) {
                 this.scroll = scroll;
             }
             public sbyte scroll;
         }
         public sealed class Zoom : Command {
-            public Zoom(sbyte scroll) : base(ActionCode.ZOOM) {
-                    this.zoom = scroll;
+            public Zoom(sbyte scroll)
+                : base(ActionCode.ZOOM) {
+                this.zoom = scroll;
             }
             public sbyte zoom;
         }

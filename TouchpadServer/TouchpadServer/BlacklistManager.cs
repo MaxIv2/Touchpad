@@ -11,9 +11,9 @@ namespace TouchpadServer {
         private const string getCount = "SELECT COUNT(address) FROM blacklist";
         private const string getAllItems = "SELECT * FROM blacklist";
         private const string removeItem = "DELETE FROM blacklist WHERE address='{0}'";
-        private const string insertItem = "INSERT INTO blacklist (name, address) VALUES ('{0}', '{1}')";
+        private const string insertItem = "INSERT INTO blacklist (address) VALUES ('{0}')";
         private const string setConnection = "Data Source=blacklist.sqlite;Version=3;";
-        private const string createTable = "CREATE TABLE blacklist (name string, address string)";
+        private const string createTable = "CREATE TABLE blacklist (address string)";
         private const string getItemByAddress = "SELECT * FROM blacklist WHERE address='{0}'";
         public static void SetUp() {
             SQLiteConnection.CreateFile("blacklist.sqlite");
@@ -45,10 +45,10 @@ namespace TouchpadServer {
             }
             return result;
         }
-        public static void Insert(string name, string address) {
+        public static void Insert(string address) {
             SQLiteConnection connection = new SQLiteConnection(setConnection);
             connection.Open();
-            SQLiteCommand command = new SQLiteCommand(String.Format(insertItem, name, address), connection);
+            SQLiteCommand command = new SQLiteCommand(String.Format(insertItem, address), connection);
             try {
                 command.ExecuteNonQuery();
             }
@@ -72,7 +72,7 @@ namespace TouchpadServer {
             try {
                 reader = command.ExecuteReader();
                 for (int i = 0; reader.Read(); i++) {
-                    result[i] = new string[2] { (string)reader["name"], (string)reader["address"] };
+                    result[i] = new string[1] { (string)reader["address"] };
                 }
                 reader.Close();
             }

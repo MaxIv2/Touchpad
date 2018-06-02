@@ -3,164 +3,132 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net.Sockets;
 using System.Net;
-using System.Timers;
 using System.Net.NetworkInformation;
-using System.Diagnostics;
+using System.Net.Sockets;
+using System.Timers;
 
 namespace TouchpadServer {
     sealed class TcpServer : Server {
         private TcpListener listener;
+        private bool isListenening;
+        private bool isConnected;
         private Socket client;
-        private int port;
+        private Timer clientGetter;
 
-        public TcpServer()
-            : base() {
-            this.SetListener();
-        }
-
-        protected override void BlacklistClient() {
-            string address = (this.client.RemoteEndPoint as IPEndPoint).Address.ToString();
-            string name;
-            try {
-                IPHostEntry entry = Dns.GetHostEntry(address);
-                if (entry != null)
-                    name = entry.HostName;
-                else
-                    name = "Unknown";
-            }
-            catch (SocketException) {
-                name = "Unknown";
-            }
-            BlacklistManager.Insert(name, address);
-        }
-
-        #region Connectivity
-        public override void AcceptClient() {
-            this.client = this.listener.AcceptSocket();
-            string address = (this.client.RemoteEndPoint as IPEndPoint).Address.ToString();
-            if (BlacklistManager.Contains(address)) {
-                this.client.Close();
-                this.ResetGetter();
-                return;
-            }
-            this.listener.Stop();
-            this.connected = true;
-            this.awaitingAcknoldegement = false;
-            this.connectivityChecker.Enabled = true;
-            this.reader.Enabled = true;
-            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, this.client.RemoteEndPoint.ToString()));
-        }
-        public override void Disconnect(bool notifyClient = true) {
-            if (this.connected) {
-                this.connectivityChecker.Enabled = false;
-                this.reader.Enabled = false;
-                if (notifyClient)
-                    this.SendTerminateConnection();
-                string address = this.client.RemoteEndPoint.ToString();
-                this.client.Close();
-                this.client.Dispose();
-                this.connected = false;
-                OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED, address));
+        public bool IsOnline {
+            get {
+                return this.isConnected || this.isListenening;
             }
         }
-        #endregion Connectivity
 
-        #region Listener Methods
-        protected override void StopListener() {
-            this.listener.Stop();
+        public TcpServer() {
+            this.isListenening = false;
+            SetUpListener();
+            SetUpClientGetter(500);
         }
-        protected override void StartListener() {
-            this.listener.Start();
+        
+        #region setup
+        private void SetUpListener() {
+            IPEndPoint DefaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, port: 0);
+            int port;
+            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)) {
+                socket.Bind(DefaultLoopbackEndpoint);
+                port = ((IPEndPoint)socket.LocalEndPoint).Port;
+            }
+            this.listener = new TcpListener(new IPAddress(new byte[] { 0, 0, 0, 0 }), port);
         }
-        protected override bool GetPending() {
-            return this.listener.Pending();
+        private void SetUpClientGetter(int interval) {
+            this.clientGetter = new Timer(interval);
+            this.clientGetter.AutoReset = true;
+            this.clientGetter.Elapsed += TryGetClient;
+        }
+        private void TryGetClient(object sender, ElapsedEventArgs e) {
+            if (this.listener.Pending()) {
+                this.clientGetter.Enabled = false;
+                this.client = listener.AcceptSocket();
+                this.isConnected = true;
+                GlobalAppEvents.RaiseConnectedEvent(this, new EventArgs());
+            }
         }
         #endregion
-
-        #region Send/Receive data
-        protected override byte[] ReceiveData(byte len) {
-            if (this.client.Available < len)
-                return null;
-            byte[] buffer = new byte[len];
-            try {
-                this.client.Receive(buffer, buffer.Length, SocketFlags.None);
-                return buffer;
-            }
-            catch (SocketException) {
-                return null;//client Disconnected
+        #region connectivity
+        public void GoOnline() {
+            int port = ((IPEndPoint)this.listener.LocalEndpoint).Port;
+            System.Diagnostics.Debug.WriteLine("listening on port : {0}", port);
+            this.listener.Start();
+            this.isListenening = true;
+            this.clientGetter.Enabled = true;
+            GlobalAppEvents.RaiseOnlineEvent(this, new EventArgs());
+        }
+        public void GoOffline() {
+            this.clientGetter.Enabled = false;
+            if(this.isListenening)
+                this.listener.Stop();
+            this.isListenening = false;
+            if (this.isConnected)
+                this.client.Close();
+            this.isConnected = false;
+            GlobalAppEvents.RaiseOfflineEvent(this, new EventArgs());
+        }
+        public void Disconnect() {
+            if (this.isConnected) {
+                this.client.Close();
+                GlobalAppEvents.RaiseDisconnectedEvent(this, new EventArgs());
             }
         }
-
-        protected override void SendData(byte[] buffer, int start = 0, int length = -1) {
-            if (length == -1)
-                length = buffer.Length;
+        #endregion
+        #region send/receive
+        public void SendData(byte[] data) {
             try {
-                this.client.Send(buffer, length, SocketFlags.None);
+                if (this.isConnected)
+                    client.Send(data);
+            } catch {
+                Disconnect();
+            }
+        }
+        public bool RecieveData(byte[] buffer) {
+            try {
+                if (!this.isConnected)
+                    throw new Exception("Not connected to anyone!");
+                if (client.Available < buffer.Length)
+                    return false;
+                client.Receive(buffer);
+                return true;
             }
             catch {
-                //no client
+                Disconnect();
+                return false;
             }
         }
         #endregion
-
-        #region IDisposable implementation
-        protected override void Dispose(bool disposing) {
-            base.Dispose(disposing);
-            if (this.disposed)
-                return;
-            if (disposing) {
-                if (this.listener != null) {
-                    this.listener.Stop();
-                    this.listener = null;
-                }
-            }
-            if (this.connected) {
-                this.client.Dispose();
-            }
-            this.disposed = true;
-        }
-        #endregion
-
-        public override string GetEndpointRepresentation() {
-            return GetLocalIPAddress() + ":" + (port - 1);
-        }
-        private void SetListener() {
-            IPAddress ipObject = new IPAddress(new byte[] { 0, 0, 0, 0 });
-            IPEndPoint localEP = new IPEndPoint(ipObject, this.GetFreePort());
-            string ip = ipObject.ToString();
-            this.listener = new TcpListener(localEP);
-            listener.Start();
-            this.port = (listener.LocalEndpoint as IPEndPoint).Port + 1;
-            listener.Stop();
-        }
-        private static IPAddress GetLocalIPAddress() {
+        #region endpoint stuff
+        private static string GetLocalIP() {
             foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
                 if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 && ni.OperationalStatus == OperationalStatus.Up) {
                     foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
                         if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
-                            return ip.Address;
+                            return ip.Address.ToString();
                         }
                     }
                 }
             }
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
-        private int GetFreePort() {
-            int PortStartIndex = 1000;
-            int PortEndIndex = 2000;
-            IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
-            IPEndPoint[] tcpEndPoints = properties.GetActiveTcpListeners();
-
-            List<int> usedPorts = tcpEndPoints.Select(p => p.Port).ToList<int>();
-
-            for (int port = PortStartIndex; port < PortEndIndex; port++) {
-                if (!usedPorts.Contains(port)) {
-                    return port;
-                }
-            }
-            return 0;
+        public string ServerEndpointRepr() {
+            string ip = GetLocalIP();
+            string res = ip + ":" + (listener.LocalEndpoint as IPEndPoint).Port;
+            return res;
         }
+
+        public string GetClientEndpoint() {
+            if (this.client != null) {
+                IPEndPoint ep = this.client.RemoteEndPoint as IPEndPoint;
+                string epRepr = ep.Address.ToString() + ":" + ep.Port;
+                return epRepr;
+            }
+            return "";
+        }
+        #endregion
     }
 }

@@ -63,9 +63,9 @@ namespace TouchpadServer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 8c30dbc1-60b3-4cef-a04d-39de0275d914.
         /// </summary>
-        internal static string Guid {
+        internal static string GUID {
             get {
-                return ResourceManager.GetString("Guid", resourceCulture);
+                return ResourceManager.GetString("GUID", resourceCulture);
             }
         }
         

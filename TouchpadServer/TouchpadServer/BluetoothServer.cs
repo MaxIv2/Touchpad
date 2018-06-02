@@ -2,123 +2,115 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
-using System.Timers;
 using System.Net.Sockets;
-using System.Diagnostics;
+using System.Timers;
 
 namespace TouchpadServer {
     sealed class BluetoothServer : Server {
         private BluetoothListener listener;
+        private bool isListenening;
+        private bool isConnected;
         private BluetoothClient client;
+        private Timer clientGetter;
         private NetworkStream stream;
 
-        public BluetoothServer() : base(){
-            this.online = false;
-            this.listener = new BluetoothListener(new Guid(Properties.Resources.Guid));
-        }
-        protected override void BlacklistClient() {
-            BlacklistManager.Insert(client.GetRemoteMachineName(client.RemoteEndPoint.Address), client.RemoteEndPoint.Address.ToString());
-        } 
-
-        #region Connectivity
-        public override void Disconnect(bool notifyClient = true) {
-            if (this.connected) {
-                this.connectivityChecker.Enabled = false;
-                this.reader.Enabled = false;
-                if (notifyClient)
-                    this.SendTerminateConnection();
-                string address = this.client.RemoteEndPoint.Address.ToString();
-                this.client.Close();
-                this.client.Dispose();
-                this.stream.Close();
-                this.stream.Dispose();
-                this.connected = false;
-                OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED, address));
+        public bool IsOnline {
+            get {
+                return this.isConnected || this.isListenening;
             }
         }
-        public override void AcceptClient() {
-            this.client = this.listener.AcceptBluetoothClient();
-            string address = this.client.RemoteEndPoint.Address.ToString();
-            if (BlacklistManager.Contains(address)) {
-                this.client.Close();
-                this.ResetGetter();
-                return;
-            }
-            this.listener.Stop();
-            this.connected = true;
-            this.awaitingAcknoldegement = false;
-            this.stream = client.GetStream();
-            this.connectivityChecker.Enabled = true;
-            this.reader.Enabled = true;
 
-            this.OnConnectionStatusChanged(new ConnectionStatusChangedEventArgs(ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED, this.client.RemoteMachineName));
+        public BluetoothServer() {
+            this.isListenening = false;
+            SetUpListener();
+            SetUpClientGetter(500);
+        }
+        
+        #region setup
+        private void SetUpListener() {
+            this.listener = new BluetoothListener(new Guid(Properties.Resources.GUID));
+        }
+        private void SetUpClientGetter(int interval) {
+            this.clientGetter = new Timer(interval);
+            this.clientGetter.AutoReset = true;
+            this.clientGetter.Elapsed += TryGetClient;
+        }
+        private void TryGetClient(object sender, ElapsedEventArgs e) {
+            if (this.listener.Pending()) {
+                this.clientGetter.Enabled = false;
+                this.client = listener.AcceptBluetoothClient();
+                this.stream = client.GetStream();
+                this.isConnected = true;
+                GlobalAppEvents.RaiseConnectedEvent(this, new EventArgs());
+            }
         }
         #endregion
-
-        #region Listener Methods
-        protected override void StopListener() {
-            this.listener.Stop();
-        }
-        protected override void StartListener() {
+        #region connectivity
+        public void GoOnline() {
+            System.Diagnostics.Debug.WriteLine("listening bluetooth");
             this.listener.Start();
+            this.isListenening = true;
+            this.clientGetter.Enabled = true;
+            GlobalAppEvents.RaiseOnlineEvent(this, new EventArgs());
         }
-        protected override bool GetPending() {
-            return this.listener.Pending();
+        public void GoOffline() {
+            this.clientGetter.Enabled = false;
+            if(this.isListenening)
+                this.listener.Stop();
+            this.isListenening = false;
+            if (this.isConnected)
+                this.client.Close();
+            this.isConnected = false;
+            GlobalAppEvents.RaiseOfflineEvent(this, new EventArgs());
         }
-        #endregion
-
-        #region Send/Receive data
-        protected override byte[] ReceiveData(byte len) {
-            if (this.client.Available < len)
-                return null;
-            byte[] buffer = new byte[len];
-            this.stream.Read(buffer, 0, buffer.Length);
-            return buffer;
-        }
-        protected override void SendData(byte[] buffer, int start = 0, int length = -1) {
-            if (length == -1)
-                length = buffer.Length;
-            try {
-                this.stream.Write(buffer, start, length);
-                this.stream.Flush();
-            } catch {
-                //no client
+        public void Disconnect() {
+            if (this.isConnected) {
+                this.client.Close();
+                GlobalAppEvents.RaiseDisconnectedEvent(this, new EventArgs());
             }
         }
         #endregion
-
-        #region IDisposable implementation
-        protected override void Dispose(bool disposing) {
-            base.Dispose(disposing);
-            if (this.disposed)
-                return;
-            if (disposing) {
-                if (this.listener != null) {
-                    this.listener.Stop();
-                    this.listener = null;
+        #region send/receive
+        public void SendData(byte[] data) {
+            try {
+                if (this.isConnected) {
+                    this.stream.Write(data, 0, data.Length);
                 }
             }
-            if (this.connected) {
-                this.stream.Dispose();
-                this.client.Dispose();
+            catch {
+                Disconnect();
             }
-            this.disposed = true;
+        }
+        public bool RecieveData(byte[] buffer) {
+            try {
+                if (!this.isConnected)
+                    throw new Exception("Not connected to anyone!");
+                if (client.Available < buffer.Length)
+                    return false;
+                this.stream.Read(buffer, 0, buffer.Length);
+                return true;
+            }
+            catch {
+                Disconnect();
+                return false;
+            }
         }
         #endregion
-
-        public override string GetEndpointRepresentation() {
+        #region endpoint stuff
+        public string ServerEndpointRepr() {
             BluetoothRadio radio = BluetoothRadio.PrimaryRadio;
             if (radio == null || radio.LocalAddress == null)
                 throw new Exception("Primary radio is missing, or bluetooth is off");
             return String.Format("{0:C}", radio.LocalAddress);
         }
-        public static bool SupportsBluetooth() {
-            BluetoothRadio radio = BluetoothRadio.PrimaryRadio;
-            if (radio == null || radio.LocalAddress == null)
-                return false;
-            return true;
+        public string GetClientEndpoint() {
+            if (this.client != null)
+                return this.client.RemoteEndPoint.Address.ToString();
+            return "";
         }
+        #endregion
     }
 }

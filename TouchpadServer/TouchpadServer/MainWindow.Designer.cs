@@ -24,155 +24,142 @@
         /// </summary>
         private void InitializeComponent() {
             this.QRCodeContainer = new System.Windows.Forms.PictureBox();
-            this.diconnectButton = new System.Windows.Forms.Button();
-            this.serverStatus = new System.Windows.Forms.Label();
+            this.onlineSwitch = new TouchpadServer.SwitchButton();
+            this.disconnectButton = new System.Windows.Forms.Button();
             this.exitButton = new System.Windows.Forms.Button();
-            this.blacklistButton = new System.Windows.Forms.Button();
+            this.blackListButton = new System.Windows.Forms.Button();
             this.switchConnectionType = new System.Windows.Forms.Button();
-            this.onAndOffButtonSwitch = new TouchpadServer.SwitchButton();
-            this.moveText = new System.Windows.Forms.Label();
-            this.scrollText = new System.Windows.Forms.Label();
-            this.scaleText = new System.Windows.Forms.Label();
-            this.moveBar = new System.Windows.Forms.TrackBar();
-            this.scrollBar = new System.Windows.Forms.TrackBar();
-            this.scaleBar = new System.Windows.Forms.TrackBar();
+            this.statusLabel = new System.Windows.Forms.Label();
+            this.mouseSensitivity = new System.Windows.Forms.TrackBar();
+            this.scrollSensitivity = new System.Windows.Forms.TrackBar();
+            this.zoomSensitivity = new System.Windows.Forms.TrackBar();
+            this.mouseSensLabel = new System.Windows.Forms.Label();
+            this.scrollSensLabel = new System.Windows.Forms.Label();
+            this.zoomSensLabel = new System.Windows.Forms.Label();
             this.sendDataCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.moveBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.scrollBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.scaleBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mouseSensitivity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.scrollSensitivity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomSensitivity)).BeginInit();
             this.SuspendLayout();
             // 
             // QRCodeContainer
             // 
-            this.QRCodeContainer.Location = new System.Drawing.Point(13, 12);
-            this.QRCodeContainer.MaximumSize = new System.Drawing.Size(250, 50);
-            this.QRCodeContainer.MinimumSize = new System.Drawing.Size(250, 250);
+            this.QRCodeContainer.Location = new System.Drawing.Point(8, 16);
             this.QRCodeContainer.Name = "QRCodeContainer";
-            this.QRCodeContainer.Size = new System.Drawing.Size(250, 250);
+            this.QRCodeContainer.Size = new System.Drawing.Size(270, 270);
             this.QRCodeContainer.TabIndex = 0;
             this.QRCodeContainer.TabStop = false;
             // 
-            // diconnectButton
+            // onlineSwitch
             // 
-            this.diconnectButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.diconnectButton.Location = new System.Drawing.Point(306, 109);
-            this.diconnectButton.Name = "diconnectButton";
-            this.diconnectButton.Size = new System.Drawing.Size(424, 36);
-            this.diconnectButton.TabIndex = 1;
-            this.diconnectButton.Text = "Disconnect";
-            this.diconnectButton.UseVisualStyleBackColor = true;
+            this.onlineSwitch.Location = new System.Drawing.Point(443, 16);
+            this.onlineSwitch.Name = "onlineSwitch";
+            this.onlineSwitch.Size = new System.Drawing.Size(78, 23);
+            this.onlineSwitch.TabIndex = 1;
+            this.onlineSwitch.Text = "onlineSwitch";
+            this.onlineSwitch.UseVisualStyleBackColor = true;
             // 
-            // serverStatus
+            // disconnectButton
             // 
-            this.serverStatus.AutoSize = true;
-            this.serverStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.serverStatus.Location = new System.Drawing.Point(301, 56);
-            this.serverStatus.Name = "serverStatus";
-            this.serverStatus.Size = new System.Drawing.Size(185, 50);
-            this.serverStatus.TabIndex = 2;
-            this.serverStatus.Text = "Status (___ based):\nOffline";
+            this.disconnectButton.Location = new System.Drawing.Point(292, 75);
+            this.disconnectButton.Name = "disconnectButton";
+            this.disconnectButton.Size = new System.Drawing.Size(229, 23);
+            this.disconnectButton.TabIndex = 2;
+            this.disconnectButton.Text = "Disconnect";
+            this.disconnectButton.UseVisualStyleBackColor = true;
             // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(13, 289);
+            this.exitButton.Location = new System.Drawing.Point(412, 246);
             this.exitButton.Name = "exitButton";
-            this.exitButton.Size = new System.Drawing.Size(162, 23);
-            this.exitButton.TabIndex = 4;
-            this.exitButton.Text = "Exit Remote Touchpad";
+            this.exitButton.Size = new System.Drawing.Size(109, 23);
+            this.exitButton.TabIndex = 3;
+            this.exitButton.Text = "Exit";
             this.exitButton.UseVisualStyleBackColor = true;
             // 
-            // blacklistButton
+            // blackListButton
             // 
-            this.blacklistButton.Location = new System.Drawing.Point(306, 151);
-            this.blacklistButton.Name = "blacklistButton";
-            this.blacklistButton.Size = new System.Drawing.Size(124, 23);
-            this.blacklistButton.TabIndex = 7;
-            this.blacklistButton.Text = "Blacklist";
-            this.blacklistButton.UseVisualStyleBackColor = true;
+            this.blackListButton.Location = new System.Drawing.Point(292, 246);
+            this.blackListButton.Name = "blackListButton";
+            this.blackListButton.Size = new System.Drawing.Size(114, 23);
+            this.blackListButton.TabIndex = 4;
+            this.blackListButton.Text = "Blacklist";
+            this.blackListButton.UseVisualStyleBackColor = true;
             // 
             // switchConnectionType
             // 
-            this.switchConnectionType.Location = new System.Drawing.Point(580, 289);
+            this.switchConnectionType.Location = new System.Drawing.Point(292, 16);
             this.switchConnectionType.Name = "switchConnectionType";
-            this.switchConnectionType.Size = new System.Drawing.Size(149, 23);
-            this.switchConnectionType.TabIndex = 8;
+            this.switchConnectionType.Size = new System.Drawing.Size(145, 23);
+            this.switchConnectionType.TabIndex = 5;
             this.switchConnectionType.Text = "Switch Connection Type";
             this.switchConnectionType.UseVisualStyleBackColor = true;
             // 
-            // onAndOffButtonSwitch
+            // statusLabel
             // 
-            this.onAndOffButtonSwitch.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.onAndOffButtonSwitch.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.onAndOffButtonSwitch.Location = new System.Drawing.Point(642, 12);
-            this.onAndOffButtonSwitch.Name = "onAndOffButtonSwitch";
-            this.onAndOffButtonSwitch.Size = new System.Drawing.Size(87, 23);
-            this.onAndOffButtonSwitch.TabIndex = 3;
-            this.onAndOffButtonSwitch.Text = "On/Off";
-            this.onAndOffButtonSwitch.UseVisualStyleBackColor = true;
+            this.statusLabel.AutoSize = true;
+            this.statusLabel.Location = new System.Drawing.Point(289, 51);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(176, 13);
+            this.statusLabel.TabIndex = 6;
+            this.statusLabel.Text = "Connected to : 192.168.1.8 : 55555";
             // 
-            // moveText
+            // mouseSensitivity
             // 
-            this.moveText.AutoSize = true;
-            this.moveText.Location = new System.Drawing.Point(306, 181);
-            this.moveText.Name = "moveText";
-            this.moveText.Size = new System.Drawing.Size(84, 13);
-            this.moveText.TabIndex = 9;
-            this.moveText.Text = "Move Sensitivity";
+            this.mouseSensitivity.SetRange(1, 10);
+            this.mouseSensitivity.Location = new System.Drawing.Point(335, 106);
+            this.mouseSensitivity.Name = "mouseSensitivity";
+            this.mouseSensitivity.Size = new System.Drawing.Size(186, 45);
+            this.mouseSensitivity.TabIndex = 7;
             // 
-            // scrollText
+            // scrollSensitivity
             // 
-            this.scrollText.AutoSize = true;
-            this.scrollText.Location = new System.Drawing.Point(306, 217);
-            this.scrollText.Name = "scrollText";
-            this.scrollText.Size = new System.Drawing.Size(81, 13);
-            this.scrollText.TabIndex = 10;
-            this.scrollText.Text = "Scroll sensitivity";
+            this.scrollSensitivity.Location = new System.Drawing.Point(335, 157);
+            this.scrollSensitivity.Name = "scrollSensitivity";
+            this.scrollSensitivity.Size = new System.Drawing.Size(186, 45);
+            this.scrollSensitivity.TabIndex = 8;
             // 
-            // scaleText
+            // zoomSensitivity
             // 
-            this.scaleText.AutoSize = true;
-            this.scaleText.Location = new System.Drawing.Point(306, 249);
-            this.scaleText.Name = "scaleText";
-            this.scaleText.Size = new System.Drawing.Size(84, 13);
-            this.scaleText.TabIndex = 11;
-            this.scaleText.Text = "Scale Sensitivity";
+            this.zoomSensitivity.Location = new System.Drawing.Point(335, 208);
+            this.zoomSensitivity.Name = "zoomSensitivity";
+            this.zoomSensitivity.Size = new System.Drawing.Size(186, 45);
+            this.zoomSensitivity.TabIndex = 9;
             // 
-            // moveBar
+            // mouseSensLabel
             // 
-            this.moveBar.Location = new System.Drawing.Point(414, 181);
-            this.moveBar.Maximum = 11;
-            this.moveBar.Minimum = 1;
-            this.moveBar.Name = "moveBar";
-            this.moveBar.Size = new System.Drawing.Size(315, 45);
-            this.moveBar.TabIndex = 12;
-            this.moveBar.Value = 1;
+            this.mouseSensLabel.AutoSize = true;
+            this.mouseSensLabel.Location = new System.Drawing.Point(289, 107);
+            this.mouseSensLabel.Name = "mouseSensLabel";
+            this.mouseSensLabel.Size = new System.Drawing.Size(54, 26);
+            this.mouseSensLabel.TabIndex = 10;
+            this.mouseSensLabel.Text = "Mouse\nSensitivity";
             // 
-            // scrollBar
+            // scrollSensLabel
             // 
-            this.scrollBar.Location = new System.Drawing.Point(414, 217);
-            this.scrollBar.Maximum = 11;
-            this.scrollBar.Minimum = 1;
-            this.scrollBar.Name = "scrollBar";
-            this.scrollBar.Size = new System.Drawing.Size(316, 45);
-            this.scrollBar.TabIndex = 13;
-            this.scrollBar.Value = 1;
+            this.scrollSensLabel.AutoSize = true;
+            this.scrollSensLabel.Location = new System.Drawing.Point(288, 157);
+            this.scrollSensLabel.Name = "scrollSensLabel";
+            this.scrollSensLabel.Size = new System.Drawing.Size(54, 26);
+            this.scrollSensLabel.TabIndex = 11;
+            this.scrollSensLabel.Text = "Scroll\nSensitivity";
             // 
-            // scaleBar
+            // zoomSensLabel
             // 
-            this.scaleBar.Location = new System.Drawing.Point(414, 249);
-            this.scaleBar.Maximum = 11;
-            this.scaleBar.Minimum = 1;
-            this.scaleBar.Name = "scaleBar";
-            this.scaleBar.Size = new System.Drawing.Size(315, 45);
-            this.scaleBar.TabIndex = 14;
-            this.scaleBar.Value = 1;
+            this.zoomSensLabel.AutoSize = true;
+            this.zoomSensLabel.Location = new System.Drawing.Point(288, 208);
+            this.zoomSensLabel.Name = "zoomSensLabel";
+            this.zoomSensLabel.Size = new System.Drawing.Size(54, 26);
+            this.zoomSensLabel.TabIndex = 12;
+            this.zoomSensLabel.Text = "Zoom\nSensitivity";
             // 
             // sendDataCheckBox
             // 
             this.sendDataCheckBox.AutoSize = true;
             this.sendDataCheckBox.Checked = global::TouchpadServer.Properties.Settings.Default.SendToServer;
-            this.sendDataCheckBox.Location = new System.Drawing.Point(611, 64);
+            this.sendDataCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.sendDataCheckBox.Location = new System.Drawing.Point(291, 275);
             this.sendDataCheckBox.Name = "sendDataCheckBox";
             this.sendDataCheckBox.Size = new System.Drawing.Size(119, 17);
             this.sendDataCheckBox.TabIndex = 15;
@@ -184,20 +171,20 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(741, 324);
+            this.ClientSize = new System.Drawing.Size(533, 310);
             this.Controls.Add(this.sendDataCheckBox);
-            this.Controls.Add(this.switchConnectionType);
-            this.Controls.Add(this.scaleBar);
-            this.Controls.Add(this.scrollBar);
-            this.Controls.Add(this.moveBar);
-            this.Controls.Add(this.scaleText);
-            this.Controls.Add(this.scrollText);
-            this.Controls.Add(this.moveText);
-            this.Controls.Add(this.blacklistButton);
+            this.Controls.Add(this.blackListButton);
             this.Controls.Add(this.exitButton);
-            this.Controls.Add(this.onAndOffButtonSwitch);
-            this.Controls.Add(this.serverStatus);
-            this.Controls.Add(this.diconnectButton);
+            this.Controls.Add(this.zoomSensLabel);
+            this.Controls.Add(this.scrollSensLabel);
+            this.Controls.Add(this.mouseSensLabel);
+            this.Controls.Add(this.zoomSensitivity);
+            this.Controls.Add(this.scrollSensitivity);
+            this.Controls.Add(this.mouseSensitivity);
+            this.Controls.Add(this.statusLabel);
+            this.Controls.Add(this.switchConnectionType);
+            this.Controls.Add(this.disconnectButton);
+            this.Controls.Add(this.onlineSwitch);
             this.Controls.Add(this.QRCodeContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -205,28 +192,30 @@
             this.Name = "MainWindow";
             this.Text = "Touchpad";
             ((System.ComponentModel.ISupportInitialize)(this.QRCodeContainer)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.moveBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.scrollBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.scaleBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mouseSensitivity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.scrollSensitivity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomSensitivity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
+
+
         #endregion
 
         private System.Windows.Forms.PictureBox QRCodeContainer;
-        private System.Windows.Forms.Button diconnectButton;
-        private System.Windows.Forms.Label serverStatus;
-        private TouchpadServer.SwitchButton onAndOffButtonSwitch;
+        private SwitchButton onlineSwitch;
+        private System.Windows.Forms.Button disconnectButton;
         private System.Windows.Forms.Button exitButton;
-        private System.Windows.Forms.Button blacklistButton;
+        private System.Windows.Forms.Button blackListButton;
         private System.Windows.Forms.Button switchConnectionType;
-        private System.Windows.Forms.Label moveText;
-        private System.Windows.Forms.Label scrollText;
-        private System.Windows.Forms.Label scaleText;
-        private System.Windows.Forms.TrackBar moveBar;
-        private System.Windows.Forms.TrackBar scrollBar;
-        private System.Windows.Forms.TrackBar scaleBar;
+        private System.Windows.Forms.Label statusLabel;
+        private System.Windows.Forms.TrackBar mouseSensitivity;
+        private System.Windows.Forms.TrackBar scrollSensitivity;
+        private System.Windows.Forms.TrackBar zoomSensitivity;
+        private System.Windows.Forms.Label mouseSensLabel;
+        private System.Windows.Forms.Label scrollSensLabel;
+        private System.Windows.Forms.Label zoomSensLabel;
         private System.Windows.Forms.CheckBox sendDataCheckBox;
     }
 }

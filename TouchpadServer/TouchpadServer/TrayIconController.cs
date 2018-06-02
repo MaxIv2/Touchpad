@@ -26,16 +26,42 @@ namespace TouchpadServer {
             this.trayIcon.Icon = Properties.Resources.mouseBlack;
             this.trayIcon.Visible = true;
             this.trayIcon.Click += this.IconClick;
-            ApplicationEvents.connectionStatusChangedEventHandler += ChangeAppearance;
+            this.SubscribeEvents();
             ContextMenuStrip menu = new ContextMenuStrip();
             Tuple<string, EventHandler>[] items = { new Tuple<string, EventHandler>("Blacklist", LaunchBlacklistWindow),
                                                       new Tuple<string,EventHandler>("Mouse Recorder", LaunchMouseRecorder),
                                                       new Tuple<string,EventHandler> ("Log in", LaunchLoginWindow),
-                                                      new Tuple<string,EventHandler>("Exit", ApplicationEvents.CallUserExitRequestEventHandler)};
+                                                      new Tuple<string,EventHandler>("Exit", GlobalAppEvents.RaiseExitRequest)};
             foreach (Tuple<string, EventHandler> item in items) {
                 menu.Items.Add(item.Item1, null, item.Item2);
             }
             this.trayIcon.ContextMenuStrip = menu;
+        }
+
+        #region event subscription
+        private void SubscribeEvents() {
+            GlobalAppEvents.Online += OnOnline;
+            GlobalAppEvents.Disconnected += OnOnline;
+            GlobalAppEvents.Connected += OnConnected;
+            GlobalAppEvents.Offline += OnOffline;
+        }
+        private void UnsubscribeEvents() {
+            GlobalAppEvents.Online += OnOnline;
+            GlobalAppEvents.Disconnected += OnOnline;
+            GlobalAppEvents.Connected += OnConnected;
+            GlobalAppEvents.Offline += OnOffline;
+        }
+
+        #endregion
+
+        private void OnOffline(object sender, EventArgs e) {
+            this.trayIcon.Icon = Properties.Resources.mouseRed;
+        }
+        private void OnConnected(object sender, EventArgs e) {
+            this.trayIcon.Icon = Properties.Resources.mouseGreen;
+        }
+        private void OnOnline(object sender, EventArgs e) {
+            this.trayIcon.Icon = Properties.Resources.mouseBlack;
         }
 
         private void LaunchMouseRecorder(object sender, EventArgs e) {
@@ -47,26 +73,10 @@ namespace TouchpadServer {
             LoginForm a = LoginForm.Form;
             a.Show();
         }
-
-        private void ChangeAppearance(object sender, ConnectionStatusChangedEventArgs e) {
-            switch (e.status) {
-                case ConnectionStatusChangedEventArgs.ConnectionStatus.OFFLINE:
-                    this.trayIcon.Icon = Properties.Resources.mouseRed;
-                    break;
-                case ConnectionStatusChangedEventArgs.ConnectionStatus.DISCONNECTED:
-                    this.trayIcon.Icon = Properties.Resources.mouseBlack;
-                    break;
-                case ConnectionStatusChangedEventArgs.ConnectionStatus.CONNECTED:
-                    this.trayIcon.Icon = Properties.Resources.mouseGreen;
-                    break;
-            } 
-        }
-
         private void LaunchBlacklistWindow(object sender, EventArgs e) {
             BlacklistWindow blacklistWindow = BlacklistWindow.Form;
             blacklistWindow.Show();
         }
-
         private void IconClick(object sender, EventArgs e) {
             MouseEventArgs eventArgs = (MouseEventArgs)e;
             if (eventArgs.Button == MouseButtons.Left) {
@@ -74,17 +84,15 @@ namespace TouchpadServer {
                 settingsWindow.Show();
             }
         }
-
         public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
         private void Dispose(bool disposing) {
             if (disposed)
                 return;
             if (disposing) {
-                ApplicationEvents.connectionStatusChangedEventHandler -= ChangeAppearance;
+                UnsubscribeEvents();
                 trayIcon.Visible = false;
                 trayIcon.Dispose();
             }

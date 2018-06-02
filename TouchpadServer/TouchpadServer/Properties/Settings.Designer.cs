@@ -26,24 +26,12 @@ namespace TouchpadServer.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Bluetooth {
+        public bool SendToServer {
             get {
-                return ((bool)(this["Bluetooth"]));
+                return ((bool)(this["SendToServer"]));
             }
             set {
-                this["Bluetooth"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.0.0.0:0")]
-        public string EndpointRepresentation {
-            get {
-                return ((string)(this["EndpointRepresentation"]));
-            }
-            set {
-                this["EndpointRepresentation"] = value;
+                this["SendToServer"] = value;
             }
         }
         
@@ -61,13 +49,13 @@ namespace TouchpadServer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int Scale {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool bluetooth {
             get {
-                return ((int)(this["Scale"]));
+                return ((bool)(this["bluetooth"]));
             }
             set {
-                this["Scale"] = value;
+                this["bluetooth"] = value;
             }
         }
         
@@ -85,13 +73,13 @@ namespace TouchpadServer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SendToServer {
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int Zoom {
             get {
-                return ((bool)(this["SendToServer"]));
+                return ((int)(this["Zoom"]));
             }
             set {
-                this["SendToServer"] = value;
+                this["Zoom"] = value;
             }
         }
     }
